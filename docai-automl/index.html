@@ -766,8 +766,14 @@ flowchart TD
             </div>
 
             <h3 style="border-left-color:#3b82f6; color:#2563eb;">1.2 데이터 추가</h3>
-            <div class="ob-cmd"><span class="prompt">$</span> <span class="flag">${docai3 또는 docai4}</span> data add</div>
-            <p>대화형 CLI가 실행됩니다:</p>
+            <div class="ref-cmd-block"><span class="desc"># Command 방식 (한 줄 실행)</span>
+<span class="cmd">${docai3 or docai4} data add</span> \
+  <span class="opt">-d</span> payment_confirmation \
+  <span class="opt">-n</span> 250213_meritzsec_main \
+  <span class="opt">-src</span> /data/project/datasets/data_assets/payment_confirmation/drp.en_ko.in_house.deepnatural \
+  <span class="opt">-ver</span> 230525 \
+  <span class="opt">-ont</span> ont.payment_confirmation.upstage/4.0.yaml</div>
+            <p>또는 <strong>Prompt 방식</strong> (대화형 CLI):</p>
             <div class="cli-select">
 <span class="q">? Select Document Type</span> (화살표로 선택)<br>
 &nbsp;&nbsp;» consent_to_collection_and_use_of_personal_information<br>
@@ -783,7 +789,14 @@ flowchart TD
             </div>
 
             <h3 style="border-left-color:#3b82f6; color:#2563eb;">1.3 OCR 실행</h3>
-            <div class="ob-cmd"><span class="prompt">$</span> <span class="flag">${docai3 또는 docai4}</span> data ocr</div>
+            <div class="ref-cmd-block"><span class="desc"># Command 방식</span>
+<span class="cmd">${docai3 or docai4} data ocr</span> \
+  <span class="opt">-d</span> payment_confirmation \
+  <span class="opt">-n</span> 250213_meritzsec_main \
+  <span class="opt">-ont</span> ont.payment_confirmation.upstage__4.0.yaml \
+  <span class="opt">-ver</span> 2.4.0 \
+  <span class="opt">--dos</span> <span class="opt">--language_tag</span> ko</div>
+            <p>또는 <strong>Prompt 방식</strong>:</p>
             <div class="cli-select">
 <span class="q">? Select Document Type</span> → 문서 타입 선택<br>
 <span class="q">? Select Dataset Name</span> → 데이터셋 선택<br>
@@ -791,7 +804,8 @@ flowchart TD
             </div>
 
             <h3 style="border-left-color:#3b82f6; color:#2563eb;">1.4 (KVS만) 데이터 분석</h3>
-            <div class="ob-cmd"><span class="prompt">$</span> <span class="flag">docai4</span> data analyze</div>
+            <div class="ref-cmd-block"><span class="desc"># KVS 전용 — 토큰 분포 분석</span>
+<span class="cmd">docai4 data analyze</span></div>
             <p>입력/출력 토큰 길이 분포를 분석하여 <code>setup.yaml</code>의 <code>max_length</code> 설정에 활용합니다.</p>
 
             <h3 style="border-left-color:#3b82f6; color:#2563eb;">1.5 결과 디렉토리 구조</h3>
@@ -816,7 +830,11 @@ flowchart TD
         <div class="ob-step-body">
 
             <h3 style="border-left-color:var(--purple-500); color:var(--purple-600);">2.1 학습 세팅</h3>
-            <div class="ob-cmd"><span class="prompt">$</span> <span class="flag">${docai3 또는 docai4}</span> model setup</div>
+            <div class="ref-cmd-block"><span class="desc"># Command 방식</span>
+<span class="cmd">${docai3 or docai4} model setup</span> \
+  <span class="opt">-d</span> payment_confirmation \
+  <span class="opt">-n</span> 250213_meritzsec_main</div>
+            <p>또는 <strong>Prompt 방식</strong>:</p>
             <div class="cli-select">
 <span class="q">? Select Document Type</span> → 문서 타입 선택<br>
 <span class="q">? Enter Experiment Name</span> → <span class="sel">{날짜}_{고객사}_{범위}</span> 입력
@@ -839,8 +857,14 @@ flowchart TD
             </table>
 
             <h3 style="border-left-color:var(--purple-500); color:var(--purple-600);">2.2 학습 실행</h3>
-            <div class="ob-cmd"><span class="prompt">$</span> <span class="flag">${docai3 또는 docai4}</span> model train</div>
-            <div class="ob-cmd"><span class="prompt">$</span> <span class="flag">${docai3 또는 docai4}</span> model train <span class="flag">--all</span> &nbsp;&nbsp;<span style="color:var(--slate-500);"># 모든 실험 조합 일괄 학습</span></div>
+            <div class="ref-cmd-block"><span class="desc"># Command 방식 — 단일 실험</span>
+<span class="cmd">${docai3 or docai4} model train</span> \
+  <span class="opt">-d</span> payment_confirmation \
+  <span class="opt">-n</span> 250213_meritzsec_main \
+  <span class="opt">-id</span> 0
+
+<span class="desc"># 모든 하이퍼파라미터 조합 일괄 학습</span>
+<span class="cmd">${docai3 or docai4} model train</span> <span class="opt">--all</span></div>
 
             <h3 style="border-left-color:var(--purple-500); color:var(--purple-600);">2.3 학습 결과</h3>
             <div class="cmp-grid" style="margin-top:12px;">
@@ -865,9 +889,24 @@ flowchart TD
     <div class="ob-step-card">
         <div class="ob-step-header"><div class="ob-step-num" style="background:linear-gradient(135deg,#10b981,#059669);">3</div><div class="ob-step-title">추론 &amp; 평가</div><div class="ob-step-desc">모델 테스트 → KiEval 점수 확인</div></div>
         <div class="ob-step-body">
-            <div class="ob-cmd"><span class="prompt">$</span> <span class="flag">${docai3 또는 docai4}</span> model test</div>
-            <div class="ob-cmd"><span class="prompt">$</span> <span class="flag">${docai3 또는 docai4}</span> model test <span class="flag">--all</span> &nbsp;&nbsp;<span style="color:var(--slate-500);"># 모든 실험 일괄 평가</span></div>
+            <div class="ref-cmd-block"><span class="desc"># Command 방식 — 단일 실험 평가</span>
+<span class="cmd">${docai3 or docai4} model test</span> \
+  <span class="opt">-d</span> payment_confirmation \
+  <span class="opt">-n</span> 250213_meritzsec_main \
+  <span class="opt">-e</span> 250213_meritzsec_main__0 \
+  <span class="opt">--dataset_name</span> 250213_meritzsec_main \
+  <span class="opt">-ont</span> ont.payment_confirmation.upstage__4.0.yaml
 
+<span class="desc"># use_case 지정 (후처리 적용 평가)</span>
+<span class="cmd">${docai3 or docai4} model test</span> \
+  <span class="opt">-d</span> payment_confirmation \
+  <span class="opt">-u</span> meritzsec \
+  <span class="opt">-n</span> 250213_meritzsec_main \
+  <span class="opt">-e</span> 250213_meritzsec_main__0
+
+<span class="desc"># 모든 실험 일괄 평가</span>
+<span class="cmd">${docai3 or docai4} model test</span> <span class="opt">--all</span></div>
+            <p>또는 <strong>Prompt 방식</strong>:</p>
             <div class="cli-select">
 <span class="q">? Select Document Type</span> → 문서 타입<br>
 <span class="q">? Select Experiment Name</span> → 실험명<br>
@@ -910,7 +949,12 @@ flowchart TD
                     <div class="ob-cmd"><span class="prompt">$</span> cd /data/project/enterprise/docai/repos/ocr-parser-postprocessor && git pull</div>
                 </li>
                 <li><strong>use_case 지정하여 재평가:</strong>
-                    <div class="ob-cmd"><span class="prompt">$</span> <span class="flag">${docai3 또는 docai4}</span> model test -u <span class="flag">${use_case}</span></div>
+                    <div class="ref-cmd-block" style="margin-top:8px;"><span class="desc"># 후처리 적용 후 재평가</span>
+<span class="cmd">${docai3 or docai4} model test</span> \
+  <span class="opt">-d</span> transfer_confirmation \
+  <span class="opt">-u</span> meritzsec \
+  <span class="opt">-n</span> 250729_meritzsec_main \
+  <span class="opt">-e</span> 250729_meritzsec_main__0</div>
                     <p style="margin-top:4px;">결과: <code>outputs/{use_case}__{ontology_name}/</code></p>
                 </li>
             </ol>
@@ -923,7 +967,12 @@ flowchart TD
         <div class="ob-step-body">
 
             <h3 style="border-left-color:#f43f5e; color:#e11d48;">5.1 체크포인트 저장</h3>
-            <div class="ob-cmd"><span class="prompt">$</span> <span class="flag">${docai3 또는 docai4}</span> save</div>
+            <div class="ref-cmd-block"><span class="desc"># Command 방식</span>
+<span class="cmd">${docai3 or docai4} save</span> \
+  <span class="opt">--document_type</span> transfer_confirmation \
+  <span class="opt">--exp_name</span> 250729_meritzsec_main \
+  <span class="opt">--model_name</span> 250729_meritzsec_main__0</div>
+            <p>또는 <strong>Prompt 방식</strong>:</p>
             <div class="cli-select">
 <span class="q">? Select Document Type</span> → 문서 타입<br>
 <span class="q">? Select Experiment</span> → 실험명<br>
@@ -933,7 +982,14 @@ flowchart TD
             <p>저장 경로: <code>/data/project/enterprise/docai/checkpoints/${docai3 or docai4}/{document_type}/{model_name}_{universal}</code></p>
 
             <h3 style="border-left-color:#f43f5e; color:#e11d48;">5.2 패키지 생성</h3>
-            <div class="ob-cmd"><span class="prompt">$</span> <span class="flag">${docai3 또는 docai4}</span> pack</div>
+            <div class="ref-cmd-block"><span class="desc"># Command 방식</span>
+<span class="cmd">${docai3 or docai4} pack</span> \
+  <span class="opt">--document_type</span> transfer_confirmation \
+  <span class="opt">--model_name</span> 250729_meritzsec_main__0 \
+  <span class="opt">--ontology</span> ont.transfer_confirmation.upstage__3.0_meritzsec.yaml \
+  <span class="opt">--use_case</span> meritzsec \
+  <span class="opt">--package_name</span> kr-transfer-confirmation-extractor-meritzsec-0.3b-4.1.0</div>
+            <p>또는 <strong>Prompt 방식</strong>:</p>
             <div class="cli-select">
 <span class="q">? Select Document Type</span> → 문서 타입<br>
 <span class="q">? Select Model</span> → 모델<br>
@@ -966,7 +1022,8 @@ flowchart TD
     <div class="ob-step-card">
         <div class="ob-step-header"><div class="ob-step-num" style="background:linear-gradient(135deg,#8b5cf6,#7c3aed);">+</div><div class="ob-step-title">분석 (Analyzer)</div><div class="ob-step-desc">모델 결과 시각적 분석</div></div>
         <div class="ob-step-body">
-            <div class="ob-cmd"><span class="prompt">$</span> <span class="flag">${docai3 또는 docai4}</span> analyze</div>
+            <div class="ref-cmd-block"><span class="desc"># Analyzer 실행</span>
+<span class="cmd">${docai3 or docai4} analyze</span></div>
             <div class="cli-select">
 <span class="q">? Select Document Type</span> → 문서 타입<br>
 <span class="q">? Select Model Name</span> → 모델<br>
