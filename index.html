@@ -5,324 +5,282 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EBS AI ModelOps — Documentation Portal</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&family=Noto+Sans+KR:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
 
         :root {
-            --purple-900: #1a0533;
-            --purple-700: #3f1089;
-            --purple-600: #5a1db8;
-            --purple-500: #7c3aed;
-            --purple-400: #9b6bf5;
-            --purple-300: #b794f6;
-            --purple-200: #d4bbfc;
-            --purple-100: #ede5ff;
-            --purple-50: #f5f0ff;
-            --slate-900: #0f172a;
-            --slate-800: #1e293b;
-            --slate-600: #475569;
-            --slate-500: #64748b;
-            --slate-400: #94a3b8;
-            --slate-200: #e2e8f0;
-            --slate-100: #f1f5f9;
-            --slate-50: #f8fafc;
+            --up-primary: #4d65ff;
+            --up-primary-dark: #3b4fcc;
+            --up-primary-light: #7b8fff;
+            --up-primary-50: #eef0ff;
+            --up-primary-100: #dde2ff;
+            --up-black: #000;
+            --up-gray-900: #111;
+            --up-gray-800: #222;
+            --up-gray-700: #333;
+            --up-gray-600: #555;
+            --up-gray-500: #777;
+            --up-gray-400: #999;
+            --up-gray-300: #ccc;
+            --up-gray-200: #e5e5e5;
+            --up-gray-100: #f5f5f5;
+            --up-white: #fff;
+            --radius: 8px;
+            --radius-pill: 100px;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            font-family: 'Inter', -apple-system, sans-serif;
-            background: var(--slate-50);
-            color: var(--slate-800);
+            font-family: 'Noto Sans KR', 'Montserrat', -apple-system, sans-serif;
+            background: var(--up-white);
+            color: var(--up-gray-900);
             min-height: 100vh;
             -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            text-rendering: optimizeLegibility;
         }
 
+        /* ── Hero ── */
         .hero {
-            background: linear-gradient(135deg, var(--purple-900) 0%, var(--purple-700) 40%, var(--purple-500) 100%);
-            padding: 80px 40px 60px;
+            padding: 100px 40px 80px;
             text-align: center;
+            background: var(--up-white);
             position: relative;
-            overflow: hidden;
         }
 
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: -40%;
-            right: -15%;
-            width: 500px;
-            height: 500px;
-            background: radial-gradient(circle, rgba(167,139,250,0.15) 0%, transparent 70%);
-            border-radius: 50%;
-        }
-
-        .hero-badge {
+        .hero-label {
             display: inline-block;
-            background: rgba(255,255,255,0.1);
-            border: 1px solid rgba(255,255,255,0.2);
-            border-radius: 100px;
-            padding: 6px 20px;
-            font-size: 12px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 13px;
             font-weight: 600;
-            color: var(--purple-200);
-            letter-spacing: 1px;
+            color: var(--up-primary);
+            letter-spacing: 2px;
             text-transform: uppercase;
             margin-bottom: 20px;
         }
 
         .hero h1 {
-            font-size: 42px;
-            font-weight: 900;
-            color: #fff;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 52px;
+            font-weight: 800;
+            color: var(--up-black);
             letter-spacing: -1.5px;
-            margin-bottom: 12px;
-            position: relative;
+            line-height: 1.1;
+            margin-bottom: 16px;
         }
 
-        .hero h1 span { color: var(--purple-300); }
+        .hero h1 span {
+            color: var(--up-primary);
+        }
 
         .hero p {
-            font-size: 16px;
-            color: var(--purple-300);
-            max-width: 500px;
+            font-size: 17px;
+            color: var(--up-gray-500);
+            max-width: 480px;
             margin: 0 auto;
+            line-height: 1.6;
+            font-weight: 400;
         }
 
+        /* ── Container ── */
         .container {
-            max-width: 900px;
-            margin: -40px auto 0;
-            padding: 0 24px 80px;
-            position: relative;
-            z-index: 1;
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 0 24px 100px;
         }
 
+        /* ── Card Grid ── */
         .card-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
         }
 
         .card {
-            background: #fff;
-            border-radius: 16px;
-            border: 1px solid var(--slate-200);
+            background: var(--up-white);
+            border-radius: var(--radius);
+            border: 1px solid var(--up-gray-200);
             padding: 32px 28px;
             text-decoration: none;
             color: inherit;
-            transition: all 0.3s;
-            position: relative;
-            overflow: hidden;
+            transition: all 0.3s ease;
             display: flex;
             flex-direction: column;
+            cursor: default;
         }
-
-        .card::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0;
-            height: 4px;
-        }
-
-        .card.c-blue::before { background: linear-gradient(90deg, #3b82f6, #93c5fd); }
-        .card.c-purple::before { background: linear-gradient(90deg, var(--purple-500), var(--purple-300)); }
-        .card.c-green::before { background: linear-gradient(90deg, #10b981, #6ee7b7); }
 
         .card:hover {
             transform: translateY(-4px);
-            box-shadow: 0 12px 40px rgba(124, 58, 237, 0.12);
-            border-color: var(--purple-200);
+            box-shadow: 0 16px 48px rgba(0, 0, 0, 0.08);
+            border-color: var(--up-primary-light);
         }
 
         .card-icon {
             width: 48px;
             height: 48px;
-            border-radius: 14px;
+            border-radius: var(--radius);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 22px;
-            margin-bottom: 18px;
+            font-size: 24px;
+            margin-bottom: 20px;
+            background: var(--up-primary-50);
         }
 
-        .card.c-blue .card-icon { background: #eff6ff; }
-        .card.c-purple .card-icon { background: var(--purple-100); }
-        .card.c-green .card-icon { background: #f0fdf4; }
+        .card-label {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--up-primary);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
 
         .card-title {
+            font-family: 'Montserrat', sans-serif;
             font-size: 20px;
-            font-weight: 800;
-            color: var(--slate-900);
+            font-weight: 700;
+            color: var(--up-black);
             margin-bottom: 8px;
             letter-spacing: -0.3px;
         }
 
         .card-desc {
             font-size: 14px;
-            color: var(--slate-500);
-            line-height: 1.6;
+            color: var(--up-gray-500);
+            line-height: 1.65;
             flex: 1;
         }
 
-        .card-footer {
+        .card-actions {
             display: flex;
-            align-items: center;
-            gap: 6px;
-            margin-top: 20px;
-            font-size: 13px;
-            font-weight: 600;
-            color: var(--purple-500);
+            gap: 10px;
+            margin-top: 24px;
         }
 
-        .card-footer-group {
-            display: flex;
-            gap: 12px;
-            margin-top: 20px;
-        }
-
-        .card-link {
+        .btn {
             display: inline-flex;
             align-items: center;
-            gap: 5px;
-            padding: 8px 16px;
-            border-radius: 100px;
+            gap: 6px;
+            padding: 9px 20px;
+            border-radius: var(--radius-pill);
+            font-family: 'Montserrat', sans-serif;
             font-size: 12px;
             font-weight: 600;
             text-decoration: none;
-            transition: all 0.2s;
+            transition: all 0.2s ease;
             white-space: nowrap;
         }
 
-        .card-link.primary {
-            background: var(--purple-500);
-            color: #fff;
+        .btn-primary {
+            background: var(--up-primary);
+            color: var(--up-white);
         }
 
-        .card-link.primary:hover {
-            background: var(--purple-600);
-            box-shadow: 0 2px 8px rgba(124, 58, 237, 0.3);
+        .btn-primary:hover {
+            background: var(--up-primary-dark);
+            box-shadow: 0 4px 12px rgba(77, 101, 255, 0.25);
         }
 
-        .card-link.secondary {
-            background: var(--slate-100);
-            color: var(--slate-600);
-            border: 1px solid var(--slate-200);
+        .btn-ghost {
+            background: transparent;
+            color: var(--up-gray-600);
+            border: 1px solid var(--up-gray-200);
         }
 
-        .card-link.secondary:hover {
-            background: var(--purple-50);
-            color: var(--purple-600);
-            border-color: var(--purple-200);
+        .btn-ghost:hover {
+            background: var(--up-primary-50);
+            color: var(--up-primary);
+            border-color: var(--up-primary-100);
         }
 
-        .card-link svg {
-            width: 13px;
-            height: 13px;
+        .btn svg {
+            width: 14px;
+            height: 14px;
         }
 
-        .card-footer svg {
-            width: 16px;
-            height: 16px;
-            transition: transform 0.2s;
+        /* ── Divider ── */
+        .divider {
+            width: 60px;
+            height: 2px;
+            background: var(--up-primary);
+            margin: 0 auto 48px;
+            border: none;
+            border-radius: 1px;
         }
 
-        .card:hover .card-footer svg {
-            transform: translateX(4px);
-        }
-
-        .card-badge {
-            display: inline-block;
-            font-size: 10px;
-            font-weight: 700;
-            padding: 3px 10px;
-            border-radius: 100px;
-            letter-spacing: 0.5px;
-            text-transform: uppercase;
-            margin-bottom: 14px;
-        }
-
-        .card.c-blue .card-badge { background: #dbeafe; color: #2563eb; }
-        .card.c-purple .card-badge { background: var(--purple-100); color: var(--purple-600); }
-        .card.c-green .card-badge { background: #d1fae5; color: #059669; }
-        .card.c-rose::before { background: linear-gradient(90deg, #f43f5e, #fda4af); }
-        .card.c-rose .card-icon { background: #fff1f2; }
-
-        /* div cards need pointer cursor on hover */
-        .card { cursor: default; }
-
-        .empty-badge {
-            display: inline-block;
-            font-size: 10px;
-            font-weight: 600;
-            padding: 2px 8px;
-            border-radius: 4px;
-            background: var(--slate-100);
-            color: var(--slate-400);
-            margin-left: 8px;
-        }
-
+        /* ── Footer ── */
         .footer {
             text-align: center;
-            padding: 32px;
-            font-size: 12px;
-            color: var(--slate-400);
+            padding: 40px 24px;
+            border-top: 1px solid var(--up-gray-200);
+            font-size: 13px;
+            color: var(--up-gray-400);
         }
 
-        .footer strong { color: var(--purple-500); }
+        .footer strong {
+            color: var(--up-primary);
+            font-weight: 600;
+        }
+
+        /* ── Responsive ── */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 36px; }
+            .card-grid { grid-template-columns: 1fr; }
+            .hero { padding: 60px 24px 48px; }
+        }
     </style>
 </head>
 <body>
 
 <div class="hero">
-    <div class="hero-badge">EBS AI ModelOps</div>
+    <div class="hero-label">EBS AI ModelOps</div>
     <h1>Documentation <span>Portal</span></h1>
-    <p>프로젝트별 기술 문서 모음</p>
+    <p>프로젝트별 기술 문서와 온보딩 가이드 모음</p>
 </div>
+
+<hr class="divider">
 
 <div class="container">
     <div class="card-grid">
 
-        <div class="card c-blue">
+        <div class="card">
             <div class="card-icon">&#129302;</div>
-            <div class="card-badge">AutoML Platform</div>
+            <div class="card-label">AutoML Platform</div>
             <div class="card-title">DocAI AutoML</div>
             <div class="card-desc">3세대 DSP + 4세대 KVS 공용 AutoML. LXDonut 기반 멀티모달 문서 파싱 엔진.</div>
-            <div class="card-footer-group">
-                <a href="./docai-automl/" class="card-link primary">
-                    문서 보기 <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            <div class="card-actions">
+                <a href="./docai-automl/" class="btn btn-primary">
+                    Docs <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                 </a>
-                <a href="./onboarding/" class="card-link secondary">
-                    &#128640; Onboarding
-                </a>
+                <a href="./onboarding/" class="btn btn-ghost">Onboarding</a>
             </div>
         </div>
 
-        <div class="card c-purple">
+        <div class="card">
             <div class="card-icon">&#128218;</div>
-            <div class="card-badge">Pipeline Toolkit</div>
+            <div class="card-label">Pipeline Toolkit</div>
             <div class="card-title">DocAI Kit</div>
-            <div class="card-desc">Enterprise DocAI Kit. BMT/POC, QA, 온사이트 검증을 위한 문서 AI 파이프라인 툴킷. 12개 모듈, 7개 E2E 파이프라인.</div>
-            <div class="card-footer-group">
-                <a href="./docai-kit/" class="card-link primary">
-                    문서 보기 <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            <div class="card-desc">Enterprise DocAI Kit. BMT/POC, QA, 온사이트 검증을 위한 파이프라인 툴킷.</div>
+            <div class="card-actions">
+                <a href="./docai-kit/" class="btn btn-primary">
+                    Docs <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                 </a>
-                <a href="./docai-kit-onboarding/" class="card-link secondary">
-                    &#128640; Onboarding
-                </a>
+                <a href="./docai-kit-onboarding/" class="btn btn-ghost">Onboarding</a>
             </div>
         </div>
 
-        <div class="card c-green">
+        <div class="card">
             <div class="card-icon">&#128209;</div>
-            <div class="card-badge">Classification</div>
+            <div class="card-label">Classification</div>
             <div class="card-title">Classifier</div>
-            <div class="card-desc">문서 분류 엔진. V1(CNN) + V2(LXDonut) 아키텍처, CloudEvent 서빙, 학습/추론 파이프라인.</div>
-            <div class="card-footer-group">
-                <a href="./classifier/" class="card-link primary">
-                    문서 보기 <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            <div class="card-desc">문서 분류 엔진. V1(CNN) + V2(LXDonut) 아키텍처, 학습/추론 파이프라인.</div>
+            <div class="card-actions">
+                <a href="./classifier/" class="btn btn-primary">
+                    Docs <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                 </a>
-                <a href="./classifier-onboarding/" class="card-link secondary">
-                    &#128640; Onboarding
-                </a>
+                <a href="./classifier-onboarding/" class="btn btn-ghost">Onboarding</a>
             </div>
         </div>
 
@@ -330,7 +288,7 @@
 </div>
 
 <div class="footer">
-    <strong>EBS AI ModelOps</strong> &middot; Documentation Portal
+    <strong>Upstage</strong> &middot; EBS AI ModelOps &middot; Documentation Portal
 </div>
 
 </body>
