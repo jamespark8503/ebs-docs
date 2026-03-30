@@ -197,6 +197,8 @@
         .card.c-blue .card-badge { background: #dbeafe; color: #2563eb; }
         .card.c-purple .card-badge { background: var(--purple-100); color: var(--purple-600); }
         .card.c-green .card-badge { background: #d1fae5; color: #059669; }
+        .card.c-rose::before { background: linear-gradient(90deg, #f43f5e, #fda4af); }
+        .card.c-rose .card-icon { background: #fff1f2; }
 
         .empty-badge {
             display: inline-block;
@@ -255,10 +257,21 @@
         <a href="./classifier/" class="card c-green">
             <div class="card-icon">&#128209;</div>
             <div class="card-badge">Classification</div>
-            <div class="card-title">Classifier <span class="empty-badge">Coming Soon</span></div>
-            <div class="card-desc">문서 분류 엔진. CloudEvent 기반 분류 서빙, 모델 구조, 온톨로지 설정 가이드.</div>
+            <div class="card-title">Classifier</div>
+            <div class="card-desc">문서 분류 엔진. V1(CNN) + V2(LXDonut) 아키텍처, CloudEvent 서빙, 학습/추론 파이프라인.</div>
             <div class="card-footer">
                 문서 보기
+                <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </div>
+        </a>
+
+        <a href="./onboarding/" class="card c-rose" style="border:2px solid #fecdd3;">
+            <div class="card-icon" style="background:#fff1f2;">&#128640;</div>
+            <div class="card-badge" style="background:#fce7f3; color:#be185d;">Onboarding</div>
+            <div class="card-title">AutoML Onboarding</div>
+            <div class="card-desc">DocAI AutoML 실전 사용 가이드. 환경 세팅, 데이터 준비, 학습, 평가, 패키징까지 Step-by-Step + 전체 CLI Reference.</div>
+            <div class="card-footer" style="color:#e11d48;">
+                가이드 보기
                 <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
             </div>
         </a>
