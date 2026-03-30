@@ -149,6 +149,48 @@
         .dir-tree .fi { color:#c4b5fd; }
         .dir-tree .c { color:#64748b; font-style:italic; font-size:11px; }
 
+        /* Onboarding */
+        .ob-divider { height:4px; background:linear-gradient(90deg,var(--purple-500),#4f46e5,var(--purple-500)); border:none; margin:64px 0 0; border-radius:2px; }
+        .step-grid { display:flex; gap:0; margin-bottom:32px; position:relative; }
+        .step-item { flex:1; text-align:center; padding:16px 8px; position:relative; }
+        .step-item::after { content:'→'; position:absolute; right:-8px; top:20px; font-size:16px; color:var(--slate-400); z-index:1; }
+        .step-item:last-child::after { display:none; }
+        .step-num { width:44px; height:44px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:18px; font-weight:800; color:#fff; margin:0 auto 8px; }
+        .step-num.n0 { background:linear-gradient(135deg,#64748b,#475569); }
+        .step-num.n1 { background:linear-gradient(135deg,#3b82f6,#2563eb); }
+        .step-num.n2 { background:linear-gradient(135deg,var(--purple-500),var(--purple-600)); }
+        .step-num.n3 { background:linear-gradient(135deg,#10b981,#059669); }
+        .step-num.n4 { background:linear-gradient(135deg,#f97316,#ea580c); }
+        .step-num.n5 { background:linear-gradient(135deg,#f43f5e,#e11d48); }
+        .step-num.n6 { background:linear-gradient(135deg,#8b5cf6,#7c3aed); }
+        .step-label { font-size:12px; font-weight:700; color:var(--slate-800); }
+        .step-sublabel { font-size:10px; color:var(--slate-500); }
+        .callout { display:flex; gap:12px; padding:16px 20px; border-radius:var(--radius-sm); margin-bottom:16px; font-size:13px; line-height:1.6; }
+        .callout-icon { font-size:18px; flex-shrink:0; margin-top:1px; }
+        .callout.info { background:var(--purple-50); border:1px solid var(--purple-100); color:var(--purple-700); }
+        .callout.warn { background:#fef3c7; border:1px solid #fde68a; color:#92400e; }
+        .callout.tip { background:var(--green-50); border:1px solid var(--green-100); color:#065f46; }
+        .ob-cmd { display:flex; align-items:center; gap:12px; padding:14px 20px; background:var(--slate-900); border-radius:var(--radius-sm); margin-bottom:12px; font-family:'JetBrains Mono',monospace; font-size:13px; color:#86efac; border:1px solid rgba(255,255,255,0.06); }
+        .ob-cmd .prompt { color:var(--slate-500); user-select:none; }
+        .ob-cmd .flag { color:#fde68a; }
+        .ob-step-card { background:#fff; border-radius:var(--radius); border:1px solid var(--slate-200); margin-bottom:20px; overflow:hidden; }
+        .ob-step-header { display:flex; align-items:center; gap:12px; padding:18px 24px; background:var(--slate-50); border-bottom:1px solid var(--slate-200); cursor:pointer; user-select:none; }
+        .ob-step-header:hover { background:var(--purple-50); }
+        .ob-step-num { width:32px; height:32px; border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:800; color:#fff; flex-shrink:0; }
+        .ob-step-title { font-size:15px; font-weight:700; color:var(--slate-900); }
+        .ob-step-desc { font-size:12px; color:var(--slate-500); margin-left:auto; }
+        .ob-step-body { padding:24px; }
+        .ob-step-body p { font-size:13px; color:var(--slate-700); margin-bottom:12px; line-height:1.7; }
+        .ob-step-body ol, .ob-step-body ul { font-size:13px; color:var(--slate-700); margin:0 0 16px 20px; line-height:1.8; }
+        .ob-step-body li { margin-bottom:4px; }
+        .ob-step-body li code { font-size:11.5px; }
+        .ob-step-body strong { color:var(--slate-900); }
+        .cli-select { background:var(--slate-50); border:1px solid var(--slate-200); border-radius:var(--radius-sm); padding:14px 18px; margin-bottom:12px; font-family:'JetBrains Mono',monospace; font-size:12px; line-height:1.8; color:var(--slate-600); }
+        .cli-select .q { color:var(--purple-600); font-weight:600; }
+        .cli-select .sel { color:var(--green-600); }
+        .conv-box { background:var(--slate-50); border:1px solid var(--slate-200); border-radius:var(--radius-sm); padding:14px 18px; margin-bottom:12px; font-size:12px; color:var(--slate-600); line-height:1.6; }
+        .conv-box strong { color:var(--slate-800); }
+
         /* Footer */
         .footer { text-align:center; padding:40px; color:var(--slate-400); font-size:13px; border-top:1px solid var(--slate-200); }
         .footer strong { color:var(--purple-500); }
@@ -195,6 +237,7 @@
         <a href="#training" class="nav-link">Training</a>
         <a href="#inference" class="nav-link">Inference</a>
         <a href="#config" class="nav-link">Config</a>
+        <a href="#onboarding" class="nav-link" style="color:var(--purple-500);font-weight:700;">&#128640; Onboarding</a>
     </div>
 </nav>
 
@@ -641,12 +684,319 @@ flowchart TD
     </table>
 </div>
 
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- ONBOARDING GUIDE -->
+<!-- ══════════════════════════════════════════════════════ -->
+<hr class="ob-divider">
+
+<div id="onboarding" class="section" style="margin-top:48px;">
+    <div class="section-header">
+        <div class="section-icon purple" style="background:linear-gradient(135deg,#7c3aed,#4f46e5);">&#128640;</div>
+        <div><div class="section-title">Onboarding Guide</div><div class="section-subtitle">DocAI AutoML 실전 사용 가이드 (Step-by-Step)</div></div>
+    </div>
+
+    <div class="callout info">
+        <div class="callout-icon">&#128204;</div>
+        <div>
+            <strong>프로젝트 경로:</strong> <code>/data/project/enterprise/docai</code><br>
+            <strong>명령어 규칙:</strong> DRSP(3세대) → <code>docai3</code> &nbsp;|&nbsp; KVS(4세대) → <code>docai4</code>
+        </div>
+    </div>
+
+    <!-- Pipeline Overview -->
+    <div class="step-grid">
+        <div class="step-item"><div class="step-num n0">0</div><div class="step-label">환경 세팅</div><div class="step-sublabel">Conda + 패키지</div></div>
+        <div class="step-item"><div class="step-num n1">1</div><div class="step-label">데이터 준비</div><div class="step-sublabel">Dataset + OCR</div></div>
+        <div class="step-item"><div class="step-num n2">2</div><div class="step-label">모델 학습</div><div class="step-sublabel">Setup + Train</div></div>
+        <div class="step-item"><div class="step-num n3">3</div><div class="step-label">추론 &amp; 평가</div><div class="step-sublabel">Test + KiEval</div></div>
+        <div class="step-item"><div class="step-num n4">4</div><div class="step-label">후처리</div><div class="step-sublabel">Refiner 개발</div></div>
+        <div class="step-item"><div class="step-num n5">5</div><div class="step-label">패키징</div><div class="step-sublabel">Save + Pack</div></div>
+        <div class="step-item"><div class="step-num n6">+</div><div class="step-label">분석</div><div class="step-sublabel">Analyzer</div></div>
+    </div>
+
+    <!-- ── STEP 0: 환경 세팅 ── -->
+    <div class="ob-step-card">
+        <div class="ob-step-header"><div class="ob-step-num" style="background:linear-gradient(135deg,#64748b,#475569);">0</div><div class="ob-step-title">환경 세팅</div><div class="ob-step-desc">Conda 환경 + docai-automl 설치</div></div>
+        <div class="ob-step-body">
+            <p><strong>Option A) 개인 가상환경 생성</strong></p>
+            <div class="ob-cmd"><span class="prompt">$</span> source ${개인 경로}/bin/activate</div>
+            <div class="ob-cmd"><span class="prompt">$</span> conda create -n <span class="flag">${환경이름}</span> python=3.10</div>
+            <div class="ob-cmd"><span class="prompt">$</span> pip install git+https://github.com/UpstageAI/docai-automl.git@main</div>
+
+            <p style="margin-top:16px;"><strong>Option B) 공용 가상환경 사용</strong></p>
+            <div class="ob-cmd"><span class="prompt">$</span> source /data/project/enterprise/docai/miniconda3/bin/activate docai-automl</div>
+        </div>
+    </div>
+
+    <!-- ── STEP 1: 데이터 준비 ── -->
+    <div class="ob-step-card">
+        <div class="ob-step-header"><div class="ob-step-num" style="background:linear-gradient(135deg,#3b82f6,#2563eb);">1</div><div class="ob-step-title">데이터 준비</div><div class="ob-step-desc">Dataset 추가 → 온톨로지 → OCR 실행</div></div>
+        <div class="ob-step-body">
+
+            <h3 style="border-left-color:#3b82f6; color:#2563eb;">1.1 데이터셋 &amp; 온톨로지 경로 확인</h3>
+            <table>
+                <thead><tr><th>항목</th><th>경로</th></tr></thead>
+                <tbody>
+                    <tr><td><strong>데이터셋</strong></td><td><code>/data/project/datasets/data_assets/{dataset_type}/{dataset_name}</code></td></tr>
+                    <tr><td><strong>온톨로지</strong></td><td><code>/data/project/enterprise/docai/repos/ocr-parser-ontology/_composed/{ontology_name}</code></td></tr>
+                </tbody>
+            </table>
+
+            <div class="callout tip">
+                <div class="callout-icon">&#128161;</div>
+                <div>온톨로지가 없으면: <code>cd .../ocr-parser-ontology/_composed && git checkout composed && git pull</code></div>
+            </div>
+
+            <h3 style="border-left-color:#3b82f6; color:#2563eb;">1.2 데이터 추가</h3>
+            <div class="ob-cmd"><span class="prompt">$</span> <span class="flag">${docai3 또는 docai4}</span> data add</div>
+            <p>대화형 CLI가 실행됩니다:</p>
+            <div class="cli-select">
+<span class="q">? Select Document Type</span> (화살표로 선택)<br>
+&nbsp;&nbsp;» consent_to_collection_and_use_of_personal_information<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Create New Directory<br><br>
+<span class="q">? Select Add Type</span><br>
+&nbsp;&nbsp;» <span class="sel">ontology</span> — 온톨로지 추가 시<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="sel">source</span> — 데이터셋 추가 시
+            </div>
+
+            <div class="conv-box">
+                <strong>데이터셋 이름 컨벤션:</strong> <code>{날짜}_{고객사코드}_{범위}_{특징}</code><br>
+                예: <code>250213_meritzsec_main</code>, <code>250417_general_poc_syn</code>
+            </div>
+
+            <h3 style="border-left-color:#3b82f6; color:#2563eb;">1.3 OCR 실행</h3>
+            <div class="ob-cmd"><span class="prompt">$</span> <span class="flag">${docai3 또는 docai4}</span> data ocr</div>
+            <div class="cli-select">
+<span class="q">? Select Document Type</span> → 문서 타입 선택<br>
+<span class="q">? Select Dataset Name</span> → 데이터셋 선택<br>
+<span class="q">? Select ontology</span> → 온톨로지 선택
+            </div>
+
+            <h3 style="border-left-color:#3b82f6; color:#2563eb;">1.4 (KVS만) 데이터 분석</h3>
+            <div class="ob-cmd"><span class="prompt">$</span> <span class="flag">docai4</span> data analyze</div>
+            <p>입력/출력 토큰 길이 분포를 분석하여 <code>setup.yaml</code>의 <code>max_length</code> 설정에 활용합니다.</p>
+
+            <h3 style="border-left-color:#3b82f6; color:#2563eb;">1.5 결과 디렉토리 구조</h3>
+            <pre class="dir-tree"><span class="f">/data/project/enterprise/docai/dev/${docai3 or docai4}/{document_type}/</span>
+├── <span class="f">data/</span>
+│   ├── <span class="f">ontologies/</span>
+│   │   ├── <span class="fi">ontology_1.0.yaml</span>
+│   │   └── <span class="fi">ontology_2.0.yaml</span>
+│   └── <span class="f">sources/{dataset_name}/</span>
+│       ├── <span class="f">images/</span>
+│       │   ├── <span class="f">train/</span>  <span class="f">val/</span>  <span class="f">test/</span>
+│       ├── <span class="f">ufos/</span>              <span class="c">← DRSP: ocr/, parsing/ (train/val/test.json)</span>
+│       ├── <span class="f">ufks/</span>              <span class="c">← KVS: train/val/test.json</span>
+│       ├── <span class="f">analysis_result/</span>   <span class="c">← KVS analyze 결과</span>
+│       └── <span class="fi">meta_info.json</span></pre>
+        </div>
+    </div>
+
+    <!-- ── STEP 2: 모델 학습 ── -->
+    <div class="ob-step-card">
+        <div class="ob-step-header"><div class="ob-step-num" style="background:linear-gradient(135deg,var(--purple-500),var(--purple-600));">2</div><div class="ob-step-title">모델 학습</div><div class="ob-step-desc">setup.yaml 설정 → 학습 실행</div></div>
+        <div class="ob-step-body">
+
+            <h3 style="border-left-color:var(--purple-500); color:var(--purple-600);">2.1 학습 세팅</h3>
+            <div class="ob-cmd"><span class="prompt">$</span> <span class="flag">${docai3 또는 docai4}</span> model setup</div>
+            <div class="cli-select">
+<span class="q">? Select Document Type</span> → 문서 타입 선택<br>
+<span class="q">? Enter Experiment Name</span> → <span class="sel">{날짜}_{고객사}_{범위}</span> 입력
+            </div>
+            <p><code>{document_type}/models/{exp_name}/setup.yaml</code> 이 생성됩니다. 아래 주요 항목을 설정하세요:</p>
+
+            <table>
+                <thead><tr><th>항목</th><th>설명</th><th>예시</th></tr></thead>
+                <tbody>
+                    <tr><td><code>data.dataset</code></td><td>사용할 데이터셋 이름</td><td><code>250417_hi_maintenance</code></td></tr>
+                    <tr><td><code>data.ontology</code></td><td>온톨로지 파일명</td><td><code>ont.diagnosis.upstage__7.0.yaml</code></td></tr>
+                    <tr><td><code>train.model</code></td><td>모델 타입</td><td>DRSP: <code>parsing/bio_with_grouping</code><br>KVS: <code>lxdonut_parallel</code></td></tr>
+                    <tr><td><code>train.lr</code></td><td>학습률</td><td><code>2e-5</code></td></tr>
+                    <tr><td><code>train.batch_size</code></td><td>배치 크기</td><td><code>2</code> ~ <code>4</code></td></tr>
+                    <tr><td><code>train.num_epochs</code></td><td>에포크 (KVS)</td><td><code>200</code></td></tr>
+                    <tr><td><code>train.max_steps</code></td><td>학습 스텝 (DRSP)</td><td><code>1000</code></td></tr>
+                    <tr><td><code>train.max_length</code></td><td>최대 토큰 길이</td><td><code>2048</code></td></tr>
+                    <tr><td><code>pretrained_model_...</code></td><td>사전학습 모델 경로</td><td>체크포인트 경로</td></tr>
+                </tbody>
+            </table>
+
+            <h3 style="border-left-color:var(--purple-500); color:var(--purple-600);">2.2 학습 실행</h3>
+            <div class="ob-cmd"><span class="prompt">$</span> <span class="flag">${docai3 또는 docai4}</span> model train</div>
+            <div class="ob-cmd"><span class="prompt">$</span> <span class="flag">${docai3 또는 docai4}</span> model train <span class="flag">--all</span> &nbsp;&nbsp;<span style="color:var(--slate-500);"># 모든 실험 조합 일괄 학습</span></div>
+
+            <h3 style="border-left-color:var(--purple-500); color:var(--purple-600);">2.3 학습 결과</h3>
+            <div class="cmp-grid" style="margin-top:12px;">
+                <div class="cmp-card"><div class="cmp-header gen3">DRSP 결과</div><div class="cmp-body"><ul>
+                    <li><code>backbone_config/</code></li>
+                    <li><code>checkpoints/</code> (best.ckpt, last.ckpt)</li>
+                    <li><code>tokenizer/</code></li>
+                    <li><code>hparams.yaml</code>, <code>ontology.yaml</code></li>
+                </ul></div></div>
+                <div class="cmp-card"><div class="cmp-header gen4">KVS 결과</div><div class="cmp-body"><ul>
+                    <li><code>code/</code>, <code>logs/</code></li>
+                    <li><code>model/</code> (best/, last/)</li>
+                    <li><code>config.yaml</code></li>
+                    <li><code>accelerator_config.json</code></li>
+                    <li><code>progress_bar.log</code></li>
+                </ul></div></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── STEP 3: 추론 & 평가 ── -->
+    <div class="ob-step-card">
+        <div class="ob-step-header"><div class="ob-step-num" style="background:linear-gradient(135deg,#10b981,#059669);">3</div><div class="ob-step-title">추론 &amp; 평가</div><div class="ob-step-desc">모델 테스트 → KiEval 점수 확인</div></div>
+        <div class="ob-step-body">
+            <div class="ob-cmd"><span class="prompt">$</span> <span class="flag">${docai3 또는 docai4}</span> model test</div>
+            <div class="ob-cmd"><span class="prompt">$</span> <span class="flag">${docai3 또는 docai4}</span> model test <span class="flag">--all</span> &nbsp;&nbsp;<span style="color:var(--slate-500);"># 모든 실험 일괄 평가</span></div>
+
+            <div class="cli-select">
+<span class="q">? Select Document Type</span> → 문서 타입<br>
+<span class="q">? Select Experiment Name</span> → 실험명<br>
+<span class="q">? Select Model Name</span> → 모델 (exp__0, exp__1...)<br>
+<span class="q">? Select Dataset</span> → 데이터셋<br>
+<span class="q">? Select ontology</span> → 온톨로지
+            </div>
+
+            <h3 style="border-left-color:#10b981; color:#059669;">결과 디렉토리</h3>
+            <pre class="dir-tree"><span class="f">models/{exp_name}/{exp_name}__0/outputs/{dataset_name}/</span>
+├── <span class="f">general_infer_ufp/</span>
+│   ├── <span class="fi">ufp.json</span>              <span class="c">← 추론 결과 (UFP)</span>
+│   └── <span class="fi">mufp.json</span>             <span class="c">← 추론 결과 (MUFP)</span>
+└── <span class="f">{use_case}__{ontology_version}/</span>
+    ├── <span class="f">kieval/</span>
+    │   ├── <span class="fi">total_kieval.json</span>   <span class="c">← 전체 KiEval 점수</span>
+    │   ├── <span class="fi">entity_level_kieval.json</span>
+    │   └── <span class="fi">kieval_result.md</span>    <span class="c">← 사람이 읽기 쉬운 요약</span>
+    ├── <span class="f">ufp/</span>   <span class="c">(gold.json, pred.json)</span>
+    ├── <span class="f">mufp/</span>  <span class="c">(gold.json, pred.json)</span>
+    └── <span class="f">csv/</span>   <span class="c">(gold.csv, pred.csv)</span></pre>
+        </div>
+    </div>
+
+    <!-- ── STEP 4: 후처리 ── -->
+    <div class="ob-step-card">
+        <div class="ob-step-header"><div class="ob-step-num" style="background:linear-gradient(135deg,#f97316,#ea580c);">4</div><div class="ob-step-title">후처리</div><div class="ob-step-desc">Refiner / Grounder 개발 → 재평가</div></div>
+        <div class="ob-step-body">
+            <div class="callout warn">
+                <div class="callout-icon">&#9888;&#65039;</div>
+                <div>현재 <code>/data/project/docai/repos/ocr-parser-postprocessor</code>를 직접 수정하는 방식으로 전환 예정입니다. 전환 전까지는 GitHub PR 방식을 유지합니다.</div>
+            </div>
+
+            <ol>
+                <li><strong>개인 공간에 클론:</strong>
+                    <div class="ob-cmd"><span class="prompt">$</span> git clone https://github.com/UpstageAI/ocr-parser-postprocessor</div>
+                </li>
+                <li><strong>후처리 개발 후 PR &amp; Merge 완료</strong></li>
+                <li><strong>공용 레포 최신화:</strong>
+                    <div class="ob-cmd"><span class="prompt">$</span> cd /data/project/enterprise/docai/repos/ocr-parser-postprocessor && git pull</div>
+                </li>
+                <li><strong>use_case 지정하여 재평가:</strong>
+                    <div class="ob-cmd"><span class="prompt">$</span> <span class="flag">${docai3 또는 docai4}</span> model test -u <span class="flag">${use_case}</span></div>
+                    <p style="margin-top:4px;">결과: <code>outputs/{use_case}__{ontology_name}/</code></p>
+                </li>
+            </ol>
+        </div>
+    </div>
+
+    <!-- ── STEP 5: 패키징 ── -->
+    <div class="ob-step-card">
+        <div class="ob-step-header"><div class="ob-step-num" style="background:linear-gradient(135deg,#f43f5e,#e11d48);">5</div><div class="ob-step-title">패키징</div><div class="ob-step-desc">체크포인트 저장 → 서빙용 패키지 생성</div></div>
+        <div class="ob-step-body">
+
+            <h3 style="border-left-color:#f43f5e; color:#e11d48;">5.1 체크포인트 저장</h3>
+            <div class="ob-cmd"><span class="prompt">$</span> <span class="flag">${docai3 또는 docai4}</span> save</div>
+            <div class="cli-select">
+<span class="q">? Select Document Type</span> → 문서 타입<br>
+<span class="q">? Select Experiment</span> → 실험명<br>
+<span class="q">? Select Model</span> → 최고 성능 모델<br>
+<span class="q">? Is this model universal?</span> → <span class="sel">YES</span> / NO
+            </div>
+            <p>저장 경로: <code>/data/project/enterprise/docai/checkpoints/${docai3 or docai4}/{document_type}/{model_name}_{universal}</code></p>
+
+            <h3 style="border-left-color:#f43f5e; color:#e11d48;">5.2 패키지 생성</h3>
+            <div class="ob-cmd"><span class="prompt">$</span> <span class="flag">${docai3 또는 docai4}</span> pack</div>
+            <div class="cli-select">
+<span class="q">? Select Document Type</span> → 문서 타입<br>
+<span class="q">? Select Model</span> → 모델<br>
+<span class="q">? Enter use case</span> → use_case 입력<br>
+<span class="q">? Enter package name</span> → kr-{type}-extractor-{use_case}-0.3b-{version}
+            </div>
+
+            <div class="conv-box">
+                <strong>패키지 이름 규칙:</strong> <code>{language}-{document_type}-extractor-{use_case}-{size}-{gen}.{minor}.{patch}</code><br>
+                예: <code>kr-transfer-confirmation-extractor-meritzsec-0.3b-4.1.0</code>
+            </div>
+
+            <h3 style="border-left-color:#f43f5e; color:#e11d48;">5.3 패키지 결과</h3>
+            <pre class="dir-tree"><span class="f">packages/{use_case}/{document_type}/{package_name}/</span>
+├── <span class="f">config/</span>                    <span class="c">← 서빙 시 OP_CONFIG_DIR</span>
+│   ├── <span class="fi">ont.{type}.yaml</span>       <span class="c">← 온톨로지 (원본 이름)</span>
+│   └── <span class="fi">README.md</span>             <span class="c">← 모델 정보, 평가 결과, 데이터셋 정보</span>
+├── <span class="f">weight/</span>                    <span class="c">← 서빙 시 OP_MODEL_DIR</span>
+│   ├── <span class="f">codes/</span>  <span class="f">compiled/</span>  <span class="f">tokenizer/</span>
+│   ├── <span class="fi">config.json</span>  <span class="fi">config.yaml</span>
+│   ├── <span class="fi">ontology.yaml</span>  <span class="fi">ontology_short.yaml</span>
+│   └── <span class="fi">pytorch_model.bin</span>
+├── <span class="fi">config.yaml</span>               <span class="c">← EQMS용 (서빙 정보, Docker 이미지, GPU 설정)</span>
+├── <span class="fi">config.tar.gz</span>
+└── <span class="fi">weight.tar.gz</span></pre>
+        </div>
+    </div>
+
+    <!-- ── STEP +: 분석 ── -->
+    <div class="ob-step-card">
+        <div class="ob-step-header"><div class="ob-step-num" style="background:linear-gradient(135deg,#8b5cf6,#7c3aed);">+</div><div class="ob-step-title">분석 (Analyzer)</div><div class="ob-step-desc">모델 결과 시각적 분석</div></div>
+        <div class="ob-step-body">
+            <div class="ob-cmd"><span class="prompt">$</span> <span class="flag">${docai3 또는 docai4}</span> analyze</div>
+            <div class="cli-select">
+<span class="q">? Select Document Type</span> → 문서 타입<br>
+<span class="q">? Select Model Name</span> → 모델<br>
+<span class="q">? Select Dataset Name</span> → 데이터셋<br>
+<span class="q">? Select Output Name</span> → 출력 디렉토리
+            </div>
+            <p><code>localhost:{포트번호}</code>로 접속하면 분석 페이지가 열립니다.</p>
+
+            <table>
+                <thead><tr><th>색상</th><th>의미</th></tr></thead>
+                <tbody>
+                    <tr><td><span style="color:#000;font-weight:700;">Black</span></td><td>Ground Truth (정답 라벨)</td></tr>
+                    <tr><td><span style="color:#16a34a;font-weight:700;">Green</span></td><td>Matched — 정답과 일치하는 예측</td></tr>
+                    <tr><td><span style="color:#dc2626;font-weight:700;">Red</span></td><td>Wrong — 오답 예측 (fail)</td></tr>
+                    <tr><td><span style="color:#ca8a04;font-weight:700;">Yellow</span></td><td>Similar-but-fail — 유사하지만 불일치</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- ── Quick Reference ── -->
+    <div class="arch-box" style="margin-top:32px;">
+        <h3>Quick Command Reference</h3>
+        <table style="width:100%;border:none;margin:0;">
+            <thead><tr><th style="background:rgba(255,255,255,0.1);color:#d4bbfc;border-bottom:1px solid rgba(255,255,255,0.15);">작업</th><th style="background:rgba(255,255,255,0.1);color:#d4bbfc;border-bottom:1px solid rgba(255,255,255,0.15);">DRSP (3세대)</th><th style="background:rgba(255,255,255,0.1);color:#d4bbfc;border-bottom:1px solid rgba(255,255,255,0.15);">KVS (4세대)</th></tr></thead>
+            <tbody>
+                <tr><td style="color:#e2e8f0;border-bottom:1px solid rgba(255,255,255,0.08);">데이터 추가</td><td style="color:#86efac;border-bottom:1px solid rgba(255,255,255,0.08);font-family:'JetBrains Mono',monospace;font-size:12px;">docai3 data add</td><td style="color:#93c5fd;border-bottom:1px solid rgba(255,255,255,0.08);font-family:'JetBrains Mono',monospace;font-size:12px;">docai4 data add</td></tr>
+                <tr><td style="color:#e2e8f0;border-bottom:1px solid rgba(255,255,255,0.08);">OCR 실행</td><td style="color:#86efac;border-bottom:1px solid rgba(255,255,255,0.08);font-family:'JetBrains Mono',monospace;font-size:12px;">docai3 data ocr</td><td style="color:#93c5fd;border-bottom:1px solid rgba(255,255,255,0.08);font-family:'JetBrains Mono',monospace;font-size:12px;">docai4 data ocr</td></tr>
+                <tr><td style="color:#e2e8f0;border-bottom:1px solid rgba(255,255,255,0.08);">데이터 분석</td><td style="color:#64748b;border-bottom:1px solid rgba(255,255,255,0.08);">—</td><td style="color:#93c5fd;border-bottom:1px solid rgba(255,255,255,0.08);font-family:'JetBrains Mono',monospace;font-size:12px;">docai4 data analyze</td></tr>
+                <tr><td style="color:#e2e8f0;border-bottom:1px solid rgba(255,255,255,0.08);">학습 세팅</td><td style="color:#86efac;border-bottom:1px solid rgba(255,255,255,0.08);font-family:'JetBrains Mono',monospace;font-size:12px;">docai3 model setup</td><td style="color:#93c5fd;border-bottom:1px solid rgba(255,255,255,0.08);font-family:'JetBrains Mono',monospace;font-size:12px;">docai4 model setup</td></tr>
+                <tr><td style="color:#e2e8f0;border-bottom:1px solid rgba(255,255,255,0.08);">학습 실행</td><td style="color:#86efac;border-bottom:1px solid rgba(255,255,255,0.08);font-family:'JetBrains Mono',monospace;font-size:12px;">docai3 model train [--all]</td><td style="color:#93c5fd;border-bottom:1px solid rgba(255,255,255,0.08);font-family:'JetBrains Mono',monospace;font-size:12px;">docai4 model train [--all]</td></tr>
+                <tr><td style="color:#e2e8f0;border-bottom:1px solid rgba(255,255,255,0.08);">평가</td><td style="color:#86efac;border-bottom:1px solid rgba(255,255,255,0.08);font-family:'JetBrains Mono',monospace;font-size:12px;">docai3 model test [--all]</td><td style="color:#93c5fd;border-bottom:1px solid rgba(255,255,255,0.08);font-family:'JetBrains Mono',monospace;font-size:12px;">docai4 model test [--all]</td></tr>
+                <tr><td style="color:#e2e8f0;border-bottom:1px solid rgba(255,255,255,0.08);">후처리 평가</td><td style="color:#86efac;border-bottom:1px solid rgba(255,255,255,0.08);font-family:'JetBrains Mono',monospace;font-size:12px;">docai3 model test -u {uc}</td><td style="color:#93c5fd;border-bottom:1px solid rgba(255,255,255,0.08);font-family:'JetBrains Mono',monospace;font-size:12px;">docai4 model test -u {uc}</td></tr>
+                <tr><td style="color:#e2e8f0;border-bottom:1px solid rgba(255,255,255,0.08);">체크포인트 저장</td><td style="color:#86efac;border-bottom:1px solid rgba(255,255,255,0.08);font-family:'JetBrains Mono',monospace;font-size:12px;">docai3 save</td><td style="color:#93c5fd;border-bottom:1px solid rgba(255,255,255,0.08);font-family:'JetBrains Mono',monospace;font-size:12px;">docai4 save</td></tr>
+                <tr><td style="color:#e2e8f0;border-bottom:1px solid rgba(255,255,255,0.08);">패키징</td><td style="color:#86efac;border-bottom:1px solid rgba(255,255,255,0.08);font-family:'JetBrains Mono',monospace;font-size:12px;">docai3 pack</td><td style="color:#93c5fd;border-bottom:1px solid rgba(255,255,255,0.08);font-family:'JetBrains Mono',monospace;font-size:12px;">docai4 pack</td></tr>
+                <tr><td style="color:#e2e8f0;border-bottom:none;">분석</td><td style="color:#86efac;border-bottom:none;font-family:'JetBrains Mono',monospace;font-size:12px;">docai3 analyze</td><td style="color:#93c5fd;border-bottom:none;font-family:'JetBrains Mono',monospace;font-size:12px;">docai4 analyze</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
 </div>
 
 <!-- FOOTER -->
 <div class="footer">
     <strong>DocAI AutoML</strong> &middot; EBS AI ModelOps &middot; Technical Documentation
-    <br>Generated on 2026-03-30
+    <br>Generated on 2026-03-31
 </div>
 
 <script>
