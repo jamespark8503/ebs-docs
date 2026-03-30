@@ -1,0 +1,1893 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enterprise DocAI Kit - Technical Documentation</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+        :root {
+            --up-purple-900: #1a0533;
+            --up-purple-800: #2d0a5e;
+            --up-purple-700: #3f1089;
+            --up-purple-600: #5a1db8;
+            --up-purple-500: #7c3aed;
+            --up-purple-400: #9b6bf5;
+            --up-purple-300: #b794f6;
+            --up-purple-200: #d4bbfc;
+            --up-purple-100: #ede5ff;
+            --up-purple-50: #f5f0ff;
+
+            --up-violet: #7c3aed;
+            --up-indigo: #4f46e5;
+            --up-slate-900: #0f172a;
+            --up-slate-800: #1e293b;
+            --up-slate-700: #334155;
+            --up-slate-600: #475569;
+            --up-slate-500: #64748b;
+            --up-slate-400: #94a3b8;
+            --up-slate-300: #cbd5e1;
+            --up-slate-200: #e2e8f0;
+            --up-slate-100: #f1f5f9;
+            --up-slate-50: #f8fafc;
+
+            --up-accent: #a78bfa;
+            --up-glow: rgba(124, 58, 237, 0.15);
+            --up-glow-strong: rgba(124, 58, 237, 0.3);
+
+            --radius: 16px;
+            --radius-sm: 10px;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+            --shadow-md: 0 4px 16px rgba(0,0,0,0.06), 0 2px 6px rgba(0,0,0,0.04);
+            --shadow-lg: 0 12px 40px rgba(0,0,0,0.08), 0 4px 12px rgba(0,0,0,0.04);
+            --shadow-purple: 0 8px 32px rgba(124, 58, 237, 0.12);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--up-slate-50);
+            color: var(--up-slate-800);
+            line-height: 1.7;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ── Hero Section ── */
+        .hero {
+            position: relative;
+            background: linear-gradient(135deg, var(--up-purple-900) 0%, var(--up-purple-700) 40%, var(--up-purple-500) 100%);
+            padding: 80px 0 60px;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(167, 139, 250, 0.2) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            bottom: -30%;
+            left: -10%;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(79, 70, 229, 0.15) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 40px;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 100px;
+            padding: 6px 18px;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--up-purple-200);
+            margin-bottom: 24px;
+            letter-spacing: 0.5px;
+        }
+
+        .hero-badge::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: #34d399;
+            border-radius: 50%;
+            box-shadow: 0 0 8px #34d399;
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            font-weight: 800;
+            color: #fff;
+            letter-spacing: -1.5px;
+            line-height: 1.15;
+            margin-bottom: 16px;
+        }
+
+        .hero h1 span {
+            background: linear-gradient(135deg, var(--up-purple-200), #c4b5fd, #e9d5ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            font-size: 18px;
+            color: var(--up-purple-300);
+            max-width: 620px;
+            line-height: 1.7;
+            font-weight: 400;
+        }
+
+        .hero-meta {
+            display: flex;
+            gap: 32px;
+            margin-top: 32px;
+        }
+
+        .hero-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: var(--up-purple-300);
+            font-weight: 500;
+        }
+
+        .hero-meta-item svg {
+            width: 16px;
+            height: 16px;
+            opacity: 0.7;
+        }
+
+        /* ── Navigation ── */
+        .nav-bar {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(255,255,255,0.85);
+            backdrop-filter: blur(20px) saturate(180%);
+            border-bottom: 1px solid var(--up-slate-200);
+            box-shadow: 0 1px 4px rgba(0,0,0,0.03);
+        }
+
+        .nav-inner {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 40px;
+            display: flex;
+            gap: 4px;
+            overflow-x: auto;
+        }
+
+        .nav-inner::-webkit-scrollbar {
+            display: none;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 14px 18px;
+            font-size: 13.5px;
+            font-weight: 600;
+            color: var(--up-slate-500);
+            text-decoration: none;
+            white-space: nowrap;
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .nav-link:hover {
+            color: var(--up-purple-600);
+            border-bottom-color: var(--up-purple-300);
+        }
+
+        .nav-link.active {
+            color: var(--up-purple-600);
+            border-bottom-color: var(--up-purple-600);
+        }
+
+        .nav-link svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        /* ── Main Content ── */
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 48px 40px 100px;
+        }
+
+        /* ── Section ── */
+        .section {
+            margin-bottom: 56px;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 28px;
+        }
+
+        .section-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .section-icon svg {
+            width: 22px;
+            height: 22px;
+        }
+
+        .section-icon.purple {
+            background: linear-gradient(135deg, var(--up-purple-500), var(--up-purple-600));
+            box-shadow: 0 4px 12px rgba(124, 58, 237, 0.25);
+        }
+
+        .section-icon.purple svg { color: #fff; }
+
+        .section-icon.blue {
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.25);
+        }
+
+        .section-icon.blue svg { color: #fff; }
+
+        .section-icon.emerald {
+            background: linear-gradient(135deg, #10b981, #059669);
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);
+        }
+
+        .section-icon.emerald svg { color: #fff; }
+
+        .section-icon.rose {
+            background: linear-gradient(135deg, #f43f5e, #e11d48);
+            box-shadow: 0 4px 12px rgba(244, 63, 94, 0.25);
+        }
+
+        .section-icon.rose svg { color: #fff; }
+
+        .section-icon.amber {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.25);
+        }
+
+        .section-icon.amber svg { color: #fff; }
+
+        .section-title {
+            font-size: 26px;
+            font-weight: 800;
+            color: var(--up-slate-900);
+            letter-spacing: -0.5px;
+        }
+
+        .section-subtitle {
+            font-size: 14px;
+            color: var(--up-slate-500);
+            font-weight: 400;
+            margin-top: 2px;
+        }
+
+        /* ── Cards ── */
+        .card {
+            background: #fff;
+            border-radius: var(--radius);
+            border: 1px solid var(--up-slate-200);
+            box-shadow: var(--shadow-sm);
+            overflow: hidden;
+            transition: box-shadow 0.3s, border-color 0.3s;
+        }
+
+        .card:hover {
+            box-shadow: var(--shadow-md);
+            border-color: var(--up-purple-200);
+        }
+
+        .card-body {
+            padding: 32px;
+        }
+
+        .card-header {
+            padding: 20px 32px;
+            background: var(--up-slate-50);
+            border-bottom: 1px solid var(--up-slate-200);
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--up-slate-700);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .card-header .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+
+        /* ── Diagram Card ── */
+        .diagram-card {
+            background: #fff;
+            border-radius: var(--radius);
+            border: 1px solid var(--up-slate-200);
+            box-shadow: var(--shadow-sm);
+            overflow: hidden;
+            margin-bottom: 28px;
+        }
+
+        .diagram-card:hover {
+            box-shadow: var(--shadow-purple);
+            border-color: var(--up-purple-200);
+        }
+
+        .diagram-header {
+            padding: 16px 28px;
+            background: linear-gradient(135deg, var(--up-purple-50), #f5f3ff);
+            border-bottom: 1px solid var(--up-purple-100);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .diagram-header-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .diagram-header h3 {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--up-purple-800);
+        }
+
+        .diagram-tag {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--up-purple-600);
+            background: var(--up-purple-100);
+            padding: 3px 10px;
+            border-radius: 100px;
+            letter-spacing: 0.3px;
+        }
+
+        .diagram-body {
+            padding: 32px;
+            display: flex;
+            justify-content: center;
+            overflow-x: auto;
+            background: linear-gradient(180deg, #fafafe 0%, #fff 100%);
+        }
+
+        .diagram-body .mermaid {
+            width: 100%;
+            min-height: 200px;
+        }
+
+        .diagram-body .mermaid svg {
+            max-width: 100%;
+            height: auto;
+        }
+
+        /* ── Overview Grid ── */
+        .overview-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-bottom: 36px;
+        }
+
+        .overview-card {
+            background: #fff;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--up-slate-200);
+            padding: 24px;
+            transition: all 0.25s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .overview-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+        }
+
+        .overview-card.purple::before { background: linear-gradient(90deg, var(--up-purple-500), var(--up-purple-300)); }
+        .overview-card.blue::before { background: linear-gradient(90deg, #3b82f6, #93c5fd); }
+        .overview-card.emerald::before { background: linear-gradient(90deg, #10b981, #6ee7b7); }
+        .overview-card.rose::before { background: linear-gradient(90deg, #f43f5e, #fda4af); }
+        .overview-card.amber::before { background: linear-gradient(90deg, #f59e0b, #fcd34d); }
+        .overview-card.indigo::before { background: linear-gradient(90deg, #6366f1, #a5b4fc); }
+
+        .overview-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .overview-card h4 {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--up-slate-500);
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            margin-bottom: 6px;
+        }
+
+        .overview-card .value {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--up-slate-900);
+            letter-spacing: -1px;
+        }
+
+        .overview-card .desc {
+            font-size: 13px;
+            color: var(--up-slate-500);
+            margin-top: 4px;
+        }
+
+        /* ── Module Grid ── */
+        .module-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .module-card {
+            background: #fff;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--up-slate-200);
+            padding: 28px;
+            transition: all 0.25s;
+        }
+
+        .module-card:hover {
+            box-shadow: var(--shadow-md);
+            border-color: var(--up-purple-200);
+        }
+
+        .module-card-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 14px;
+        }
+
+        .module-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+
+        .module-badge.preprocess { background: #fff7ed; color: #ea580c; }
+        .module-badge.inference { background: #eff6ff; color: #2563eb; }
+        .module-badge.postprocess { background: #fef2f2; color: #dc2626; }
+        .module-badge.utility { background: #f0fdf4; color: #16a34a; }
+        .module-badge.output { background: #fefce8; color: #ca8a04; }
+        .module-badge.serving { background: #faf5ff; color: #9333ea; }
+
+        .module-name {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--up-slate-900);
+        }
+
+        .module-name code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 14px;
+            background: var(--up-slate-100);
+            padding: 2px 8px;
+            border-radius: 6px;
+            color: var(--up-purple-700);
+        }
+
+        .module-desc {
+            font-size: 14px;
+            color: var(--up-slate-600);
+            line-height: 1.7;
+            margin-bottom: 14px;
+        }
+
+        .module-funcs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .func-tag {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11.5px;
+            font-weight: 500;
+            background: var(--up-slate-100);
+            color: var(--up-slate-600);
+            padding: 4px 10px;
+            border-radius: 6px;
+            border: 1px solid var(--up-slate-200);
+        }
+
+        /* ── Table ── */
+        .data-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            font-size: 14px;
+        }
+
+        .data-table thead th {
+            background: var(--up-purple-50);
+            color: var(--up-purple-800);
+            font-weight: 700;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            padding: 14px 20px;
+            text-align: left;
+            border-bottom: 2px solid var(--up-purple-100);
+        }
+
+        .data-table thead th:first-child {
+            border-radius: 10px 0 0 0;
+        }
+
+        .data-table thead th:last-child {
+            border-radius: 0 10px 0 0;
+        }
+
+        .data-table tbody td {
+            padding: 14px 20px;
+            border-bottom: 1px solid var(--up-slate-100);
+            color: var(--up-slate-700);
+        }
+
+        .data-table tbody tr:hover {
+            background: var(--up-purple-50);
+        }
+
+        .data-table code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12.5px;
+            background: var(--up-slate-100);
+            padding: 2px 8px;
+            border-radius: 5px;
+            color: var(--up-purple-700);
+            border: 1px solid var(--up-slate-200);
+        }
+
+        /* ── Pipeline Steps ── */
+        .pipeline-steps {
+            display: flex;
+            gap: 0;
+            margin-bottom: 36px;
+            position: relative;
+        }
+
+        .pipeline-step {
+            flex: 1;
+            text-align: center;
+            padding: 20px 16px;
+            position: relative;
+        }
+
+        .pipeline-step::after {
+            content: '→';
+            position: absolute;
+            top: 24px;
+            right: -8px;
+            font-size: 18px;
+            color: var(--up-slate-400);
+            z-index: 1;
+            width: auto;
+            height: auto;
+            background: none;
+        }
+
+        .pipeline-step:last-child::after {
+            display: none;
+        }
+
+        .step-number {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            font-weight: 800;
+            margin: 0 auto 10px;
+            color: #fff;
+        }
+
+        .step-number.s1 { background: linear-gradient(135deg, #f97316, #ea580c); }
+        .step-number.s2 { background: linear-gradient(135deg, #10b981, #059669); }
+        .step-number.s3 { background: linear-gradient(135deg, #3b82f6, #2563eb); }
+        .step-number.s4 { background: linear-gradient(135deg, #f43f5e, #e11d48); }
+        .step-number.s5 { background: linear-gradient(135deg, #8b5cf6, #7c3aed); }
+
+        .step-label {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--up-slate-800);
+            margin-bottom: 4px;
+        }
+
+        .step-desc {
+            font-size: 12px;
+            color: var(--up-slate-500);
+        }
+
+        /* ── Data Format Flow ── */
+        .format-flow {
+            display: flex;
+            align-items: center;
+            gap: 0;
+            padding: 24px;
+            background: linear-gradient(135deg, var(--up-purple-50), #f5f3ff, var(--up-slate-50));
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--up-purple-100);
+            margin-bottom: 28px;
+            overflow-x: auto;
+        }
+
+        .format-node {
+            padding: 12px 20px;
+            border-radius: 10px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+            font-weight: 600;
+            white-space: nowrap;
+            text-align: center;
+            min-width: 100px;
+        }
+
+        .format-node.input { background: #fff7ed; color: #c2410c; border: 1px solid #fed7aa; }
+        .format-node.ufo { background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; }
+        .format-node.ufp { background: #f0fdf4; color: #15803d; border: 1px solid #bbf7d0; }
+        .format-node.output { background: #faf5ff; color: #7e22ce; border: 1px solid #e9d5ff; }
+
+        .format-arrow {
+            color: var(--up-slate-400);
+            font-size: 20px;
+            padding: 0 8px;
+            flex-shrink: 0;
+        }
+
+        /* ── Directory Tree ── */
+        .dir-tree {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+            line-height: 1.9;
+            color: var(--up-slate-400);
+            background: var(--up-slate-900);
+            padding: 28px 32px;
+            border-radius: var(--radius-sm);
+            overflow-x: auto;
+            white-space: pre;
+        }
+
+        .dir-tree .folder { color: #93c5fd; font-weight: 600; }
+        .dir-tree .file { color: #c4b5fd; }
+        .dir-tree .comment { color: #64748b; font-style: italic; font-size: 12px; }
+
+        /* ── E2E Table ── */
+        .e2e-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 16px;
+        }
+
+        .e2e-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            padding: 18px;
+            background: #fff;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--up-slate-200);
+            transition: all 0.2s;
+        }
+
+        .e2e-item:hover {
+            border-color: var(--up-purple-300);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .e2e-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--up-purple-100);
+            color: var(--up-purple-600);
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        .e2e-name {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--up-slate-800);
+            margin-bottom: 4px;
+        }
+
+        .e2e-desc {
+            font-size: 12.5px;
+            color: var(--up-slate-500);
+            line-height: 1.5;
+        }
+
+        /* ── Env Var Table ── */
+        .env-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            font-size: 13.5px;
+            border-radius: var(--radius-sm);
+            overflow: hidden;
+            border: 1px solid var(--up-slate-200);
+        }
+
+        .env-table thead th {
+            background: var(--up-slate-800);
+            color: var(--up-slate-200);
+            font-weight: 700;
+            font-size: 11.5px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 14px 20px;
+            text-align: left;
+        }
+
+        .env-table tbody td {
+            padding: 12px 20px;
+            border-bottom: 1px solid var(--up-slate-100);
+        }
+
+        .env-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .env-table tbody tr:hover {
+            background: var(--up-purple-50);
+        }
+
+        .env-table code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            background: var(--up-purple-50);
+            color: var(--up-purple-700);
+            padding: 3px 8px;
+            border-radius: 5px;
+            border: 1px solid var(--up-purple-100);
+        }
+
+        /* ── Legend ── */
+        .legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            padding: 20px 28px;
+            background: var(--up-slate-50);
+            border-top: 1px solid var(--up-slate-200);
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12.5px;
+            font-weight: 500;
+            color: var(--up-slate-600);
+        }
+
+        .legend-color {
+            width: 14px;
+            height: 14px;
+            border-radius: 4px;
+        }
+
+        /* ── Architecture Pattern ── */
+        .arch-pattern {
+            background: linear-gradient(135deg, var(--up-purple-900), var(--up-purple-800));
+            border-radius: var(--radius);
+            padding: 36px;
+            margin-bottom: 28px;
+            color: #fff;
+        }
+
+        .arch-pattern h3 {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: var(--up-purple-200);
+        }
+
+        .arch-layers {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .arch-layer {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 14px 20px;
+            border-radius: 10px;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .arch-layer-name {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--up-purple-200);
+            min-width: 160px;
+        }
+
+        .arch-layer-arrow {
+            color: var(--up-purple-400);
+            font-size: 18px;
+        }
+
+        .arch-layer-desc {
+            font-size: 14px;
+            color: var(--up-slate-300);
+        }
+
+        /* ── Footer ── */
+        .footer {
+            text-align: center;
+            padding: 40px;
+            color: var(--up-slate-400);
+            font-size: 13px;
+            border-top: 1px solid var(--up-slate-200);
+        }
+
+        .footer strong {
+            color: var(--up-purple-500);
+        }
+
+        /* ── Responsive ── */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 32px; }
+            .overview-grid { grid-template-columns: 1fr; }
+            .module-grid { grid-template-columns: 1fr; }
+            .pipeline-steps { flex-direction: column; }
+            .pipeline-step::after { display: none; }
+            .container { padding: 24px 20px 60px; }
+            .hero-content { padding: 0 20px; }
+            .nav-inner { padding: 0 20px; }
+        }
+
+        /* ── Scrollbar ── */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: var(--up-slate-300); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--up-purple-400); }
+    </style>
+</head>
+<body>
+
+<!-- ═══════════════════ HERO ═══════════════════ -->
+<div class="hero">
+    <div class="hero-content">
+        <div class="hero-badge">EBS AI ModelOps</div>
+        <h1>Enterprise <span>DocAI Kit</span></h1>
+        <p>BMT/POC 테스트, QA, 온사이트 검증을 위한 문서 AI 파이프라인 툴킷의 기술 문서입니다.</p>
+        <div class="hero-meta">
+            <div class="hero-meta-item">
+                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/></svg>
+                12 Modules
+            </div>
+            <div class="hero-meta-item">
+                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+                7 E2E Pipelines
+            </div>
+            <div class="hero-meta-item">
+                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                Function-based Architecture
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════════════ NAV ═══════════════════ -->
+<nav class="nav-bar">
+    <div class="nav-inner">
+        <a href="#overview" class="nav-link active">
+            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h7"/></svg>
+            Overview
+        </a>
+        <a href="#class-diagram" class="nav-link">
+            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+            Class Diagram
+        </a>
+        <a href="#flowchart" class="nav-link">
+            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M13 5l7 7-7 7M5 5l7 7-7 7"/></svg>
+            Flowchart
+        </a>
+        <a href="#modules" class="nav-link">
+            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+            Modules
+        </a>
+        <a href="#pipeline" class="nav-link">
+            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2"/></svg>
+            Pipeline
+        </a>
+        <a href="#env" class="nav-link">
+            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><circle cx="12" cy="12" r="3"/></svg>
+            Config
+        </a>
+    </div>
+</nav>
+
+<!-- ═══════════════════ CONTENT ═══════════════════ -->
+<div class="container">
+
+    <!-- ── Overview ── -->
+    <div id="overview" class="section">
+        <div class="section-header">
+            <div class="section-icon purple">
+                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+            </div>
+            <div>
+                <div class="section-title">Overview</div>
+                <div class="section-subtitle">프로젝트 전체 구성 한눈에 보기</div>
+            </div>
+        </div>
+
+        <div class="overview-grid">
+            <div class="overview-card purple">
+                <h4>Modules</h4>
+                <div class="value">12</div>
+                <div class="desc">Python 모듈 (code/)</div>
+            </div>
+            <div class="overview-card blue">
+                <h4>AI Engines</h4>
+                <div class="value">5</div>
+                <div class="desc">OCR, Classifier, Parser, LLM, DP</div>
+            </div>
+            <div class="overview-card emerald">
+                <h4>E2E Pipelines</h4>
+                <div class="value">7</div>
+                <div class="desc">Shell 기반 자동화 스크립트</div>
+            </div>
+            <div class="overview-card amber">
+                <h4>Data Formats</h4>
+                <div class="value">4</div>
+                <div class="desc">UFO, UFP, MUFP, LLM MUFP</div>
+            </div>
+            <div class="overview-card rose">
+                <h4>Postprocessing</h4>
+                <div class="value">2</div>
+                <div class="desc">Masker, UFP2CSV</div>
+            </div>
+            <div class="overview-card indigo">
+                <h4>Architecture</h4>
+                <div class="value">3-Layer</div>
+                <div class="desc">request → run → main 패턴</div>
+            </div>
+        </div>
+
+        <!-- Architecture Pattern -->
+        <div class="arch-pattern">
+            <h3>Core Architecture Pattern</h3>
+            <p style="font-size:14px; color: var(--up-purple-300); margin-bottom: 20px;">
+                모든 모듈이 동일한 3-레이어 구조를 따릅니다.
+            </p>
+            <div class="arch-layers">
+                <div class="arch-layer">
+                    <div class="arch-layer-name">request_XXX()</div>
+                    <div class="arch-layer-arrow">→</div>
+                    <div class="arch-layer-desc">단일 이미지/문서에 대한 HTTP 요청 (서빙 서버 통신)</div>
+                </div>
+                <div class="arch-layer">
+                    <div class="arch-layer-name">run_XXX()</div>
+                    <div class="arch-layer-arrow">→</div>
+                    <div class="arch-layer-desc">디렉토리 내 전체 파일 순회하며 request_XXX() 호출</div>
+                </div>
+                <div class="arch-layer">
+                    <div class="arch-layer-name">main()</div>
+                    <div class="arch-layer-arrow">→</div>
+                    <div class="arch-layer-desc">argparse CLI 인자 처리 후 run_XXX() 실행 + JSON 저장</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Data Format Flow -->
+        <div style="margin-bottom: 8px; font-size: 14px; font-weight: 700; color: var(--up-slate-700);">Data Format Chain</div>
+        <div class="format-flow">
+            <div class="format-node input">PDF / TIFF / IMG</div>
+            <div class="format-arrow">→</div>
+            <div class="format-node input">PNG</div>
+            <div class="format-arrow">→</div>
+            <div class="format-node ufo">UFO</div>
+            <div class="format-arrow">→</div>
+            <div class="format-node ufp">UFP / MUFP</div>
+            <div class="format-arrow">→</div>
+            <div class="format-node output">CSV / XLSX</div>
+        </div>
+    </div>
+
+    <!-- ── Class Diagram ── -->
+    <div id="class-diagram" class="section">
+        <div class="section-header">
+            <div class="section-icon blue">
+                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+            </div>
+            <div>
+                <div class="section-title">Module Structure</div>
+                <div class="section-subtitle">함수형 모듈 구조 및 의존관계</div>
+            </div>
+        </div>
+
+        <div class="diagram-card">
+            <div class="diagram-header">
+                <div class="diagram-header-left">
+                    <svg width="18" height="18" fill="none" stroke="var(--up-purple-600)" stroke-width="2" viewBox="0 0 24 24"><path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+                    <h3>Class Diagram (Module-level)</h3>
+                </div>
+                <span class="diagram-tag">MERMAID</span>
+            </div>
+            <div class="diagram-body">
+                <pre class="mermaid">
+classDiagram
+    direction LR
+
+    class utils {
+        +save_json()
+        +load_json()
+        +load_yaml()
+        +load_multipage_images()
+    }
+
+    class conversion {
+        +file_processing()
+        +pdf_tiff_to_png_conversion()
+    }
+
+    class oa {
+        +apply_orientation_alignment()
+        +calc_global_angle()
+        +rotate_points()
+        +turn_image()
+        +request_ocr()
+        +run_ocr()
+    }
+
+    class classifier {
+        +request_classifier()
+        +run_classifier()
+    }
+
+    class ocr {
+        +request_ocr()
+        +run_ocr()
+    }
+
+    class dp {
+        +request_dp()
+        +run_dp()
+    }
+
+    class parser {
+        +request_drsp()
+        +request_kvs()
+        +run_drsp()
+        +run_kvs()
+        +run_parser()
+    }
+
+    class llm {
+        +request_llm()
+        +run_llm()
+    }
+
+    class masker {
+        +extract_bbox_for_crop()
+        +image_masking()
+        +run_masker()
+    }
+
+    class serving {
+        +request_inference()
+        +run_inference()
+    }
+
+    class ufp2csv {
+        +convert_ufp_to_record()
+        +save_csv()
+        +save_xlsx()
+    }
+
+    conversion --> utils : load_multipage_images
+    masker --> parser : import run_parser
+    ocr ..> parser : UFO 전달
+    parser ..> llm : MUFP 전달
+    parser ..> masker : UFP 전달
+    parser ..> ufp2csv : MUFP 변환
+                </pre>
+            </div>
+            <div class="legend">
+                <div class="legend-item"><div class="legend-color" style="background:#10b981"></div> Utility</div>
+                <div class="legend-item"><div class="legend-color" style="background:#f97316"></div> Preprocessing</div>
+                <div class="legend-item"><div class="legend-color" style="background:#3b82f6"></div> AI Inference</div>
+                <div class="legend-item"><div class="legend-color" style="background:#ef4444"></div> Postprocessing</div>
+                <div class="legend-item"><div class="legend-color" style="background:#8b5cf6"></div> Serving</div>
+                <div class="legend-item"><div class="legend-color" style="background:#eab308"></div> Output Conversion</div>
+                <div class="legend-item" style="margin-left:24px; color: var(--up-slate-400)">── import 의존 &nbsp;&nbsp; - - - 데이터 흐름</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── Flowchart ── -->
+    <div id="flowchart" class="section">
+        <div class="section-header">
+            <div class="section-icon emerald">
+                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M13 5l7 7-7 7M5 5l7 7-7 7"/></svg>
+            </div>
+            <div>
+                <div class="section-title">Pipeline Flowchart</div>
+                <div class="section-subtitle">E2E 파이프라인 실행 흐름</div>
+            </div>
+        </div>
+
+        <!-- Pipeline Steps Visual -->
+        <div class="pipeline-steps">
+            <div class="pipeline-step">
+                <div class="step-number s1">1</div>
+                <div class="step-label">Conversion</div>
+                <div class="step-desc">PDF/TIFF → PNG</div>
+            </div>
+            <div class="pipeline-step">
+                <div class="step-number s2">2</div>
+                <div class="step-label">OA</div>
+                <div class="step-desc">방향 보정</div>
+            </div>
+            <div class="pipeline-step">
+                <div class="step-number s3">3</div>
+                <div class="step-label">OCR</div>
+                <div class="step-desc">텍스트 추출</div>
+            </div>
+            <div class="pipeline-step">
+                <div class="step-number s4">4</div>
+                <div class="step-label">Parser</div>
+                <div class="step-desc">구조화 파싱</div>
+            </div>
+            <div class="pipeline-step">
+                <div class="step-number s5">5</div>
+                <div class="step-label">Output</div>
+                <div class="step-desc">LLM / Masker / CSV</div>
+            </div>
+        </div>
+
+        <div class="diagram-card">
+            <div class="diagram-header">
+                <div class="diagram-header-left">
+                    <svg width="18" height="18" fill="none" stroke="var(--up-purple-600)" stroke-width="2" viewBox="0 0 24 24"><path d="M13 5l7 7-7 7M5 5l7 7-7 7"/></svg>
+                    <h3>Full Pipeline Flow</h3>
+                </div>
+                <span class="diagram-tag">MERMAID</span>
+            </div>
+            <div class="diagram-body">
+                <pre class="mermaid">
+flowchart TD
+    START(["Input: PDF / TIFF / Image"]) --> CONV
+
+    subgraph PRE ["&nbsp;&nbsp;1. Preprocessing&nbsp;&nbsp;"]
+        direction LR
+        CONV["conversion.py<br/>PDF/TIFF → PNG"]
+        OA_OCR["oa.py: run_ocr<br/>OCR로 방향 감지"]
+        OA_TURN["oa.py: turn_image<br/>이미지 회전 보정"]
+        CONV --> OA_OCR --> OA_TURN
+    end
+
+    OA_TURN --> CLS_Q{"분류 필요?"}
+    CLS_Q -- Yes --> CLS
+    CLS_Q -- No --> OCR
+
+    subgraph CLASS ["&nbsp;&nbsp;2. Classification&nbsp;&nbsp;"]
+        CLS["classifier.py<br/>CloudEvent 기반 분류"]
+    end
+
+    CLS --> OCR
+
+    subgraph INF ["&nbsp;&nbsp;3. Inference&nbsp;&nbsp;"]
+        OCR["ocr.py<br/>Base64 → OCR 서버 → UFO"]
+        OCR --> ENG{"Parser 엔진 선택"}
+        ENG -- DRSP --> DRSP["parser.py<br/>DRSP 파싱"]
+        ENG -- KVS --> KVS["parser.py<br/>KVS 파싱"]
+        DRSP --> MUFP["MUFP 결과"]
+        KVS --> MUFP
+        MUFP --> LLM_Q{"LLM 보정?"}
+        LLM_Q -- Yes --> LLM["llm.py<br/>LLM 보정"]
+        LLM_Q -- No --> POST
+        LLM --> POST
+    end
+
+    subgraph OUT ["&nbsp;&nbsp;4. Postprocessing&nbsp;&nbsp;"]
+        POST{"후처리 선택"}
+        POST -- 마스킹 --> MASK["masker.py<br/>민감정보 마스킹"]
+        POST -- 변환 --> CSV["ufp2csv.py<br/>CSV / XLSX 출력"]
+    end
+
+    MASK --> DONE
+    CSV --> DONE
+    DONE(["최종 출력"])
+
+    style PRE fill:#fff7ed,stroke:#f97316,stroke-width:2px,color:#1e293b
+    style CLASS fill:#f0fdf4,stroke:#10b981,stroke-width:2px,color:#1e293b
+    style INF fill:#eff6ff,stroke:#3b82f6,stroke-width:2px,color:#1e293b
+    style OUT fill:#fef2f2,stroke:#ef4444,stroke-width:2px,color:#1e293b
+    style START fill:#f5f3ff,stroke:#7c3aed,stroke-width:2px
+    style DONE fill:#f5f3ff,stroke:#7c3aed,stroke-width:2px
+                </pre>
+            </div>
+        </div>
+
+        <div class="diagram-card">
+            <div class="diagram-header">
+                <div class="diagram-header-left">
+                    <svg width="18" height="18" fill="none" stroke="var(--up-purple-600)" stroke-width="2" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 18h7"/></svg>
+                    <h3>Data Format Transformation</h3>
+                </div>
+                <span class="diagram-tag">MERMAID</span>
+            </div>
+            <div class="diagram-body">
+                <pre class="mermaid">
+flowchart LR
+    A["PDF / TIFF / Image"] -->|"conversion.py"| B["PNG"]
+    B -->|"ocr.py"| C["UFO<br/>ufos.json"]
+    C -->|"parser.py DRSP"| D["UFP / MUFP<br/>mufps.json"]
+    C -->|"parser.py KVS"| D
+    D -->|"llm.py"| E["LLM MUFP<br/>llm_mufps.json"]
+    D -->|"ufp2csv.py"| F["CSV / XLSX"]
+    D -->|"masker.py"| G["마스킹 이미지"]
+
+    style A fill:#fff7ed,stroke:#f97316,color:#1e293b
+    style B fill:#fff7ed,stroke:#f97316,color:#1e293b
+    style C fill:#eff6ff,stroke:#3b82f6,color:#1e293b
+    style D fill:#eff6ff,stroke:#3b82f6,color:#1e293b
+    style E fill:#eff6ff,stroke:#3b82f6,color:#1e293b
+    style F fill:#f0fdf4,stroke:#10b981,color:#1e293b
+    style G fill:#fef2f2,stroke:#ef4444,color:#1e293b
+                </pre>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── Modules ── -->
+    <div id="modules" class="section">
+        <div class="section-header">
+            <div class="section-icon purple">
+                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+            </div>
+            <div>
+                <div class="section-title">Module Details</div>
+                <div class="section-subtitle">각 모듈의 역할과 핵심 함수</div>
+            </div>
+        </div>
+
+        <div class="module-grid">
+            <!-- conversion -->
+            <div class="module-card">
+                <div class="module-card-header">
+                    <div class="module-badge preprocess">&#128196;</div>
+                    <div class="module-name"><code>conversion.py</code></div>
+                </div>
+                <div class="module-desc">
+                    PDF/TIFF 등 멀티페이지 문서를 단일 PNG 이미지로 분리 변환합니다.
+                    <strong>ProcessPoolExecutor</strong>로 병렬 처리하며, 원본은 backup/ 폴더로 이동합니다.
+                </div>
+                <div class="module-funcs">
+                    <span class="func-tag">file_processing()</span>
+                    <span class="func-tag">pdf_tiff_to_png_conversion()</span>
+                </div>
+            </div>
+
+            <!-- oa -->
+            <div class="module-card">
+                <div class="module-card-header">
+                    <div class="module-badge preprocess">&#128260;</div>
+                    <div class="module-name"><code>oa.py</code></div>
+                </div>
+                <div class="module-desc">
+                    Orientation Alignment. Word box 각도 분석으로 문서 기울기를 감지하고 이미지를 자동 회전 보정합니다.
+                    5도 미만 기울기는 스킵합니다.
+                </div>
+                <div class="module-funcs">
+                    <span class="func-tag">apply_orientation_alignment()</span>
+                    <span class="func-tag">calc_global_angle()</span>
+                    <span class="func-tag">rotate_points()</span>
+                    <span class="func-tag">turn_image()</span>
+                </div>
+            </div>
+
+            <!-- classifier -->
+            <div class="module-card">
+                <div class="module-card-header">
+                    <div class="module-badge inference">&#128209;</div>
+                    <div class="module-name"><code>classifier.py</code></div>
+                </div>
+                <div class="module-desc">
+                    <strong>CloudEvent</strong> 프로토콜로 이미지를 바이너리 전송하여 문서 타입을 분류합니다.
+                    결과값(문서 타입명)으로 하위 폴더를 생성하고 이미지를 복사합니다.
+                </div>
+                <div class="module-funcs">
+                    <span class="func-tag">request_classifier()</span>
+                    <span class="func-tag">run_classifier()</span>
+                </div>
+            </div>
+
+            <!-- ocr -->
+            <div class="module-card">
+                <div class="module-card-header">
+                    <div class="module-badge inference">&#128065;</div>
+                    <div class="module-name"><code>ocr.py</code></div>
+                </div>
+                <div class="module-desc">
+                    이미지를 Base64 인코딩하여 OCR 서버에 전송합니다.
+                    <code>withDOS</code>, <code>languageTag</code>(기본: ko) 옵션을 지원하며 UFO 포맷으로 결과를 저장합니다.
+                </div>
+                <div class="module-funcs">
+                    <span class="func-tag">request_ocr()</span>
+                    <span class="func-tag">run_ocr()</span>
+                </div>
+            </div>
+
+            <!-- parser -->
+            <div class="module-card">
+                <div class="module-card-header">
+                    <div class="module-badge inference">&#128218;</div>
+                    <div class="module-name"><code>parser.py</code></div>
+                </div>
+                <div class="module-desc">
+                    두 가지 엔진을 지원합니다. <strong>DRSP</strong>는 UFO만으로 텍스트 기반 파싱, <strong>KVS</strong>는 UFO+Image로 이미지+텍스트 기반 파싱을 수행합니다. 출력: UFP 또는 MUFP.
+                </div>
+                <div class="module-funcs">
+                    <span class="func-tag">request_drsp()</span>
+                    <span class="func-tag">request_kvs()</span>
+                    <span class="func-tag">run_drsp()</span>
+                    <span class="func-tag">run_kvs()</span>
+                    <span class="func-tag">run_parser()</span>
+                </div>
+            </div>
+
+            <!-- llm -->
+            <div class="module-card">
+                <div class="module-card-header">
+                    <div class="module-badge inference">&#129302;</div>
+                    <div class="module-name"><code>llm.py</code></div>
+                </div>
+                <div class="module-desc">
+                    Parser의 MUFP 결과를 LLM 서버에 전송하여 엔티티 값을 보정합니다.
+                    문서 타입별로 별도 LLM 포트/모델 운용이 가능합니다.
+                </div>
+                <div class="module-funcs">
+                    <span class="func-tag">request_llm()</span>
+                    <span class="func-tag">run_llm()</span>
+                </div>
+            </div>
+
+            <!-- masker -->
+            <div class="module-card">
+                <div class="module-card-header">
+                    <div class="module-badge postprocess">&#128683;</div>
+                    <div class="module-name"><code>masker.py</code></div>
+                </div>
+                <div class="module-desc">
+                    UFP의 entity key 기준으로 민감정보를 선별하고, bounding box 좌표에
+                    <strong>PIL ImageDraw</strong>로 검은색 사각형을 덮어 마스킹합니다.
+                </div>
+                <div class="module-funcs">
+                    <span class="func-tag">extract_bbox_for_crop()</span>
+                    <span class="func-tag">image_masking()</span>
+                    <span class="func-tag">run_masker()</span>
+                </div>
+            </div>
+
+            <!-- ufp2csv -->
+            <div class="module-card">
+                <div class="module-card-header">
+                    <div class="module-badge output">&#128202;</div>
+                    <div class="module-name"><code>ufp2csv.py</code></div>
+                </div>
+                <div class="module-desc">
+                    Ontology YAML에서 <code>.content</code> 키를 추출하여 컬럼을 생성하고,
+                    MUFP의 group → entity 구조를 flat 레코드로 변환하여 CSV 또는 XLSX로 저장합니다.
+                </div>
+                <div class="module-funcs">
+                    <span class="func-tag">convert_ufp_to_record()</span>
+                    <span class="func-tag">save_csv()</span>
+                    <span class="func-tag">save_xlsx()</span>
+                </div>
+            </div>
+
+            <!-- dp -->
+            <div class="module-card">
+                <div class="module-card-header">
+                    <div class="module-badge inference">&#9889;</div>
+                    <div class="module-name"><code>dp.py</code></div>
+                </div>
+                <div class="module-desc">
+                    Document Parsing 통합 모듈. OCR + Parser를 하나의 서버에서 처리합니다.
+                    이미지만 입력하면 UFO 없이 직접 파싱 결과를 반환합니다.
+                </div>
+                <div class="module-funcs">
+                    <span class="func-tag">request_dp()</span>
+                    <span class="func-tag">run_dp()</span>
+                </div>
+            </div>
+
+            <!-- serving -->
+            <div class="module-card">
+                <div class="module-card-header">
+                    <div class="module-badge serving">&#128640;</div>
+                    <div class="module-name"><code>serving.py</code></div>
+                </div>
+                <div class="module-desc">
+                    Serving Pack 통합 추론. 다른 모듈과 달리 <strong>multipart form-data</strong>로 이미지 + 모델명을 전송합니다.
+                    엔드포인트: <code>/inference?verbose=True</code>
+                </div>
+                <div class="module-funcs">
+                    <span class="func-tag">request_inference()</span>
+                    <span class="func-tag">run_inference()</span>
+                </div>
+            </div>
+
+            <!-- utils -->
+            <div class="module-card">
+                <div class="module-card-header">
+                    <div class="module-badge utility">&#128295;</div>
+                    <div class="module-name"><code>utils.py</code></div>
+                </div>
+                <div class="module-desc">
+                    공통 유틸리티. JSON/YAML 로드/저장, MIME 타입 감지, 멀티페이지 이미지 로딩
+                    (PNG, JPEG, PDF, TIFF 지원)을 제공합니다.
+                </div>
+                <div class="module-funcs">
+                    <span class="func-tag">save_json()</span>
+                    <span class="func-tag">load_json()</span>
+                    <span class="func-tag">load_yaml()</span>
+                    <span class="func-tag">load_multipage_images()</span>
+                </div>
+            </div>
+
+            <!-- mbr_convert -->
+            <div class="module-card">
+                <div class="module-card-header">
+                    <div class="module-badge utility">&#128221;</div>
+                    <div class="module-name"><code>mbr_convert.py</code></div>
+                </div>
+                <div class="module-desc">
+                    일회성 스크립트. MUFP의 그룹 엔티티 키를 재구성하고 항목 엔티티를 삽입하는 MBR(의료비) 전용 후처리입니다.
+                </div>
+                <div class="module-funcs">
+                    <span class="func-tag">inline script</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── Data Format Table ── -->
+    <div class="section">
+        <div class="section-header">
+            <div class="section-icon amber">
+                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"/></svg>
+            </div>
+            <div>
+                <div class="section-title">Data Formats</div>
+                <div class="section-subtitle">파이프라인에서 사용되는 데이터 포맷</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Format</th>
+                        <th>Full Name</th>
+                        <th>Description</th>
+                        <th>Generated By</th>
+                        <th>File</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>UFO</code></td>
+                        <td>Unified Format OCR</td>
+                        <td>OCR 결과 (word boxes, 텍스트, 좌표)</td>
+                        <td><code>ocr.py</code></td>
+                        <td><code>ufos.json</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>UFP</code></td>
+                        <td>Unified Format Parser</td>
+                        <td>Parser 결과 (구조화된 엔티티)</td>
+                        <td><code>parser.py</code></td>
+                        <td><code>ufps.json</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>MUFP</code></td>
+                        <td>Modified UFP</td>
+                        <td>Parser 확장 포맷 (기본 출력)</td>
+                        <td><code>parser.py</code></td>
+                        <td><code>mufps.json</code></td>
+                    </tr>
+                    <tr>
+                        <td><code>LLM MUFP</code></td>
+                        <td>LLM-refined MUFP</td>
+                        <td>LLM으로 보정된 MUFP</td>
+                        <td><code>llm.py</code></td>
+                        <td><code>llm_mufps.json</code></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- ── E2E Pipeline ── -->
+    <div id="pipeline" class="section">
+        <div class="section-header">
+            <div class="section-icon rose">
+                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2"/></svg>
+            </div>
+            <div>
+                <div class="section-title">E2E Pipelines</div>
+                <div class="section-subtitle">End-to-End 자동화 스크립트 구성</div>
+            </div>
+        </div>
+
+        <div class="e2e-grid">
+            <div class="e2e-item">
+                <div class="e2e-icon">&#9654;</div>
+                <div>
+                    <div class="e2e-name">conversion2all.sh</div>
+                    <div class="e2e-desc">Conversion → OA (전처리만 수행)</div>
+                </div>
+            </div>
+            <div class="e2e-item">
+                <div class="e2e-icon">&#9654;</div>
+                <div>
+                    <div class="e2e-name">ocr2all.sh</div>
+                    <div class="e2e-desc">Conversion → OA → OCR (UFO까지)</div>
+                </div>
+            </div>
+            <div class="e2e-item">
+                <div class="e2e-icon">&#9654;</div>
+                <div>
+                    <div class="e2e-name">ocr2parser.sh</div>
+                    <div class="e2e-desc">ocr2all → Parser (MUFP까지)</div>
+                </div>
+            </div>
+            <div class="e2e-item">
+                <div class="e2e-icon">&#9654;</div>
+                <div>
+                    <div class="e2e-name">ocr2res.sh</div>
+                    <div class="e2e-desc">ocr2parser → UFP2CSV (최종 CSV/XLSX)</div>
+                </div>
+            </div>
+            <div class="e2e-item">
+                <div class="e2e-icon">&#9654;</div>
+                <div>
+                    <div class="e2e-name">ocr2llm.sh</div>
+                    <div class="e2e-desc">ocr2parser → LLM (LLM 보정까지)</div>
+                </div>
+            </div>
+            <div class="e2e-item">
+                <div class="e2e-icon">&#9654;</div>
+                <div>
+                    <div class="e2e-name">ocr2masker.sh</div>
+                    <div class="e2e-desc">ocr2parser → Masker (민감정보 마스킹)</div>
+                </div>
+            </div>
+            <div class="e2e-item">
+                <div class="e2e-icon">&#9654;</div>
+                <div>
+                    <div class="e2e-name">serving2all.sh / .py</div>
+                    <div class="e2e-desc">Serving Pack 통합 추론 (별도 경로)</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── Server Communication ── -->
+    <div class="section">
+        <div class="section-header">
+            <div class="section-icon blue">
+                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2-4h.01M17 16h.01"/></svg>
+            </div>
+            <div>
+                <div class="section-title">Server Communication</div>
+                <div class="section-subtitle">모듈별 서버 통신 방식</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Module</th>
+                        <th>Endpoint</th>
+                        <th>Protocol</th>
+                        <th>Input Encoding</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>ocr.py</code></td>
+                        <td><code>/v1/models/custom-model:predict</code></td>
+                        <td>JSON POST</td>
+                        <td>Image → Base64</td>
+                    </tr>
+                    <tr>
+                        <td><code>parser.py</code> (DRSP)</td>
+                        <td><code>/v1/models/custom-model:predict</code></td>
+                        <td>JSON POST</td>
+                        <td>UFO JSON</td>
+                    </tr>
+                    <tr>
+                        <td><code>parser.py</code> (KVS)</td>
+                        <td><code>/v1/models/custom-model:predict</code></td>
+                        <td>JSON POST</td>
+                        <td>UFO + Image Base64</td>
+                    </tr>
+                    <tr>
+                        <td><code>llm.py</code></td>
+                        <td><code>/v1/models/custom-model:predict</code></td>
+                        <td>JSON POST</td>
+                        <td>MUFP JSON</td>
+                    </tr>
+                    <tr>
+                        <td><code>classifier.py</code></td>
+                        <td><code>/v1/models/custom-model:predict</code></td>
+                        <td><strong>CloudEvent Binary</strong></td>
+                        <td>Image Binary</td>
+                    </tr>
+                    <tr>
+                        <td><code>dp.py</code></td>
+                        <td><code>/v1/models/custom-model:predict</code></td>
+                        <td>JSON POST</td>
+                        <td>Image → Base64</td>
+                    </tr>
+                    <tr>
+                        <td><code>serving.py</code></td>
+                        <td><code>/inference?verbose=True</code></td>
+                        <td><strong>Multipart Form</strong></td>
+                        <td>Image File + Model Name</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- ── Environment Variables ── -->
+    <div id="env" class="section">
+        <div class="section-header">
+            <div class="section-icon purple">
+                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><circle cx="12" cy="12" r="3"/></svg>
+            </div>
+            <div>
+                <div class="section-title">Environment Variables</div>
+                <div class="section-subtitle">E2E 스크립트에서 사용하는 환경변수</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <table class="env-table">
+                <thead>
+                    <tr>
+                        <th>Variable</th>
+                        <th>Description</th>
+                        <th>Type</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>WORKSPACE</code></td>
+                        <td>작업 디렉토리 루트 경로</td>
+                        <td>string</td>
+                    </tr>
+                    <tr>
+                        <td><code>IP</code></td>
+                        <td>서빙 서버 IP 주소</td>
+                        <td>string</td>
+                    </tr>
+                    <tr>
+                        <td><code>OCR_PORT</code></td>
+                        <td>OCR 서버 포트</td>
+                        <td>string</td>
+                    </tr>
+                    <tr>
+                        <td><code>PARSER_PORTS</code></td>
+                        <td>문서타입별 Parser 포트 매핑</td>
+                        <td>JSON object</td>
+                    </tr>
+                    <tr>
+                        <td><code>PARSER_ENGINES</code></td>
+                        <td>문서타입별 Parser 엔진 (drsp/kvs)</td>
+                        <td>JSON object</td>
+                    </tr>
+                    <tr>
+                        <td><code>PARSER_DOCUMENT_TYPES</code></td>
+                        <td>프로젝트명 → 문서타입 매핑</td>
+                        <td>JSON object</td>
+                    </tr>
+                    <tr>
+                        <td><code>LLM_DOCUMENT_TYPES</code></td>
+                        <td>프로젝트명 → LLM 문서타입 매핑</td>
+                        <td>JSON object</td>
+                    </tr>
+                    <tr>
+                        <td><code>CONTROLLER_PORT</code></td>
+                        <td>Serving Pack 컨트롤러 포트</td>
+                        <td>string</td>
+                    </tr>
+                    <tr>
+                        <td><code>SERVING_MODELS</code></td>
+                        <td>프로젝트명 → 서빙 모델 매핑</td>
+                        <td>JSON object</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- ── Directory Structure ── -->
+    <div class="section">
+        <div class="section-header">
+            <div class="section-icon emerald">
+                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/></svg>
+            </div>
+            <div>
+                <div class="section-title">Directory Convention</div>
+                <div class="section-subtitle">워크스페이스 디렉토리 구조</div>
+            </div>
+        </div>
+
+        <div class="card" style="overflow:hidden;">
+            <pre class="dir-tree"><span class="folder">workspace/</span>
+├── <span class="folder">project/</span>
+│   └── <span class="folder">{project_name}/</span>
+│       ├── <span class="folder">images/</span>                <span class="comment">← 입력 이미지 (변환 후 PNG)</span>
+│       │   └── <span class="folder">backup/</span>            <span class="comment">← 변환 전 원본 파일</span>
+│       ├── <span class="folder">outputs/</span>
+│       │   ├── <span class="file">ufos.json</span>          <span class="comment">← OCR 결과</span>
+│       │   ├── <span class="file">mufps.json</span>         <span class="comment">← Parser 결과</span>
+│       │   ├── <span class="file">llm_mufps.json</span>     <span class="comment">← LLM 보정 결과</span>
+│       │   └── <span class="file">results.csv</span>        <span class="comment">← 최종 CSV 출력</span>
+│       ├── <span class="folder">images_masked/</span>        <span class="comment">← 마스킹된 이미지</span>
+│       └── <span class="folder">images_classified/</span>    <span class="comment">← 분류된 이미지</span>
+└── <span class="folder">pack/</span>
+    └── <span class="folder">parser/</span>
+        └── <span class="folder">{document_type}/</span>
+            └── <span class="folder">config/</span>
+                └── <span class="file">ontology_short.yaml</span>  <span class="comment">← UFP→CSV 변환용 온톨로지</span></pre>
+        </div>
+    </div>
+
+</div>
+
+<!-- ═══════════════════ FOOTER ═══════════════════ -->
+<div class="footer">
+    <strong>Enterprise DocAI Kit</strong> &middot; EBS AI ModelOps &middot; Technical Documentation
+    <br>Generated on 2026-03-30
+</div>
+
+<script>
+    mermaid.initialize({
+        startOnLoad: true,
+        theme: 'base',
+        securityLevel: 'loose',
+        themeVariables: {
+            primaryColor: '#f5f3ff',
+            primaryBorderColor: '#7c3aed',
+            primaryTextColor: '#1e293b',
+            lineColor: '#94a3b8',
+            secondaryColor: '#eff6ff',
+            tertiaryColor: '#f0fdf4',
+            fontFamily: 'Inter, sans-serif',
+            fontSize: '13px',
+            nodeTextSize: '13px',
+        },
+        flowchart: {
+            curve: 'basis',
+            padding: 24,
+            htmlLabels: true,
+            nodeSpacing: 60,
+            rankSpacing: 50,
+            subGraphTitleMargin: { top: 10, bottom: 10 },
+            wrappingWidth: 200,
+        },
+        classDiagram: {
+            padding: 20,
+        }
+    });
+
+    // Smooth scroll for nav links
+    document.querySelectorAll('.nav-link').forEach(link => {
+        link.addEventListener('click', function(e) {
+            const href = this.getAttribute('href');
+            if (href.startsWith('#')) {
+                e.preventDefault();
+                const target = document.querySelector(href);
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+                document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+                this.classList.add('active');
+            }
+        });
+    });
+
+    // Active nav on scroll
+    const sections = document.querySelectorAll('.section[id]');
+    const navLinks = document.querySelectorAll('.nav-link');
+
+    window.addEventListener('scroll', () => {
+        let current = '';
+        sections.forEach(section => {
+            const sectionTop = section.offsetTop - 120;
+            if (window.scrollY >= sectionTop) {
+                current = section.getAttribute('id');
+            }
+        });
+        navLinks.forEach(link => {
+            link.classList.remove('active');
+            if (link.getAttribute('href') === `#${current}`) {
+                link.classList.add('active');
+            }
+        });
+    });
+</script>
+
+</body>
+</html>

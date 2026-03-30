@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EBS AI ModelOps — Documentation Portal</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+        :root {
+            --purple-900: #1a0533;
+            --purple-700: #3f1089;
+            --purple-600: #5a1db8;
+            --purple-500: #7c3aed;
+            --purple-400: #9b6bf5;
+            --purple-300: #b794f6;
+            --purple-200: #d4bbfc;
+            --purple-100: #ede5ff;
+            --purple-50: #f5f0ff;
+            --slate-900: #0f172a;
+            --slate-800: #1e293b;
+            --slate-600: #475569;
+            --slate-500: #64748b;
+            --slate-400: #94a3b8;
+            --slate-200: #e2e8f0;
+            --slate-100: #f1f5f9;
+            --slate-50: #f8fafc;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: var(--slate-50);
+            color: var(--slate-800);
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, var(--purple-900) 0%, var(--purple-700) 40%, var(--purple-500) 100%);
+            padding: 80px 40px 60px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -40%;
+            right: -15%;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(167,139,250,0.15) 0%, transparent 70%);
+            border-radius: 50%;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 100px;
+            padding: 6px 20px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--purple-200);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+        }
+
+        .hero h1 {
+            font-size: 42px;
+            font-weight: 900;
+            color: #fff;
+            letter-spacing: -1.5px;
+            margin-bottom: 12px;
+            position: relative;
+        }
+
+        .hero h1 span { color: var(--purple-300); }
+
+        .hero p {
+            font-size: 16px;
+            color: var(--purple-300);
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: -40px auto 0;
+            padding: 0 24px 80px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background: #fff;
+            border-radius: 16px;
+            border: 1px solid var(--slate-200);
+            padding: 32px 28px;
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 4px;
+        }
+
+        .card:nth-child(1)::before { background: linear-gradient(90deg, var(--purple-500), var(--purple-300)); }
+        .card:nth-child(2)::before { background: linear-gradient(90deg, #3b82f6, #93c5fd); }
+        .card:nth-child(3)::before { background: linear-gradient(90deg, #10b981, #6ee7b7); }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(124, 58, 237, 0.12);
+            border-color: var(--purple-200);
+        }
+
+        .card-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            margin-bottom: 18px;
+        }
+
+        .card:nth-child(1) .card-icon { background: var(--purple-100); }
+        .card:nth-child(2) .card-icon { background: #eff6ff; }
+        .card:nth-child(3) .card-icon { background: #f0fdf4; }
+
+        .card-title {
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--slate-900);
+            margin-bottom: 8px;
+            letter-spacing: -0.3px;
+        }
+
+        .card-desc {
+            font-size: 14px;
+            color: var(--slate-500);
+            line-height: 1.6;
+            flex: 1;
+        }
+
+        .card-footer {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--purple-500);
+        }
+
+        .card-footer svg {
+            width: 16px;
+            height: 16px;
+            transition: transform 0.2s;
+        }
+
+        .card:hover .card-footer svg {
+            transform: translateX(4px);
+        }
+
+        .card-badge {
+            display: inline-block;
+            font-size: 10px;
+            font-weight: 700;
+            padding: 3px 10px;
+            border-radius: 100px;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            margin-bottom: 14px;
+        }
+
+        .card:nth-child(1) .card-badge { background: var(--purple-100); color: var(--purple-600); }
+        .card:nth-child(2) .card-badge { background: #dbeafe; color: #2563eb; }
+        .card:nth-child(3) .card-badge { background: #d1fae5; color: #059669; }
+
+        .footer {
+            text-align: center;
+            padding: 32px;
+            font-size: 12px;
+            color: var(--slate-400);
+        }
+
+        .footer strong { color: var(--purple-500); }
+
+        .empty-badge {
+            display: inline-block;
+            font-size: 10px;
+            font-weight: 600;
+            padding: 2px 8px;
+            border-radius: 4px;
+            background: var(--slate-100);
+            color: var(--slate-400);
+            margin-left: 8px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="hero">
+    <div class="hero-badge">EBS AI ModelOps</div>
+    <h1>Documentation <span>Portal</span></h1>
+    <p>프로젝트별 기술 문서 모음</p>
+</div>
+
+<div class="container">
+    <div class="card-grid">
+
+        <a href="./docai-kit/" class="card">
+            <div class="card-icon">&#128218;</div>
+            <div class="card-badge">Pipeline Toolkit</div>
+            <div class="card-title">DocAI Kit</div>
+            <div class="card-desc">Enterprise DocAI Kit. BMT/POC, QA, 온사이트 검증을 위한 문서 AI 파이프라인 툴킷. 12개 모듈, 7개 E2E 파이프라인.</div>
+            <div class="card-footer">
+                문서 보기
+                <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </div>
+        </a>
+
+        <a href="./docaiml/" class="card">
+            <div class="card-icon">&#129302;</div>
+            <div class="card-badge">ML Platform</div>
+            <div class="card-title">DocAI ML <span class="empty-badge">Coming Soon</span></div>
+            <div class="card-desc">문서 AI 머신러닝 플랫폼. 모델 학습, 평가, 배포 파이프라인 기술 문서.</div>
+            <div class="card-footer">
+                문서 보기
+                <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </div>
+        </a>
+
+        <a href="./classifier/" class="card">
+            <div class="card-icon">&#128209;</div>
+            <div class="card-badge">Classification</div>
+            <div class="card-title">Classifier <span class="empty-badge">Coming Soon</span></div>
+            <div class="card-desc">문서 분류 엔진. CloudEvent 기반 분류 서빙, 모델 구조, 온톨로지 설정 가이드.</div>
+            <div class="card-footer">
+                문서 보기
+                <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </div>
+        </a>
+
+    </div>
+</div>
+
+<div class="footer">
+    <strong>EBS AI ModelOps</strong> &middot; Documentation Portal
+</div>
+
+</body>
+</html>
