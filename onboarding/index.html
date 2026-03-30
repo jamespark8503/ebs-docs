@@ -509,36 +509,21 @@
             </div>
             <p><code>localhost:{포트번호}</code>로 접속하면 분석 페이지가 열립니다.</p>
 
-            <h3 style="border-left-color:#8b5cf6; color:#7c3aed;">Analyzer 화면 예시</h3>
-            <p style="font-size:13px; color:var(--slate-600); margin-bottom:12px;">출고확인서(transfer_confirmation) 분석 결과 — 좌측에 파싱 결과 테이블, 우측에 원본 문서 이미지가 나란히 표시됩니다.</p>
-            <div style="border-radius:var(--radius-sm); overflow:hidden; border:1px solid var(--slate-200); margin-bottom:20px;">
-                <img src="images/analyze.webp" alt="Analyzer 전체 화면 — 파싱 결과 + 원본 문서 비교" style="width:100%; display:block;">
+            <h3 style="border-left-color:#8b5cf6; color:#7c3aed;">Analyzer 화면</h3>
+            <div style="border-radius:var(--radius-sm); overflow:hidden; border:1px solid var(--slate-200); margin-bottom:16px;">
+                <img src="images/analyze.webp" alt="Analyzer 전체 화면" style="width:100%; display:block;">
             </div>
-
-            <h3 style="border-left-color:#8b5cf6; color:#7c3aed;">평가 결과 상세 (Detail View)</h3>
-            <p style="font-size:13px; color:var(--slate-600); margin-bottom:12px;">각 엔티티의 매칭 결과를 색상으로 구분합니다.</p>
-            <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; margin-bottom:20px;">
-                <div style="border-radius:var(--radius-sm); overflow:hidden; border:1px solid var(--slate-200);">
-                    <img src="images/image (3).png" alt="fail/matched 결과 상세" style="width:100%; display:block;">
-                </div>
-                <div style="border-radius:var(--radius-sm); overflow:hidden; border:1px solid var(--slate-200);">
-                    <img src="images/image (4).png" alt="similar-but-fail 결과 상세" style="width:100%; display:block;">
-                </div>
-                <div style="border-radius:var(--radius-sm); overflow:hidden; border:1px solid var(--slate-200);">
-                    <img src="images/image (5).png" alt="miss/unexpected 결과 상세" style="width:100%; display:block;">
-                </div>
+            <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; margin-bottom:16px;">
+                <div style="border-radius:8px; overflow:hidden; border:1px solid var(--slate-200);"><img src="images/image (3).png" style="width:100%; display:block;"></div>
+                <div style="border-radius:8px; overflow:hidden; border:1px solid var(--slate-200);"><img src="images/image (4).png" style="width:100%; display:block;"></div>
+                <div style="border-radius:8px; overflow:hidden; border:1px solid var(--slate-200);"><img src="images/image (5).png" style="width:100%; display:block;"></div>
             </div>
-
-            <h3 style="border-left-color:#8b5cf6; color:#7c3aed;">색상 범례</h3>
-            <table>
-                <thead><tr><th>색상</th><th>의미</th><th>설명</th></tr></thead>
-                <tbody>
-                    <tr><td><span style="display:inline-block;width:14px;height:14px;background:#000;border-radius:3px;vertical-align:middle;"></span> <strong>Black</strong></td><td>Ground Truth</td><td>정답 라벨 (Label)</td></tr>
-                    <tr><td><span style="display:inline-block;width:14px;height:14px;background:#16a34a;border-radius:3px;vertical-align:middle;"></span> <strong style="color:#16a34a;">Green</strong></td><td>Matched</td><td>정답과 일치하는 예측</td></tr>
-                    <tr><td><span style="display:inline-block;width:14px;height:14px;background:#dc2626;border-radius:3px;vertical-align:middle;"></span> <strong style="color:#dc2626;">Red</strong></td><td>Fail</td><td>오답 예측 (wrong / miss / unexpected)</td></tr>
-                    <tr><td><span style="display:inline-block;width:14px;height:14px;background:#ca8a04;border-radius:3px;vertical-align:middle;"></span> <strong style="color:#ca8a04;">Yellow</strong></td><td>Similar-but-fail</td><td>유사하지만 불일치 (subset 등)</td></tr>
-                </tbody>
-            </table>
+            <div style="display:flex; gap:20px; flex-wrap:wrap; font-size:13px; margin-bottom:8px;">
+                <span><span style="display:inline-block;width:12px;height:12px;background:#000;border-radius:3px;vertical-align:middle;margin-right:4px;"></span><strong>Black</strong> Ground Truth</span>
+                <span><span style="display:inline-block;width:12px;height:12px;background:#16a34a;border-radius:3px;vertical-align:middle;margin-right:4px;"></span><strong style="color:#16a34a;">Green</strong> Matched</span>
+                <span><span style="display:inline-block;width:12px;height:12px;background:#dc2626;border-radius:3px;vertical-align:middle;margin-right:4px;"></span><strong style="color:#dc2626;">Red</strong> Fail</span>
+                <span><span style="display:inline-block;width:12px;height:12px;background:#ca8a04;border-radius:3px;vertical-align:middle;margin-right:4px;"></span><strong style="color:#ca8a04;">Yellow</strong> Similar-but-fail</span>
+            </div>
         </div>
     </div>
 
