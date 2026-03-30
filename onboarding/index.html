@@ -335,19 +335,10 @@
 <span class="cmd">docai4 data analyze</span></div>
             <p>입력/출력 토큰 길이 분포를 분석하여 <code>setup.yaml</code>의 <code>max_length</code> 설정에 활용합니다.</p>
 
-            <h3 style="border-left-color:#3b82f6; color:#2563eb;">1.5 결과 디렉토리 구조</h3>
-            <pre class="dir-tree"><span class="f">/data/project/enterprise/docai/dev/${docai3 or docai4}/{document_type}/</span>
-├── <span class="f">data/</span>
-│   ├── <span class="f">ontologies/</span>
-│   │   ├── <span class="fi">ontology_1.0.yaml</span>
-│   │   └── <span class="fi">ontology_2.0.yaml</span>
-│   └── <span class="f">sources/{dataset_name}/</span>
-│       ├── <span class="f">images/</span>
-│       │   ├── <span class="f">train/</span>  <span class="f">val/</span>  <span class="f">test/</span>
-│       ├── <span class="f">ufos/</span>              <span class="c">← DRSP: ocr/, parsing/ (train/val/test.json)</span>
-│       ├── <span class="f">ufks/</span>              <span class="c">← KVS: train/val/test.json</span>
-│       ├── <span class="f">analysis_result/</span>   <span class="c">← KVS analyze 결과</span>
-│       └── <span class="fi">meta_info.json</span></pre>
+            <div class="callout tip" style="margin-top:16px;">
+                <div class="callout-icon">&#128194;</div>
+                <div>결과 경로: <code>/data/project/enterprise/docai/dev/${docai3 or docai4}/{document_type}/data/</code><br>상세 디렉토리 구조는 <a href="#cli-ref" style="color:#059669; font-weight:600;">CLI Reference → data add</a>를 참고하세요.</div>
+            </div>
         </div>
     </div>
 
@@ -366,22 +357,11 @@
 <span class="q">? Select Document Type</span> → 문서 타입 선택<br>
 <span class="q">? Enter Experiment Name</span> → <span class="sel">{날짜}_{고객사}_{범위}</span> 입력
             </div>
-            <p><code>{document_type}/models/{exp_name}/setup.yaml</code> 이 생성됩니다. 아래 주요 항목을 설정하세요:</p>
-
-            <table>
-                <thead><tr><th>항목</th><th>설명</th><th>예시</th></tr></thead>
-                <tbody>
-                    <tr><td><code>data.dataset</code></td><td>사용할 데이터셋 이름</td><td><code>250417_hi_maintenance</code></td></tr>
-                    <tr><td><code>data.ontology</code></td><td>온톨로지 파일명</td><td><code>ont.diagnosis.upstage__7.0.yaml</code></td></tr>
-                    <tr><td><code>train.model</code></td><td>모델 타입</td><td>DRSP: <code>parsing/bio_with_grouping</code><br>KVS: <code>lxdonut_parallel</code></td></tr>
-                    <tr><td><code>train.lr</code></td><td>학습률</td><td><code>2e-5</code></td></tr>
-                    <tr><td><code>train.batch_size</code></td><td>배치 크기</td><td><code>2</code> ~ <code>4</code></td></tr>
-                    <tr><td><code>train.num_epochs</code></td><td>에포크 (KVS)</td><td><code>200</code></td></tr>
-                    <tr><td><code>train.max_steps</code></td><td>학습 스텝 (DRSP)</td><td><code>1000</code></td></tr>
-                    <tr><td><code>train.max_length</code></td><td>최대 토큰 길이</td><td><code>2048</code></td></tr>
-                    <tr><td><code>pretrained_model_...</code></td><td>사전학습 모델 경로</td><td>체크포인트 경로</td></tr>
-                </tbody>
-            </table>
+            <p><code>{document_type}/models/{exp_name}/setup.yaml</code> 이 생성됩니다. 주요 설정: <code>data.dataset</code>, <code>data.ontology</code>, <code>train.model</code>, <code>train.lr</code>, <code>train.batch_size</code>, <code>max_length</code></p>
+            <div class="callout tip">
+                <div class="callout-icon">&#128209;</div>
+                <div>setup.yaml 전체 항목은 <a href="#cli-ref" style="color:#059669; font-weight:600;">CLI Reference → model setup</a>에서 DRSP/KVS별 상세 비교를 확인하세요.</div>
+            </div>
 
             <h3 style="border-left-color:var(--purple-500); color:var(--purple-600);">2.2 학습 실행</h3>
             <div class="ref-cmd-block"><span class="desc"># Command 방식 — 단일 실험</span>
@@ -393,21 +373,9 @@
 <span class="desc"># 모든 하이퍼파라미터 조합 일괄 학습</span>
 <span class="cmd">${docai3 or docai4} model train</span> <span class="opt">--all</span></div>
 
-            <h3 style="border-left-color:var(--purple-500); color:var(--purple-600);">2.3 학습 결과</h3>
-            <div class="cmp-grid" style="margin-top:12px;">
-                <div class="cmp-card"><div class="cmp-header gen3">DRSP 결과</div><div class="cmp-body"><ul>
-                    <li><code>backbone_config/</code></li>
-                    <li><code>checkpoints/</code> (best.ckpt, last.ckpt)</li>
-                    <li><code>tokenizer/</code></li>
-                    <li><code>hparams.yaml</code>, <code>ontology.yaml</code></li>
-                </ul></div></div>
-                <div class="cmp-card"><div class="cmp-header gen4">KVS 결과</div><div class="cmp-body"><ul>
-                    <li><code>code/</code>, <code>logs/</code></li>
-                    <li><code>model/</code> (best/, last/)</li>
-                    <li><code>config.yaml</code></li>
-                    <li><code>accelerator_config.json</code></li>
-                    <li><code>progress_bar.log</code></li>
-                </ul></div></div>
+            <div class="callout tip" style="margin-top:16px;">
+                <div class="callout-icon">&#128194;</div>
+                <div>학습 결과 디렉토리 구조 (DRSP/KVS 비교)는 <a href="#cli-ref" style="color:#059669; font-weight:600;">CLI Reference → model train</a>를 참고하세요.</div>
             </div>
         </div>
     </div>
@@ -442,19 +410,10 @@
 <span class="q">? Select ontology</span> → 온톨로지
             </div>
 
-            <h3 style="border-left-color:#10b981; color:#059669;">결과 디렉토리</h3>
-            <pre class="dir-tree"><span class="f">models/{exp_name}/{exp_name}__0/outputs/{dataset_name}/</span>
-├── <span class="f">general_infer_ufp/</span>
-│   ├── <span class="fi">ufp.json</span>              <span class="c">← 추론 결과 (UFP)</span>
-│   └── <span class="fi">mufp.json</span>             <span class="c">← 추론 결과 (MUFP)</span>
-└── <span class="f">{use_case}__{ontology_version}/</span>
-    ├── <span class="f">kieval/</span>
-    │   ├── <span class="fi">total_kieval.json</span>   <span class="c">← 전체 KiEval 점수</span>
-    │   ├── <span class="fi">entity_level_kieval.json</span>
-    │   └── <span class="fi">kieval_result.md</span>    <span class="c">← 사람이 읽기 쉬운 요약</span>
-    ├── <span class="f">ufp/</span>   <span class="c">(gold.json, pred.json)</span>
-    ├── <span class="f">mufp/</span>  <span class="c">(gold.json, pred.json)</span>
-    └── <span class="f">csv/</span>   <span class="c">(gold.csv, pred.csv)</span></pre>
+            <div class="callout tip" style="margin-top:16px;">
+                <div class="callout-icon">&#128194;</div>
+                <div>결과 디렉토리 구조 (kieval, ufp, mufp, csv)는 <a href="#cli-ref" style="color:#059669; font-weight:600;">CLI Reference → model test</a>를 참고하세요.</div>
+            </div>
         </div>
     </div>
 
@@ -529,19 +488,10 @@
                 예: <code>kr-transfer-confirmation-extractor-meritzsec-0.3b-4.1.0</code>
             </div>
 
-            <h3 style="border-left-color:#f43f5e; color:#e11d48;">5.3 패키지 결과</h3>
-            <pre class="dir-tree"><span class="f">packages/{use_case}/{document_type}/{package_name}/</span>
-├── <span class="f">config/</span>                    <span class="c">← 서빙 시 OP_CONFIG_DIR</span>
-│   ├── <span class="fi">ont.{type}.yaml</span>       <span class="c">← 온톨로지 (원본 이름)</span>
-│   └── <span class="fi">README.md</span>             <span class="c">← 모델 정보, 평가 결과, 데이터셋 정보</span>
-├── <span class="f">weight/</span>                    <span class="c">← 서빙 시 OP_MODEL_DIR</span>
-│   ├── <span class="f">codes/</span>  <span class="f">compiled/</span>  <span class="f">tokenizer/</span>
-│   ├── <span class="fi">config.json</span>  <span class="fi">config.yaml</span>
-│   ├── <span class="fi">ontology.yaml</span>  <span class="fi">ontology_short.yaml</span>
-│   └── <span class="fi">pytorch_model.bin</span>
-├── <span class="fi">config.yaml</span>               <span class="c">← EQMS용 (서빙 정보, Docker 이미지, GPU 설정)</span>
-├── <span class="fi">config.tar.gz</span>
-└── <span class="fi">weight.tar.gz</span></pre>
+            <div class="callout tip" style="margin-top:16px;">
+                <div class="callout-icon">&#128194;</div>
+                <div>패키지 결과 디렉토리 구조 (config/, weight/, EQMS config)는 <a href="#cli-ref" style="color:#059669; font-weight:600;">CLI Reference → pack</a>를 참고하세요.</div>
+            </div>
         </div>
     </div>
 
@@ -1000,24 +950,10 @@
                 <code>localhost:{포트번호}</code>로 브라우저에서 접속하면 분석 페이지가 열립니다.
             </p>
 
-            <div style="border-radius:var(--radius-sm); overflow:hidden; border:1px solid var(--slate-200); margin-bottom:16px;">
-                <img src="images/analyze.webp" alt="Analyzer 전체 화면" style="width:100%; display:block;">
+            <div class="callout tip">
+                <div class="callout-icon">&#128248;</div>
+                <div>Analyzer 화면 스크린샷과 색상 범례는 위 <a href="#onboarding" style="color:#059669; font-weight:600;">Onboarding → 분석 (Analyzer)</a> 섹션을 참고하세요.</div>
             </div>
-            <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; margin-bottom:16px;">
-                <div style="border-radius:8px; overflow:hidden; border:1px solid var(--slate-200);"><img src="images/image (3).png" alt="fail/matched 상세" style="width:100%; display:block;"></div>
-                <div style="border-radius:8px; overflow:hidden; border:1px solid var(--slate-200);"><img src="images/image (4).png" alt="similar-but-fail 상세" style="width:100%; display:block;"></div>
-                <div style="border-radius:8px; overflow:hidden; border:1px solid var(--slate-200);"><img src="images/image (5).png" alt="miss/unexpected 상세" style="width:100%; display:block;"></div>
-            </div>
-
-            <table>
-                <thead><tr><th>색상</th><th>의미</th><th>설명</th></tr></thead>
-                <tbody>
-                    <tr><td><span style="display:inline-block;width:16px;height:16px;background:#000;border-radius:3px;vertical-align:middle;"></span> <strong>Black</strong></td><td>Ground Truth</td><td>정답 라벨 (Label)</td></tr>
-                    <tr><td><span style="display:inline-block;width:16px;height:16px;background:#16a34a;border-radius:3px;vertical-align:middle;"></span> <strong style="color:#16a34a;">Green</strong></td><td>Matched</td><td>정답과 일치하는 예측</td></tr>
-                    <tr><td><span style="display:inline-block;width:16px;height:16px;background:#dc2626;border-radius:3px;vertical-align:middle;"></span> <strong style="color:#dc2626;">Red</strong></td><td>Fail</td><td>오답 예측 (wrong / miss / unexpected)</td></tr>
-                    <tr><td><span style="display:inline-block;width:16px;height:16px;background:#ca8a04;border-radius:3px;vertical-align:middle;"></span> <strong style="color:#ca8a04;">Yellow</strong></td><td>Similar-but-fail</td><td>유사하지만 불일치 (subset 등)</td></tr>
-                </tbody>
-            </table>
         </div>
     </div>
 
