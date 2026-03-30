@@ -123,9 +123,9 @@
             height: 4px;
         }
 
-        .card:nth-child(1)::before { background: linear-gradient(90deg, var(--purple-500), var(--purple-300)); }
-        .card:nth-child(2)::before { background: linear-gradient(90deg, #3b82f6, #93c5fd); }
-        .card:nth-child(3)::before { background: linear-gradient(90deg, #10b981, #6ee7b7); }
+        .card.c-blue::before { background: linear-gradient(90deg, #3b82f6, #93c5fd); }
+        .card.c-purple::before { background: linear-gradient(90deg, var(--purple-500), var(--purple-300)); }
+        .card.c-green::before { background: linear-gradient(90deg, #10b981, #6ee7b7); }
 
         .card:hover {
             transform: translateY(-4px);
@@ -144,9 +144,9 @@
             margin-bottom: 18px;
         }
 
-        .card:nth-child(1) .card-icon { background: var(--purple-100); }
-        .card:nth-child(2) .card-icon { background: #eff6ff; }
-        .card:nth-child(3) .card-icon { background: #f0fdf4; }
+        .card.c-blue .card-icon { background: #eff6ff; }
+        .card.c-purple .card-icon { background: var(--purple-100); }
+        .card.c-green .card-icon { background: #f0fdf4; }
 
         .card-title {
             font-size: 20px;
@@ -194,18 +194,9 @@
             margin-bottom: 14px;
         }
 
-        .card:nth-child(1) .card-badge { background: var(--purple-100); color: var(--purple-600); }
-        .card:nth-child(2) .card-badge { background: #dbeafe; color: #2563eb; }
-        .card:nth-child(3) .card-badge { background: #d1fae5; color: #059669; }
-
-        .footer {
-            text-align: center;
-            padding: 32px;
-            font-size: 12px;
-            color: var(--slate-400);
-        }
-
-        .footer strong { color: var(--purple-500); }
+        .card.c-blue .card-badge { background: #dbeafe; color: #2563eb; }
+        .card.c-purple .card-badge { background: var(--purple-100); color: var(--purple-600); }
+        .card.c-green .card-badge { background: #d1fae5; color: #059669; }
 
         .empty-badge {
             display: inline-block;
@@ -217,6 +208,15 @@
             color: var(--slate-400);
             margin-left: 8px;
         }
+
+        .footer {
+            text-align: center;
+            padding: 32px;
+            font-size: 12px;
+            color: var(--slate-400);
+        }
+
+        .footer strong { color: var(--purple-500); }
     </style>
 </head>
 <body>
@@ -230,7 +230,18 @@
 <div class="container">
     <div class="card-grid">
 
-        <a href="./docai-kit/" class="card">
+        <a href="./docai-automl/" class="card c-blue">
+            <div class="card-icon">&#129302;</div>
+            <div class="card-badge">AutoML Platform</div>
+            <div class="card-title">DocAI AutoML <span class="empty-badge">Coming Soon</span></div>
+            <div class="card-desc">문서 AI AutoML 플랫폼. 자동화된 모델 학습, 평가, 배포 파이프라인 기술 문서.</div>
+            <div class="card-footer">
+                문서 보기
+                <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </div>
+        </a>
+
+        <a href="./docai-kit/" class="card c-purple">
             <div class="card-icon">&#128218;</div>
             <div class="card-badge">Pipeline Toolkit</div>
             <div class="card-title">DocAI Kit</div>
@@ -241,18 +252,7 @@
             </div>
         </a>
 
-        <a href="./docaiml/" class="card">
-            <div class="card-icon">&#129302;</div>
-            <div class="card-badge">ML Platform</div>
-            <div class="card-title">DocAI ML <span class="empty-badge">Coming Soon</span></div>
-            <div class="card-desc">문서 AI 머신러닝 플랫폼. 모델 학습, 평가, 배포 파이프라인 기술 문서.</div>
-            <div class="card-footer">
-                문서 보기
-                <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-            </div>
-        </a>
-
-        <a href="./classifier/" class="card">
+        <a href="./classifier/" class="card c-green">
             <div class="card-icon">&#128209;</div>
             <div class="card-badge">Classification</div>
             <div class="card-title">Classifier <span class="empty-badge">Coming Soon</span></div>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DocAI ML — Coming Soon</title>
+    <title>DocAI AutoML — Coming Soon</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -11,6 +11,7 @@
             font-family: 'Inter', sans-serif;
             min-height: 100vh;
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
             background: linear-gradient(135deg, #1a0533 0%, #3f1089 50%, #7c3aed 100%);
@@ -22,6 +23,7 @@
         h1 { font-size: 36px; font-weight: 800; letter-spacing: -1px; margin-bottom: 12px; }
         h1 span { color: #b794f6; }
         p { font-size: 16px; color: #b794f6; max-width: 400px; margin: 0 auto 32px; line-height: 1.6; }
+        .btn-group { display: flex; gap: 12px; justify-content: center; }
         a {
             display: inline-block;
             padding: 10px 28px;
@@ -35,14 +37,18 @@
             transition: all 0.2s;
         }
         a:hover { background: rgba(255,255,255,0.2); color: #fff; }
+        a.home { background: rgba(124,58,237,0.3); border-color: rgba(124,58,237,0.5); }
+        a.home:hover { background: rgba(124,58,237,0.5); }
     </style>
 </head>
 <body>
     <div class="wrap">
         <div class="icon">&#129302;</div>
-        <h1>DocAI <span>ML</span></h1>
-        <p>문서 AI 머신러닝 플랫폼 기술 문서를 준비 중입니다.</p>
-        <a href="../">← Portal로 돌아가기</a>
+        <h1>DocAI <span>AutoML</span></h1>
+        <p>문서 AI AutoML 플랫폼 기술 문서를 준비 중입니다.</p>
+        <div class="btn-group">
+            <a class="home" href="../">&#127968; Home</a>
+        </div>
     </div>
 </body>
 </html>
