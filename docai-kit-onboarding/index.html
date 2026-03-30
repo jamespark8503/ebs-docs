@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enterprise DocAI Kit — Onboarding Guide</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap');
+        :root{--purple-900:#1a0533;--purple-700:#3f1089;--purple-600:#5a1db8;--purple-500:#7c3aed;--purple-400:#9b6bf5;--purple-300:#b794f6;--purple-200:#d4bbfc;--purple-100:#ede5ff;--purple-50:#f5f0ff;--blue-600:#2563eb;--blue-100:#dbeafe;--blue-50:#eff6ff;--green-600:#059669;--green-100:#d1fae5;--green-50:#f0fdf4;--orange-600:#ea580c;--orange-100:#fed7aa;--orange-50:#fff7ed;--rose-600:#e11d48;--rose-100:#fecdd3;--rose-50:#fff1f2;--amber-600:#d97706;--amber-50:#fefce8;--slate-900:#0f172a;--slate-800:#1e293b;--slate-700:#334155;--slate-600:#475569;--slate-500:#64748b;--slate-400:#94a3b8;--slate-300:#cbd5e1;--slate-200:#e2e8f0;--slate-100:#f1f5f9;--slate-50:#f8fafc;--radius:16px;--radius-sm:10px;}
+        *{margin:0;padding:0;box-sizing:border-box;}
+        body{font-family:'Inter',-apple-system,sans-serif;background:var(--slate-50);color:var(--slate-800);line-height:1.7;-webkit-font-smoothing:antialiased;}
+        .home-btn{position:fixed;top:20px;left:20px;z-index:999;display:inline-flex;align-items:center;gap:6px;padding:8px 18px;background:rgba(255,255,255,0.12);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.2);border-radius:100px;color:#d4bbfc;text-decoration:none;font-size:13px;font-weight:600;transition:all .2s;}
+        .home-btn:hover{background:rgba(255,255,255,0.25);color:#fff;}
+        .hero{position:relative;background:linear-gradient(135deg,var(--purple-900) 0%,#1e1b4b 40%,var(--purple-500) 100%);padding:80px 0 60px;overflow:hidden;}
+        .hero::before{content:'';position:absolute;top:-50%;right:-20%;width:600px;height:600px;background:radial-gradient(circle,rgba(124,58,237,0.2) 0%,transparent 70%);border-radius:50%;}
+        .hero-content{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:0 40px;}
+        .hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);border-radius:100px;padding:6px 18px;font-size:13px;font-weight:500;color:var(--purple-200);margin-bottom:24px;letter-spacing:.5px;}
+        .hero-badge::before{content:'';width:8px;height:8px;background:#34d399;border-radius:50%;box-shadow:0 0 8px #34d399;}
+        .hero h1{font-size:44px;font-weight:800;color:#fff;letter-spacing:-1.5px;line-height:1.15;margin-bottom:16px;}
+        .hero h1 span{color:var(--purple-300);}
+        .hero p{font-size:17px;color:var(--purple-300);max-width:640px;line-height:1.7;}
+        .hero-meta{display:flex;gap:24px;margin-top:28px;flex-wrap:wrap;}
+        .hero-meta-item{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--purple-300);font-weight:500;}
+        .nav-bar{position:sticky;top:0;z-index:100;background:rgba(255,255,255,0.85);backdrop-filter:blur(20px) saturate(180%);border-bottom:1px solid var(--slate-200);}
+        .nav-inner{max-width:1100px;margin:0 auto;padding:0 40px;display:flex;gap:4px;overflow-x:auto;}
+        .nav-inner::-webkit-scrollbar{display:none;}
+        .nav-link{display:flex;align-items:center;gap:6px;padding:14px 16px;font-size:13px;font-weight:600;color:var(--slate-500);text-decoration:none;white-space:nowrap;border-bottom:2px solid transparent;transition:all .2s;}
+        .nav-link:hover{color:var(--purple-600);border-bottom-color:var(--purple-300);}
+        .container{max-width:1100px;margin:0 auto;padding:48px 40px 100px;}
+        .section{margin-bottom:48px;}
+        .section-header{display:flex;align-items:center;gap:14px;margin-bottom:24px;}
+        .section-icon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#fff;font-size:18px;}
+        .section-icon.purple{background:linear-gradient(135deg,var(--purple-500),var(--purple-600));box-shadow:0 4px 12px rgba(124,58,237,.25);}
+        .section-icon.blue{background:linear-gradient(135deg,#3b82f6,var(--blue-600));box-shadow:0 4px 12px rgba(59,130,246,.25);}
+        .section-icon.green{background:linear-gradient(135deg,#10b981,var(--green-600));box-shadow:0 4px 12px rgba(16,185,129,.25);}
+        .section-icon.orange{background:linear-gradient(135deg,#f97316,var(--orange-600));box-shadow:0 4px 12px rgba(249,115,22,.25);}
+        .section-icon.rose{background:linear-gradient(135deg,#f43f5e,var(--rose-600));box-shadow:0 4px 12px rgba(244,63,94,.25);}
+        .section-icon.amber{background:linear-gradient(135deg,#f59e0b,var(--amber-600));box-shadow:0 4px 12px rgba(245,158,11,.25);}
+        .section-title{font-size:24px;font-weight:800;color:var(--slate-900);letter-spacing:-.5px;}
+        .section-subtitle{font-size:13px;color:var(--slate-500);margin-top:2px;}
+        h3{font-size:15px;font-weight:700;color:var(--purple-700);margin:20px 0 10px;padding-left:12px;border-left:3px solid var(--purple-400);}
+        table{width:100%;border-collapse:separate;border-spacing:0;font-size:12.5px;margin-bottom:16px;border-radius:var(--radius-sm);overflow:hidden;border:1px solid var(--slate-200);}
+        thead th{background:var(--purple-50);color:var(--purple-800);font-weight:700;font-size:10.5px;text-transform:uppercase;letter-spacing:.7px;padding:10px 14px;text-align:left;border-bottom:2px solid var(--purple-100);}
+        tbody td{padding:9px 14px;border-bottom:1px solid var(--slate-100);color:var(--slate-700);vertical-align:top;}
+        tbody tr:last-child td{border-bottom:none;}
+        tbody tr:hover{background:var(--purple-50);}
+        code{font-family:'JetBrains Mono',monospace;font-size:11px;background:var(--slate-100);padding:2px 6px;border-radius:4px;color:var(--purple-700);border:1px solid var(--slate-200);}
+        .callout{display:flex;gap:12px;padding:14px 18px;border-radius:var(--radius-sm);margin-bottom:14px;font-size:12.5px;line-height:1.6;}
+        .callout-icon{font-size:16px;flex-shrink:0;margin-top:1px;}
+        .callout.info{background:var(--purple-50);border:1px solid var(--purple-100);color:var(--purple-700);}
+        .callout.warn{background:#fef3c7;border:1px solid #fde68a;color:#92400e;}
+        .callout.tip{background:var(--green-50);border:1px solid var(--green-100);color:#065f46;}
+        .callout.danger{background:var(--rose-50);border:1px solid var(--rose-100);color:#9f1239;}
+        .cmd{background:var(--slate-900);border-radius:var(--radius-sm);padding:16px 20px;margin-bottom:12px;font-family:'JetBrains Mono',monospace;font-size:12px;line-height:1.7;color:var(--slate-300);overflow-x:auto;white-space:pre;}
+        .cmd .hl{color:#b794f6;font-weight:600;}.cmd .cm{color:#64748b;}.cmd .kw{color:#93c5fd;}.cmd .fn{color:#86efac;}.cmd .opt{color:#fde68a;}.cmd .val{color:#fda4af;}
+        .dir-tree{font-family:'JetBrains Mono',monospace;font-size:11.5px;line-height:1.85;color:var(--slate-400);background:var(--slate-900);padding:20px 24px;border-radius:var(--radius-sm);overflow-x:auto;white-space:pre;margin-bottom:14px;}
+        .dir-tree .f{color:#93c5fd;font-weight:600;}.dir-tree .fi{color:#c4b5fd;}.dir-tree .c{color:#64748b;font-style:italic;font-size:10.5px;}
+        .step-card{background:#fff;border-radius:var(--radius);border:1px solid var(--slate-200);margin-bottom:20px;overflow:hidden;}
+        .step-header{display:flex;align-items:center;gap:12px;padding:16px 24px;background:var(--slate-50);border-bottom:1px solid var(--slate-200);}
+        .step-num{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;color:#fff;flex-shrink:0;}
+        .step-title{font-size:15px;font-weight:700;color:var(--slate-900);}
+        .step-desc{font-size:11.5px;color:var(--slate-500);margin-left:auto;}
+        .step-body{padding:24px;}
+        .step-body p{font-size:13px;color:var(--slate-700);margin-bottom:10px;line-height:1.7;}
+        .step-body ol,.step-body ul{font-size:13px;color:var(--slate-700);margin:0 0 14px 20px;line-height:1.8;}
+        .step-body strong{color:var(--slate-900);}
+        .cmp-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;}
+        .cmp-card{background:#fff;border-radius:var(--radius-sm);border:1px solid var(--slate-200);overflow:hidden;}
+        .cmp-header{padding:12px 18px;font-size:13px;font-weight:700;display:flex;align-items:center;gap:8px;}
+        .cmp-header.online{background:var(--blue-50);color:var(--blue-600);border-bottom:2px solid var(--blue-100);}
+        .cmp-header.offline{background:var(--orange-50);color:var(--orange-600);border-bottom:2px solid var(--orange-100);}
+        .cmp-body{padding:16px 18px;}
+        .cmp-body ul{list-style:none;font-size:12.5px;color:var(--slate-700);}
+        .cmp-body li{padding:4px 0;border-bottom:1px solid var(--slate-100);display:flex;align-items:flex-start;gap:6px;}
+        .cmp-body li::before{content:'';width:5px;height:5px;border-radius:50%;margin-top:7px;flex-shrink:0;}
+        .cmp-card:first-child .cmp-body li::before{background:var(--blue-600);}
+        .cmp-card:last-child .cmp-body li::before{background:var(--orange-600);}
+        .env-table{width:100%;border-collapse:collapse;font-size:11.5px;margin-bottom:14px;}
+        .env-table th{background:var(--slate-800);color:var(--slate-200);font-weight:700;font-size:10px;text-transform:uppercase;letter-spacing:.8px;padding:8px 12px;text-align:left;}
+        .env-table td{padding:7px 12px;border-bottom:1px solid var(--slate-100);color:var(--slate-600);}
+        .env-table code{font-size:10.5px;}
+        .pipeline-flow{display:flex;align-items:center;gap:0;padding:16px 20px;background:var(--purple-50);border:1px solid var(--purple-100);border-radius:var(--radius-sm);margin-bottom:16px;overflow-x:auto;}
+        .pf-node{padding:8px 14px;border-radius:8px;font-size:11px;font-weight:600;white-space:nowrap;text-align:center;border:1px solid;}
+        .pf-node.input{background:#fff7ed;color:#c2410c;border-color:#fed7aa;}
+        .pf-node.process{background:#eff6ff;color:#1d4ed8;border-color:#bfdbfe;}
+        .pf-node.output{background:#f0fdf4;color:#15803d;border-color:#bbf7d0;}
+        .pf-node.tool{background:#faf5ff;color:#7e22ce;border-color:#e9d5ff;}
+        .pf-arrow{color:var(--slate-400);font-size:16px;padding:0 6px;flex-shrink:0;}
+        .footer{text-align:center;padding:40px;color:var(--slate-400);font-size:13px;border-top:1px solid var(--slate-200);}
+        .footer strong{color:var(--purple-500);}
+        @media(max-width:768px){.hero h1{font-size:32px;}.cmp-grid{grid-template-columns:1fr;}.container{padding:24px 20px 60px;}}
+    </style>
+</head>
+<body>
+
+<a href="../" class="home-btn"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M3 12l9-9 9 9M5 10v10a1 1 0 001 1h3a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1h3a1 1 0 001-1V10"/></svg>Home</a>
+
+<div class="hero">
+    <div class="hero-content">
+        <div class="hero-badge">EBS AI ModelOps</div>
+        <h1>DocAI Kit <span>Onboarding</span></h1>
+        <p>고객사 POC/BMT 수행을 위한 Enterprise DocAI Kit 실전 사용 가이드. 워크스페이스 세팅부터 Docker 서빙, 추론, Validator 채점까지.</p>
+        <div class="hero-meta">
+            <div class="hero-meta-item">&#128230; Docker 기반</div>
+            <div class="hero-meta-item">&#128209; Online + Offline 가이드</div>
+            <div class="hero-meta-item">&#9989; Validator 채점</div>
+            <div class="hero-meta-item">&#128202; CSV/XLSX 출력</div>
+        </div>
+    </div>
+</div>
+
+<nav class="nav-bar"><div class="nav-inner">
+    <a href="#overview" class="nav-link">Overview</a>
+    <a href="#step0" class="nav-link">0. 환경</a>
+    <a href="#step1" class="nav-link">1. 워크스페이스</a>
+    <a href="#step2" class="nav-link">2. setup.sh</a>
+    <a href="#step3" class="nav-link">3. Docker</a>
+    <a href="#step4" class="nav-link">4. 추론</a>
+    <a href="#step5" class="nav-link">5. Validator</a>
+    <a href="#step6" class="nav-link">6. 결과 변환</a>
+    <a href="#tips" class="nav-link">Tips</a>
+    <a href="../docai-kit/" class="nav-link" style="margin-left:auto;color:var(--purple-500);">← Tech Docs</a>
+</div></nav>
+
+<div class="container">
+
+<!-- OVERVIEW -->
+<div id="overview" class="section">
+    <div class="section-header"><div class="section-icon purple">&#128218;</div><div><div class="section-title">Overview</div><div class="section-subtitle">전체 구조와 Online/Offline 차이</div></div></div>
+
+    <div class="pipeline-flow">
+        <div class="pf-node input">이미지 준비</div><div class="pf-arrow">→</div>
+        <div class="pf-node process">Docker 서빙<br>(OCR, Parser)</div><div class="pf-arrow">→</div>
+        <div class="pf-node process">DocAI Kit<br>E2E 추론</div><div class="pf-arrow">→</div>
+        <div class="pf-node output">UFO → MUFP<br>→ CSV/XLSX</div><div class="pf-arrow">→</div>
+        <div class="pf-node tool">Validator<br>웹 채점</div>
+    </div>
+
+    <div class="cmp-grid">
+        <div class="cmp-card"><div class="cmp-header online">&#128309; Online (업스테이지 서버)</div><div class="cmp-body"><ul>
+            <li>GPU 서버에서 OCR/Parser Docker 직접 실행</li>
+            <li>DocAI Kit를 Docker 또는 pip으로 설치</li>
+            <li><code>ocr2parser.sh</code> 또는 <code>ocr2res.sh</code>로 추론</li>
+            <li>모델 패키지를 NAS에서 직접 마운트</li>
+        </ul></div></div>
+        <div class="cmp-card"><div class="cmp-header offline">&#128312; Offline (고객사 환경)</div><div class="cmp-body"><ul>
+            <li>Serving Pack이 이미 서빙 중 (포트 확인만)</li>
+            <li>DocAI Kit Docker 컨테이너로 실행</li>
+            <li><code>serving2all.sh</code>로 Serving Pack에 요청</li>
+            <li>USB로 Docker 이미지 반입</li>
+        </ul></div></div>
+    </div>
+
+    <div class="callout info">
+        <div class="callout-icon">&#128204;</div>
+        <div><strong>핵심 구성요소 4개:</strong><br>
+        <strong>docai-kit</strong> (작업 컨테이너) + <strong>OCR</strong> (텍스트 추출) + <strong>Parser</strong> (DRSP/KVS 구조화) + <strong>Validator</strong> (웹 채점)</div>
+    </div>
+</div>
+
+<!-- STEP 0 -->
+<div id="step0" class="step-card">
+    <div class="step-header"><div class="step-num" style="background:linear-gradient(135deg,#64748b,#475569);">0</div><div class="step-title">환경 준비</div><div class="step-desc">DocAI Kit 설치 방법 (Online / Offline)</div></div>
+    <div class="step-body">
+        <h3 style="color:var(--blue-600);border-left-color:#3b82f6;">Online: pip 설치</h3>
+        <div class="cmd"><span class="cm"># 레포 클론 후 설치 (python >= 3.10)</span>
+<span class="fn">git clone</span> git@github.com:UpstageAI/enterprise-docai-kit.git
+<span class="kw">cd</span> enterprise-docai-kit
+<span class="fn">pip install</span> -r requirements.txt</div>
+
+        <h3 style="color:var(--orange-600);border-left-color:#f97316;">Offline: Docker 이미지</h3>
+        <div class="cmd"><span class="cm"># Docker 이미지 로드 (USB로 반입)</span>
+<span class="fn">docker load</span> -i docai_kit_v1.1.0_20251105.tar.gz
+
+<span class="cm"># 컨테이너 실행</span>
+<span class="fn">docker run</span> -it \
+  -p <span class="opt">30050</span>:8080 \
+  -v <span class="opt">{workspace_path}</span>:/workspace \
+  docai-kit:1.1.0</div>
+
+        <div class="callout tip">
+            <div class="callout-icon">&#128161;</div>
+            <div>Docker 이미지 경로: <code>/data/project/enterprise/enterprise-docai-kit/docker/</code><br>최신 버전: <code>docai_kit_v1.1.0_20251105.tar.gz</code> (v1.1.0 — sort, 영역 조절, 엑셀 추출 기능 추가)</div>
+        </div>
+    </div>
+</div>
+
+<!-- STEP 1 -->
+<div id="step1" class="step-card">
+    <div class="step-header"><div class="step-num" style="background:linear-gradient(135deg,#3b82f6,#2563eb);">1</div><div class="step-title">워크스페이스 생성</div><div class="step-desc">프로젝트 디렉토리 구조 세팅</div></div>
+    <div class="step-body">
+        <div class="cmd"><span class="cm"># 디렉토리 생성</span>
+<span class="fn">mkdir</span> -p <span class="opt">{workspace}/project/{document_type}/images</span>
+<span class="fn">mkdir</span> -p <span class="opt">{workspace}/project/{document_type}/outputs</span></div>
+
+        <pre class="dir-tree"><span class="f">{workspace}/</span>
+├── <span class="f">project/</span>
+│   └── <span class="f">{project_name}/</span>          <span class="c">← 폴더명 = Validator 문서 이름</span>
+│       ├── <span class="f">images/</span>               <span class="c">← 추론할 이미지 넣기</span>
+│       └── <span class="f">outputs/</span>              <span class="c">← 결과 자동 생성</span>
+├── <span class="f">pack/</span>                         <span class="c">← Online에서 모델 패키지 마운트 시</span>
+│   ├── <span class="f">ocr/</span>
+│   └── <span class="f">parser/{document_type}/</span>
+├── <span class="f">validator/</span>                    <span class="c">← set.sh 실행 후 자동 생성</span>
+└── <span class="fi">setup.sh</span>                     <span class="c">← 환경변수 설정 (필수)</span></pre>
+
+        <div class="cmd"><span class="cm"># 이미지 복사 예시</span>
+<span class="fn">cp</span> /data/project/datasets/.../*.png <span class="opt">{workspace}/project/{project_name}/images/</span></div>
+
+        <div class="callout warn">
+            <div class="callout-icon">&#9888;&#65039;</div>
+            <div><strong>project_name = Validator에 표시되는 문서명.</strong> 폴더명을 신중하게 정하세요.<br><code>parser_document_types</code>에서 이 폴더명을 실제 document_type으로 매핑합니다.</div>
+        </div>
+    </div>
+</div>
+
+<!-- STEP 2 -->
+<div id="step2" class="step-card">
+    <div class="step-header"><div class="step-num" style="background:linear-gradient(135deg,var(--purple-500),var(--purple-600));">2</div><div class="step-title">setup.sh 설정</div><div class="step-desc">환경변수 설정 (포트, 엔진, 매핑)</div></div>
+    <div class="step-body">
+        <div class="cmd"><span class="cm"># setup.sh 핵심 구조</span>
+<span class="kw">workspace</span>=<span class="val">"/workspace"</span>
+<span class="kw">ip</span>=<span class="val">172.16.201.12</span>                   <span class="cm"># 서버 IP</span>
+
+<span class="cm"># OCR</span>
+<span class="kw">ocr_port</span>=<span class="val">"9004"</span>
+
+<span class="cm"># Parser 포트 (문서타입별)</span>
+<span class="kw">parser_ports</span>='{
+    "<span class="fn">car_dashboard</span>": "<span class="val">30000</span>"
+}'
+
+<span class="cm"># Parser 엔진 (drsp 또는 kvs)</span>
+<span class="kw">parser_engines</span>='{
+    "<span class="fn">car_dashboard</span>": "<span class="val">kvs</span>"
+}'
+
+<span class="cm"># 프로젝트 폴더명 → 문서타입 매핑</span>
+<span class="kw">parser_document_types</span>='{
+    "<span class="fn">cd</span>": "<span class="val">car_dashboard</span>"
+}'
+<span class="cm"># ↑ 왼쪽: project 폴더명, 오른쪽: 실제 document_type</span>
+
+<span class="cm"># Serving Pack (고객사 환경)</span>
+<span class="kw">controller_port</span>=<span class="val">"8394"</span>
+<span class="kw">serving_models</span>='{
+    "<span class="fn">cd</span>": "<span class="val">car_dashboard</span>"
+}'
+<span class="cm"># ↑ key: 폴더명, value: controller에 등록된 모델명</span></div>
+
+        <table class="env-table">
+            <thead><tr><th>Category</th><th>Variable</th><th>Description</th></tr></thead>
+            <tbody>
+                <tr><td><strong>공통</strong></td><td><code>workspace</code></td><td>워크스페이스 경로</td></tr>
+                <tr><td></td><td><code>ip</code></td><td>서버 IP (Online: 서버IP / Offline: Serving Pack IP)</td></tr>
+                <tr><td><strong>OCR</strong></td><td><code>ocr_port</code></td><td>OCR 컨테이너 포트</td></tr>
+                <tr><td><strong>Parser</strong></td><td><code>parser_ports</code></td><td>"document_type": "port" (JSON)</td></tr>
+                <tr><td></td><td><code>parser_engines</code></td><td>"document_type": "drsp" 또는 "kvs" (JSON)</td></tr>
+                <tr><td></td><td><code>parser_document_types</code></td><td>"폴더명": "document_type" (JSON) — 가장 중요!</td></tr>
+                <tr><td><strong>Serving</strong></td><td><code>controller_port</code></td><td>Serving Pack 포트 (Offline 전용)</td></tr>
+                <tr><td></td><td><code>serving_models</code></td><td>"폴더명": "모델명" (JSON)</td></tr>
+            </tbody>
+        </table>
+
+        <div class="cmd"><span class="cm"># 환경변수 로드 (컨테이너 내부에서)</span>
+<span class="fn">source</span> /workspace/setup.sh</div>
+
+        <div class="callout danger">
+            <div class="callout-icon">&#128680;</div>
+            <div><strong>초기 실행 오류의 80%는 setup.sh 오타입니다.</strong><br>
+            - JSON key 끝에 <code>s</code> 확인 (parser_port<strong>s</strong>, parser_engine<strong>s</strong>)<br>
+            - 콤마(,) 빠뜨림 또는 마지막 항목 뒤에 콤마 확인<br>
+            - setup.sh는 <strong>/workspace에 백업</strong> 권장 (컨테이너 내려가면 사라짐)</div>
+        </div>
+    </div>
+</div>
+
+<!-- STEP 3 -->
+<div id="step3" class="step-card">
+    <div class="step-header"><div class="step-num" style="background:linear-gradient(135deg,#10b981,#059669);">3</div><div class="step-title">Docker 컨테이너 실행</div><div class="step-desc">OCR + Parser 모델 서빙 (Online 전용)</div></div>
+    <div class="step-body">
+        <div class="callout info">
+            <div class="callout-icon">&#128204;</div>
+            <div><strong>Offline(고객사)에서는 Serving Pack이 이미 서빙 중이므로 이 단계를 건너뛰고 Step 4로 이동합니다.</strong></div>
+        </div>
+
+        <h3 style="color:#059669;border-left-color:#10b981;">GPU 노드 접속</h3>
+        <div class="cmd"><span class="fn">srun</span> --gres=gpu:1 --cpus-per-task=4 --mem=128G --partition=normal --pty bash -i
+
+<span class="cm"># 컨테이너 모니터링</span>
+<span class="fn">sudo watch</span> -n 2 docker ps</div>
+
+        <h3 style="color:#059669;border-left-color:#10b981;">OCR 컨테이너</h3>
+        <div class="cmd"><span class="cm"># 이미지 로드</span>
+<span class="fn">sudo docker load</span> -i /data/project/docker/images/ocr-2.5.0.tar.gz
+
+<span class="cm"># 실행</span>
+<span class="fn">sudo docker run</span> --rm -d \
+  --gpus '<span class="val">"device=0"</span>' \
+  --shm-size 64G \
+  -p <span class="opt">9004</span>:8080 \
+  -v <span class="opt">{OCR_MODEL_DIR}</span>:/model \
+  -v <span class="opt">{OCR_CONFIG_DIR}</span>:/config_dir \
+  -e OP_CONFIG_DIR=/config_dir \
+  -e OP_MODEL_DIR=/model \
+  ocr:2.5.0-kserve</div>
+
+        <h3 style="color:#059669;border-left-color:#10b981;">KVS Parser 컨테이너</h3>
+        <div class="cmd"><span class="cm"># 이미지 로드</span>
+<span class="fn">sudo docker load</span> -i /data/project/enterprise/docai/docker/images/docai4/{kvs_image}.tar.gz
+
+<span class="cm"># 실행</span>
+<span class="fn">sudo docker run</span> --rm -d \
+  --gpus <span class="val">device=1</span> --ipc=host \
+  -v <span class="opt">{package_path}</span>:/pack \
+  -e OP_MODEL_DIR=/pack/weight \
+  -p <span class="opt">30000</span>:8080 \
+  kvs-engine:<span class="opt">{tag}</span></div>
+
+        <h3 style="color:#059669;border-left-color:#10b981;">DocAI Kit 컨테이너</h3>
+        <div class="cmd"><span class="fn">sudo docker run</span> -it \
+  -p <span class="opt">30050</span>:8080 \
+  -v <span class="opt">{workspace}</span>:/workspace \
+  docai-kit:1.1.0</div>
+
+        <div class="callout warn">
+            <div class="callout-icon">&#9888;&#65039;</div>
+            <div><strong>CSV/XLSX 출력이 필요하면</strong> Parser config 디렉토리를 추가 마운트해야 합니다 (<code>ontology_short.yaml</code> 필요):<br>
+            <code>-v {package_path}/config:/workspace/pack/parser/{document_type}/config</code></div>
+        </div>
+    </div>
+</div>
+
+<!-- STEP 4 -->
+<div id="step4" class="step-card">
+    <div class="step-header"><div class="step-num" style="background:linear-gradient(135deg,var(--purple-500),var(--purple-600));">4</div><div class="step-title">추론 실행</div><div class="step-desc">E2E 파이프라인 실행</div></div>
+    <div class="step-body">
+        <div class="cmd"><span class="cm"># 컨테이너 내부에서</span>
+<span class="fn">source</span> /workspace/setup.sh
+<span class="kw">cd</span> enterprise-docai-kit/</div>
+
+        <h3 style="color:var(--blue-600);border-left-color:#3b82f6;">Online: OCR → Parser</h3>
+        <div class="cmd"><span class="cm"># 기본 추론 (Validator용)</span>
+<span class="fn">bash</span> scripts/e2e/<span class="hl">ocr2parser.sh</span>
+
+<span class="cm"># CSV/XLSX 출력 포함 (BMT 결과 제출용)</span>
+<span class="fn">bash</span> scripts/e2e/<span class="hl">ocr2res.sh</span></div>
+
+        <h3 style="color:var(--orange-600);border-left-color:#f97316;">Offline: Serving Pack</h3>
+        <div class="cmd"><span class="cm"># Serving Pack에 요청 (고객사 환경)</span>
+<span class="fn">bash</span> scripts/e2e/<span class="hl">serving2all.sh</span></div>
+
+        <h3>E2E 스크립트 선택 가이드</h3>
+        <table>
+            <thead><tr><th>스크립트</th><th>용도</th><th>출력</th></tr></thead>
+            <tbody>
+                <tr><td><code>ocr2parser.sh</code></td><td>기본 추론 (Validator용)</td><td><code>ufos.json</code> + <code>mufps.json</code></td></tr>
+                <tr><td><code>ocr2res.sh</code></td><td>BMT 결과 제출용</td><td>+ <code>results.csv</code></td></tr>
+                <tr><td><code>serving2all.sh</code></td><td>Serving Pack 호출 (Offline)</td><td><code>oac.json</code></td></tr>
+                <tr><td><code>ocr2all.sh</code></td><td>OCR만 실행</td><td><code>ufos.json</code></td></tr>
+                <tr><td><code>conversion2all.sh</code></td><td>PDF/TIFF 변환 + OA만</td><td>PNG 이미지</td></tr>
+            </tbody>
+        </table>
+
+        <div class="callout tip">
+            <div class="callout-icon">&#128161;</div>
+            <div><strong>오류 시:</strong> <code>ocr2all.sh</code>부터 단계별로 실행해보세요. 대부분 setup.sh의 포트/IP 오타입니다.<br>
+            <strong>OCR 이미 완료 시:</strong> <code>ocr2parser.sh</code>는 내부적으로 <code>ufos.json</code> 존재 여부를 확인해서 OCR을 스킵합니다.</div>
+        </div>
+    </div>
+</div>
+
+<!-- STEP 5 -->
+<div id="step5" class="step-card">
+    <div class="step-header"><div class="step-num" style="background:linear-gradient(135deg,#f43f5e,#e11d48);">5</div><div class="step-title">Validator (웹 채점)</div><div class="step-desc">추론 결과 시각화 + 채점</div></div>
+    <div class="step-body">
+        <div class="callout warn">
+            <div class="callout-icon">&#9888;&#65039;</div>
+            <div><strong>Offline(고객사)에서 Validator를 사용하려면 포트가 열려있어야 합니다.</strong><br>정기점검 전 반드시 포트 신청 (예: 30050포트 오픈 요청)</div>
+        </div>
+
+        <h3 style="color:#e11d48;border-left-color:#f43f5e;">5.1 output_format 설정</h3>
+        <p><code>scripts/validator/set.sh</code>에서 output_format을 설정합니다:</p>
+        <table>
+            <thead><tr><th>환경</th><th>output_format</th><th>사용 파일</th></tr></thead>
+            <tbody>
+                <tr><td><strong>Online</strong> (ocr2parser)</td><td><code>"mufp"</code></td><td><code>mufps.json</code></td></tr>
+                <tr><td><strong>Offline</strong> (serving2all)</td><td><code>"oac"</code></td><td><code>oac.json</code></td></tr>
+            </tbody>
+        </table>
+
+        <h3 style="color:#e11d48;border-left-color:#f43f5e;">5.2 Validator 실행</h3>
+        <div class="cmd"><span class="cm"># 1. vufp 포맷으로 변환</span>
+<span class="fn">bash</span> scripts/validator/<span class="hl">set.sh</span>
+
+<span class="cm"># 2. Validator 웹서버 실행</span>
+<span class="fn">bash</span> scripts/validator/<span class="hl">run.sh</span>
+
+<span class="cm"># 브라우저에서 접속</span>
+<span class="cm"># http://{서버IP}:{포트번호}</span></div>
+
+        <h3 style="color:#e11d48;border-left-color:#f43f5e;">5.3 채점 결과 JSON 추출</h3>
+        <div class="cmd"><span class="cm"># Validator가 실행중인 상태에서 curl로 점수 추출</span>
+<span class="fn">curl</span> -s http://localhost:<span class="opt">{port}</span>/score/<span class="opt">{project_name}</span> \
+  -o /workspace/project/<span class="opt">{project_name}</span>/outputs/score_output.json</div>
+    </div>
+</div>
+
+<!-- STEP 6 -->
+<div id="step6" class="step-card">
+    <div class="step-header"><div class="step-num" style="background:linear-gradient(135deg,#f59e0b,#d97706);">6</div><div class="step-title">결과 변환 (CSV/XLSX)</div><div class="step-desc">BMT 결과 제출용 파일 생성</div></div>
+    <div class="step-body">
+        <p><code>ocr2res.sh</code>를 사용하면 CSV가 자동 생성됩니다. XLSX가 필요하면:</p>
+        <div class="cmd"><span class="cm"># XLSX 출력 (컨테이너 내부에서)</span>
+<span class="fn">pip install</span> openpyxl
+
+<span class="cm"># ocr2res.sh 맨 끝에 추가 (vi로 편집)</span>
+python code/ufp2csv.py --outputs $outputs --ontology $ontology_path --output_format "<span class="opt">xlsx</span>"</div>
+
+        <h3 style="color:#d97706;border-left-color:#f59e0b;">고객사 정답 파일과 비교</h3>
+        <div class="cmd"><span class="cm"># 고객사 정답 CSV와 예측 결과를 문서명 기준으로 merge</span>
+python -c "
+import pandas as pd
+pred = pd.read_csv('/workspace/project/<span class="opt">{name}</span>/outputs/results.csv')
+answer = pd.read_csv('/workspace/<span class="opt">client_answer.csv</span>')
+merged = answer.merge(pred, on='파일명', suffixes=('_정답','_예측값'))
+merged.to_csv('/workspace/merged_result.csv', index=False)
+print('Saved merged_result.csv')
+"</div>
+
+        <div class="callout warn">
+            <div class="callout-icon">&#9888;&#65039;</div>
+            <div><strong>컨테이너를 내리면 수정사항이 사라집니다.</strong> <code>/workspace</code>에 저장된 파일만 유지됩니다. 스크립트 수정은 Docker 이미지를 다시 빌드해야 영구 반영됩니다.</div>
+        </div>
+    </div>
+</div>
+
+<!-- TIPS -->
+<div id="tips" class="section">
+    <div class="section-header"><div class="section-icon amber">&#128161;</div><div><div class="section-title">Tips &amp; Troubleshooting</div><div class="section-subtitle">현장에서 유용한 팁</div></div></div>
+
+    <h3>자주 발생하는 오류</h3>
+    <table>
+        <thead><tr><th>증상</th><th>원인</th><th>해결</th></tr></thead>
+        <tbody>
+            <tr><td><code>Connection refused</code></td><td>Docker 컨테이너 미실행 또는 포트 불일치</td><td><code>docker ps</code>로 확인 후 setup.sh 포트 대조</td></tr>
+            <tr><td><code>Document type not found</code></td><td><code>parser_document_types</code>에 폴더명 매핑 누락</td><td>setup.sh에서 project 폴더명 → document_type 매핑 추가</td></tr>
+            <tr><td><code>ontology_short.yaml not found</code></td><td>CSV 변환 시 config 미마운트</td><td>DocAI Kit 컨테이너에 config 디렉토리 추가 마운트</td></tr>
+            <tr><td>multipage 파일명 불일치</td><td>DRSP/KVS가 <code>1_page001.jpg → 1.jpg</code>로 변환</td><td>이미지 파일명과 ufp.json 키를 수동 매칭</td></tr>
+            <tr><td>Validator 접속 불가</td><td>고객사 포트 미오픈</td><td>정기점검 전 포트 오픈 신청 (예: 30050)</td></tr>
+        </tbody>
+    </table>
+
+    <h3>현장 체크리스트</h3>
+    <div class="callout tip">
+        <div class="callout-icon">&#9989;</div>
+        <div>
+            <strong>출장 전:</strong> 포트 신청 완료 / USB에 Docker 이미지 준비 / setup.sh 사전 작성<br>
+            <strong>현장에서:</strong> <code>cd $D8S_HOME && ./d8s</code> 로 서빙팩 정보 확인 가능<br>
+            <strong>채점 시:</strong> 틀린 이미지 이름과 사유를 기록해오기 (사진 촬영 권장)<br>
+            <strong>setup.sh 백업:</strong> <code>cp scripts/setup.sh /workspace/setup.sh</code> (컨테이너 내려가도 유지)
+        </div>
+    </div>
+
+    <h3>서버 IP 목록</h3>
+    <table>
+        <thead><tr><th>노드</th><th>IP</th><th>GPU</th></tr></thead>
+        <tbody>
+            <tr><td>gpu-2107</td><td><code>172.16.201.17</code></td><td>A100 x8</td></tr>
+            <tr><td>gpu-2102</td><td><code>172.16.201.12</code></td><td>A100 x8</td></tr>
+            <tr><td>gpu-2304</td><td><code>172.16.201.122</code></td><td>3090 x4</td></tr>
+            <tr><td>gpu-2307</td><td><code>172.16.201.127</code></td><td>3090 x4</td></tr>
+        </tbody>
+    </table>
+</div>
+
+</div>
+
+<div class="footer"><strong>Enterprise DocAI Kit Onboarding</strong> &middot; EBS AI ModelOps<br>Generated on 2026-03-31</div>
+
+<script>
+document.querySelectorAll('.nav-link').forEach(link=>{link.addEventListener('click',function(e){const h=this.getAttribute('href');if(h.startsWith('#')){e.preventDefault();document.querySelector(h)?.scrollIntoView({behavior:'smooth',block:'start'});}});});
+</script>
+</body>
+</html>
