@@ -225,18 +225,18 @@ flowchart LR
 <div id="v1-arch" class="section">
     <div class="section-header"><div class="section-icon orange">&#128209;</div><div><div class="section-title">V1 Architecture</div><div class="section-subtitle">CNN/ViT 기반 Multi-label 분류</div></div></div>
 
-    <div class="arch-box" style="background:linear-gradient(135deg,#7c2d12,#9a3412);">
-        <h3 style="color:#fed7aa;border-left-color:#fdba74;">V1 Classification Pipeline</h3>
+    <div class="arch-box" style="background:linear-gradient(135deg,#0F0525,#1A0A3E);">
+        <h3 style="color:#D4BBFC;border-left-color:#8B5CF6;">V1 Classification Pipeline</h3>
         <div class="arch-flow">
-            <div class="arch-step"><div class="arch-label" style="color:#fed7aa;">Image Input</div><div class="arch-arrow" style="color:#fdba74;">→</div><div class="arch-desc">PDF/PNG/TIFF/JPEG → PIL Image (EXIF 회전 처리)</div></div>
-            <div class="arch-connector" style="color:#fdba74;">↓</div>
-            <div class="arch-step"><div class="arch-label" style="color:#fed7aa;">Preprocessing</div><div class="arch-arrow" style="color:#fdba74;">→</div><div class="arch-desc">Resize (1280x960) + ImageNet Normalize + Albumentations 증강</div></div>
-            <div class="arch-connector" style="color:#fdba74;">↓</div>
-            <div class="arch-step"><div class="arch-label" style="color:#fed7aa;">CNN/ViT Backbone</div><div class="arch-arrow" style="color:#fdba74;">→</div><div class="arch-desc">ResNet / EfficientNet / Swin / SigLIP → Feature Vector</div></div>
-            <div class="arch-connector" style="color:#fdba74;">↓</div>
-            <div class="arch-step"><div class="arch-label" style="color:#fed7aa;">Classification Head</div><div class="arch-arrow" style="color:#fdba74;">→</div><div class="arch-desc">Linear → ReLU → Dropout → Linear(num_classes) → Logits</div></div>
-            <div class="arch-connector" style="color:#fdba74;">↓</div>
-            <div class="arch-step"><div class="arch-label" style="color:#fed7aa;">PostProcess</div><div class="arch-arrow" style="color:#fdba74;">→</div><div class="arch-desc">Sigmoid → Per-class Threshold → Priority Rules → Class Names</div></div>
+            <div class="arch-step"><div class="arch-label" style="color:#D4BBFC;">Image Input</div><div class="arch-arrow" style="color:#8B5CF6;">→</div><div class="arch-desc">PDF/PNG/TIFF/JPEG → PIL Image (EXIF 회전 처리)</div></div>
+            <div class="arch-connector" style="color:#8B5CF6;">↓</div>
+            <div class="arch-step"><div class="arch-label" style="color:#D4BBFC;">Preprocessing</div><div class="arch-arrow" style="color:#8B5CF6;">→</div><div class="arch-desc">Resize (1280x960) + ImageNet Normalize + Albumentations 증강</div></div>
+            <div class="arch-connector" style="color:#8B5CF6;">↓</div>
+            <div class="arch-step"><div class="arch-label" style="color:#D4BBFC;">CNN/ViT Backbone</div><div class="arch-arrow" style="color:#8B5CF6;">→</div><div class="arch-desc">ResNet / EfficientNet / Swin / SigLIP → Feature Vector</div></div>
+            <div class="arch-connector" style="color:#8B5CF6;">↓</div>
+            <div class="arch-step"><div class="arch-label" style="color:#D4BBFC;">Classification Head</div><div class="arch-arrow" style="color:#8B5CF6;">→</div><div class="arch-desc">Linear → ReLU → Dropout → Linear(num_classes) → Logits</div></div>
+            <div class="arch-connector" style="color:#8B5CF6;">↓</div>
+            <div class="arch-step"><div class="arch-label" style="color:#D4BBFC;">PostProcess</div><div class="arch-arrow" style="color:#8B5CF6;">→</div><div class="arch-desc">Sigmoid → Per-class Threshold → Priority Rules → Class Names</div></div>
         </div>
     </div>
 
