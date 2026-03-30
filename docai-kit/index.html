@@ -9,19 +9,19 @@
         @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&family=Noto+Sans+KR:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
 
         :root {
-            --up-purple-900: #0a0f2e;
-            --up-purple-800: #141d52;
-            --up-purple-700: #1e2d76;
-            --up-purple-600: #3b4fcc;
-            --up-purple-500: #4d65ff;
-            --up-purple-400: #7b8fff;
-            --up-purple-300: #8fa3ff;
-            --up-purple-200: #bbc7ff;
-            --up-purple-100: #e5e9ff;
-            --up-purple-50: #eef0ff;
+            --up-purple-900: #0F0525;
+            --up-purple-800: #1A0A3E;
+            --up-purple-700: #2D1065;
+            --up-purple-600: #5020C6;
+            --up-purple-500: #6528F7;
+            --up-purple-400: #8B5CF6;
+            --up-purple-300: #B794F6;
+            --up-purple-200: #D4BBFC;
+            --up-purple-100: #EDE5FF;
+            --up-purple-50: #F3EEFE;
 
-            --up-violet: #4d65ff;
-            --up-indigo: #3b4fcc;
+            --up-violet: #6528F7;
+            --up-indigo: #5020C6;
             --up-slate-900: #0f172a;
             --up-slate-800: #1e293b;
             --up-slate-700: #334155;
@@ -34,15 +34,15 @@
             --up-slate-50: #f8fafc;
 
             --up-accent: #a78bfa;
-            --up-glow: rgba(77, 101, 255, 0.15);
-            --up-glow-strong: rgba(77, 101, 255, 0.3);
+            --up-glow: rgba(101, 40, 247, 0.15);
+            --up-glow-strong: rgba(101, 40, 247, 0.3);
 
             --radius: 16px;
             --radius-sm: 10px;
             --shadow-sm: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
             --shadow-md: 0 4px 16px rgba(0,0,0,0.06), 0 2px 6px rgba(0,0,0,0.04);
             --shadow-lg: 0 12px 40px rgba(0,0,0,0.08), 0 4px 12px rgba(0,0,0,0.04);
-            --shadow-purple: 0 8px 32px rgba(77, 101, 255, 0.12);
+            --shadow-purple: 0 8px 32px rgba(101, 40, 247, 0.12);
         }
 
         * {
@@ -74,7 +74,7 @@
             right: -20%;
             width: 600px;
             height: 600px;
-            background: radial-gradient(circle, rgba(123, 143, 255, 0.2) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(139, 92, 246, 0.2) 0%, transparent 70%);
             border-radius: 50%;
         }
 
@@ -85,7 +85,7 @@
             left: -10%;
             width: 400px;
             height: 400px;
-            background: radial-gradient(circle, rgba(59, 79, 204, 0.15) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(80, 32, 198, 0.15) 0%, transparent 70%);
             border-radius: 50%;
         }
 
@@ -132,7 +132,7 @@
         }
 
         .hero h1 span {
-            background: linear-gradient(135deg, var(--up-purple-200), #bbc7ff, #dde2ff);
+            background: linear-gradient(135deg, var(--up-purple-200), #D4BBFC, #E8DDFB);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
@@ -255,7 +255,7 @@
 
         .section-icon.purple {
             background: linear-gradient(135deg, var(--up-purple-500), var(--up-purple-600));
-            box-shadow: 0 4px 12px rgba(77, 101, 255, 0.25);
+            box-shadow: 0 4px 12px rgba(101, 40, 247, 0.25);
         }
 
         .section-icon.purple svg { color: #fff; }
@@ -356,7 +356,7 @@
 
         .diagram-header {
             padding: 16px 28px;
-            background: linear-gradient(135deg, var(--up-purple-50), #eef0ff);
+            background: linear-gradient(135deg, var(--up-purple-50), #F3EEFE);
             border-bottom: 1px solid var(--up-purple-100);
             display: flex;
             align-items: center;
@@ -435,7 +435,7 @@
         .overview-card.emerald::before { background: linear-gradient(90deg, #10b981, #6ee7b7); }
         .overview-card.rose::before { background: linear-gradient(90deg, #f43f5e, #fda4af); }
         .overview-card.amber::before { background: linear-gradient(90deg, #f59e0b, #fcd34d); }
-        .overview-card.indigo::before { background: linear-gradient(90deg, #5570ff, #a3b0ff); }
+        .overview-card.indigo::before { background: linear-gradient(90deg, #7C3AED, #C4B5FD); }
 
         .overview-card:hover {
             transform: translateY(-2px);
@@ -507,7 +507,7 @@
         .module-badge.postprocess { background: #fef2f2; color: #dc2626; }
         .module-badge.utility { background: #f0fdf4; color: #16a34a; }
         .module-badge.output { background: #fefce8; color: #ca8a04; }
-        .module-badge.serving { background: #f5f6ff; color: #9333ea; }
+        .module-badge.serving { background: #FAF5FF; color: #9333ea; }
 
         .module-name {
             font-size: 16px;
@@ -645,7 +645,7 @@
         .step-number.s2 { background: linear-gradient(135deg, #10b981, #059669); }
         .step-number.s3 { background: linear-gradient(135deg, #3b82f6, #2563eb); }
         .step-number.s4 { background: linear-gradient(135deg, #f43f5e, #e11d48); }
-        .step-number.s5 { background: linear-gradient(135deg, #6678ff, #4d65ff); }
+        .step-number.s5 { background: linear-gradient(135deg, #8B5CF6, #6528F7); }
 
         .step-label {
             font-size: 13px;
@@ -665,7 +665,7 @@
             align-items: center;
             gap: 0;
             padding: 24px;
-            background: linear-gradient(135deg, var(--up-purple-50), #eef0ff, var(--up-slate-50));
+            background: linear-gradient(135deg, var(--up-purple-50), #F3EEFE, var(--up-slate-50));
             border-radius: var(--radius-sm);
             border: 1px solid var(--up-purple-100);
             margin-bottom: 28px;
@@ -686,7 +686,7 @@
         .format-node.input { background: #fff7ed; color: #c2410c; border: 1px solid #fed7aa; }
         .format-node.ufo { background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; }
         .format-node.ufp { background: #f0fdf4; color: #15803d; border: 1px solid #bbf7d0; }
-        .format-node.output { background: #f5f6ff; color: #7e22ce; border: 1px solid #dde2ff; }
+        .format-node.output { background: #FAF5FF; color: #7e22ce; border: 1px solid #E8DDFB; }
 
         .format-arrow {
             color: var(--up-slate-400);
@@ -709,7 +709,7 @@
         }
 
         .dir-tree .folder { color: #93c5fd; font-weight: 600; }
-        .dir-tree .file { color: #bbc7ff; }
+        .dir-tree .file { color: #D4BBFC; }
         .dir-tree .comment { color: #64748b; font-style: italic; font-size: 12px; }
 
         /* ── E2E Table ── */
@@ -918,7 +918,7 @@
 
 <!-- ═══════════════════ HERO ═══════════════════ -->
 <div class="home-btn-wrap" style="position:fixed;top:20px;left:20px;z-index:999;">
-    <a href="../" style="display:inline-flex;align-items:center;gap:6px;padding:8px 18px;background:rgba(255,255,255,0.12);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.2);border-radius:100px;color:#bbc7ff;text-decoration:none;font-family:Inter,sans-serif;font-size:13px;font-weight:600;transition:all 0.2s;">
+    <a href="../" style="display:inline-flex;align-items:center;gap:6px;padding:8px 18px;background:rgba(255,255,255,0.12);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.2);border-radius:100px;color:#D4BBFC;text-decoration:none;font-family:Inter,sans-serif;font-size:13px;font-weight:600;transition:all 0.2s;">
         <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M3 12l9-9 9 9M5 10v10a1 1 0 001 1h3a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1h3a1 1 0 001-1V10"/></svg>
         Home
     </a>
@@ -1167,7 +1167,7 @@ classDiagram
                 <div class="legend-item"><div class="legend-color" style="background:#f97316"></div> Preprocessing</div>
                 <div class="legend-item"><div class="legend-color" style="background:#3b82f6"></div> AI Inference</div>
                 <div class="legend-item"><div class="legend-color" style="background:#ef4444"></div> Postprocessing</div>
-                <div class="legend-item"><div class="legend-color" style="background:#6678ff"></div> Serving</div>
+                <div class="legend-item"><div class="legend-color" style="background:#8B5CF6"></div> Serving</div>
                 <div class="legend-item"><div class="legend-color" style="background:#eab308"></div> Output Conversion</div>
                 <div class="legend-item" style="margin-left:24px; color: var(--up-slate-400)">── import 의존 &nbsp;&nbsp; - - - 데이터 흐름</div>
             </div>
@@ -1273,8 +1273,8 @@ flowchart TD
     style CLASS fill:#f0fdf4,stroke:#10b981,stroke-width:2px,color:#1e293b
     style INF fill:#eff6ff,stroke:#3b82f6,stroke-width:2px,color:#1e293b
     style OUT fill:#fef2f2,stroke:#ef4444,stroke-width:2px,color:#1e293b
-    style START fill:#eef0ff,stroke:#4d65ff,stroke-width:2px
-    style DONE fill:#eef0ff,stroke:#4d65ff,stroke-width:2px
+    style START fill:#F3EEFE,stroke:#6528F7,stroke-width:2px
+    style DONE fill:#F3EEFE,stroke:#6528F7,stroke-width:2px
                 </pre>
             </div>
         </div>
@@ -1834,8 +1834,8 @@ flowchart LR
         theme: 'base',
         securityLevel: 'loose',
         themeVariables: {
-            primaryColor: '#eef0ff',
-            primaryBorderColor: '#4d65ff',
+            primaryColor: '#F3EEFE',
+            primaryBorderColor: '#6528F7',
             primaryTextColor: '#1e293b',
             lineColor: '#94a3b8',
             secondaryColor: '#eff6ff',
