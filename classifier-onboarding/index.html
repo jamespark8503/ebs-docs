@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OCR Document Classifier — Onboarding Guide</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap');
+        :root{--purple-900:#1a0533;--purple-700:#3f1089;--purple-600:#5a1db8;--purple-500:#7c3aed;--purple-400:#9b6bf5;--purple-300:#b794f6;--purple-200:#d4bbfc;--purple-100:#ede5ff;--purple-50:#f5f0ff;--blue-600:#2563eb;--blue-100:#dbeafe;--blue-50:#eff6ff;--green-600:#059669;--green-100:#d1fae5;--green-50:#f0fdf4;--orange-600:#ea580c;--orange-100:#fed7aa;--orange-50:#fff7ed;--rose-600:#e11d48;--rose-100:#fecdd3;--rose-50:#fff1f2;--amber-600:#d97706;--amber-50:#fefce8;--slate-900:#0f172a;--slate-800:#1e293b;--slate-700:#334155;--slate-600:#475569;--slate-500:#64748b;--slate-400:#94a3b8;--slate-300:#cbd5e1;--slate-200:#e2e8f0;--slate-100:#f1f5f9;--slate-50:#f8fafc;--radius:16px;--radius-sm:10px;}
+        *{margin:0;padding:0;box-sizing:border-box;}
+        body{font-family:'Inter',-apple-system,sans-serif;background:var(--slate-50);color:var(--slate-800);line-height:1.7;-webkit-font-smoothing:antialiased;}
+        .home-btn{position:fixed;top:20px;left:20px;z-index:999;display:inline-flex;align-items:center;gap:6px;padding:8px 18px;background:rgba(255,255,255,0.12);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.2);border-radius:100px;color:#a7f3d0;text-decoration:none;font-size:13px;font-weight:600;transition:all .2s;}
+        .home-btn:hover{background:rgba(255,255,255,0.25);color:#fff;}
+        .hero{position:relative;background:linear-gradient(135deg,var(--purple-900) 0%,#1e3a2f 40%,#059669 100%);padding:80px 0 60px;overflow:hidden;}
+        .hero::before{content:'';position:absolute;top:-50%;right:-20%;width:600px;height:600px;background:radial-gradient(circle,rgba(16,185,129,0.2) 0%,transparent 70%);border-radius:50%;}
+        .hero-content{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:0 40px;}
+        .hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);border-radius:100px;padding:6px 18px;font-size:13px;font-weight:500;color:#86efac;margin-bottom:24px;letter-spacing:.5px;}
+        .hero-badge::before{content:'';width:8px;height:8px;background:#34d399;border-radius:50%;box-shadow:0 0 8px #34d399;}
+        .hero h1{font-size:44px;font-weight:800;color:#fff;letter-spacing:-1.5px;line-height:1.15;margin-bottom:16px;}
+        .hero h1 span{color:#86efac;}
+        .hero p{font-size:17px;color:#a7f3d0;max-width:640px;line-height:1.7;}
+        .hero-meta{display:flex;gap:24px;margin-top:28px;flex-wrap:wrap;}
+        .hero-meta-item{display:flex;align-items:center;gap:8px;font-size:13px;color:#a7f3d0;font-weight:500;}
+        .nav-bar{position:sticky;top:0;z-index:100;background:rgba(255,255,255,0.85);backdrop-filter:blur(20px) saturate(180%);border-bottom:1px solid var(--slate-200);}
+        .nav-inner{max-width:1100px;margin:0 auto;padding:0 40px;display:flex;gap:4px;overflow-x:auto;}
+        .nav-inner::-webkit-scrollbar{display:none;}
+        .nav-link{display:flex;align-items:center;gap:6px;padding:14px 16px;font-size:13px;font-weight:600;color:var(--slate-500);text-decoration:none;white-space:nowrap;border-bottom:2px solid transparent;transition:all .2s;}
+        .nav-link:hover{color:var(--green-600);border-bottom-color:#6ee7b7;}
+        .container{max-width:1100px;margin:0 auto;padding:48px 40px 100px;}
+        .section{margin-bottom:48px;}
+        .section-header{display:flex;align-items:center;gap:14px;margin-bottom:24px;}
+        .section-icon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#fff;font-size:18px;}
+        .section-icon.green{background:linear-gradient(135deg,#10b981,var(--green-600));box-shadow:0 4px 12px rgba(16,185,129,.25);}
+        .section-icon.blue{background:linear-gradient(135deg,#3b82f6,var(--blue-600));box-shadow:0 4px 12px rgba(59,130,246,.25);}
+        .section-icon.purple{background:linear-gradient(135deg,var(--purple-500),var(--purple-600));box-shadow:0 4px 12px rgba(124,58,237,.25);}
+        .section-icon.orange{background:linear-gradient(135deg,#f97316,var(--orange-600));box-shadow:0 4px 12px rgba(249,115,22,.25);}
+        .section-icon.rose{background:linear-gradient(135deg,#f43f5e,var(--rose-600));box-shadow:0 4px 12px rgba(244,63,94,.25);}
+        .section-icon.amber{background:linear-gradient(135deg,#f59e0b,var(--amber-600));box-shadow:0 4px 12px rgba(245,158,11,.25);}
+        .section-title{font-size:24px;font-weight:800;color:var(--slate-900);letter-spacing:-.5px;}
+        .section-subtitle{font-size:13px;color:var(--slate-500);margin-top:2px;}
+        h3{font-size:15px;font-weight:700;color:var(--green-600);margin:20px 0 10px;padding-left:12px;border-left:3px solid #6ee7b7;}
+        table{width:100%;border-collapse:separate;border-spacing:0;font-size:12.5px;margin-bottom:16px;border-radius:var(--radius-sm);overflow:hidden;border:1px solid var(--slate-200);}
+        thead th{background:var(--green-50);color:#065f46;font-weight:700;font-size:10.5px;text-transform:uppercase;letter-spacing:.7px;padding:10px 14px;text-align:left;border-bottom:2px solid var(--green-100);}
+        tbody td{padding:9px 14px;border-bottom:1px solid var(--slate-100);color:var(--slate-700);vertical-align:top;}
+        tbody tr:last-child td{border-bottom:none;}
+        tbody tr:hover{background:var(--green-50);}
+        code{font-family:'JetBrains Mono',monospace;font-size:11px;background:var(--slate-100);padding:2px 6px;border-radius:4px;color:var(--green-600);border:1px solid var(--slate-200);}
+        .callout{display:flex;gap:12px;padding:14px 18px;border-radius:var(--radius-sm);margin-bottom:14px;font-size:12.5px;line-height:1.6;}
+        .callout-icon{font-size:16px;flex-shrink:0;margin-top:1px;}
+        .callout.info{background:var(--green-50);border:1px solid var(--green-100);color:#065f46;}
+        .callout.warn{background:#fef3c7;border:1px solid #fde68a;color:#92400e;}
+        .callout.tip{background:var(--blue-50);border:1px solid var(--blue-100);color:#1e40af;}
+        .callout.danger{background:var(--rose-50);border:1px solid var(--rose-100);color:#9f1239;}
+        .cmd{background:var(--slate-900);border-radius:var(--radius-sm);padding:16px 20px;margin-bottom:12px;font-family:'JetBrains Mono',monospace;font-size:12px;line-height:1.7;color:var(--slate-300);overflow-x:auto;white-space:pre;}
+        .cmd .hl{color:#86efac;font-weight:600;}.cmd .cm{color:#64748b;}.cmd .kw{color:#93c5fd;}.cmd .fn{color:#b794f6;}.cmd .opt{color:#fde68a;}.cmd .val{color:#fda4af;}
+        .dir-tree{font-family:'JetBrains Mono',monospace;font-size:11.5px;line-height:1.85;color:var(--slate-400);background:var(--slate-900);padding:20px 24px;border-radius:var(--radius-sm);overflow-x:auto;white-space:pre;margin-bottom:14px;}
+        .dir-tree .f{color:#86efac;font-weight:600;}.dir-tree .fi{color:#a5b4fc;}.dir-tree .c{color:#64748b;font-style:italic;font-size:10.5px;}
+        .step-card{background:#fff;border-radius:var(--radius);border:1px solid var(--slate-200);margin-bottom:20px;overflow:hidden;}
+        .step-header{display:flex;align-items:center;gap:12px;padding:16px 24px;background:var(--slate-50);border-bottom:1px solid var(--slate-200);}
+        .step-num{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;color:#fff;flex-shrink:0;}
+        .step-title{font-size:15px;font-weight:700;color:var(--slate-900);}
+        .step-desc{font-size:11.5px;color:var(--slate-500);margin-left:auto;}
+        .step-body{padding:24px;}
+        .step-body p{font-size:13px;color:var(--slate-700);margin-bottom:10px;line-height:1.7;}
+        .step-body ol,.step-body ul{font-size:13px;color:var(--slate-700);margin:0 0 14px 20px;line-height:1.8;}
+        .step-body strong{color:var(--slate-900);}
+        .cmp-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;}
+        .cmp-card{background:#fff;border-radius:var(--radius-sm);border:1px solid var(--slate-200);overflow:hidden;}
+        .cmp-header{padding:12px 18px;font-size:13px;font-weight:700;display:flex;align-items:center;gap:8px;}
+        .cmp-header.onsite{background:var(--orange-50);color:var(--orange-600);border-bottom:2px solid var(--orange-100);}
+        .cmp-header.server{background:var(--blue-50);color:var(--blue-600);border-bottom:2px solid var(--blue-100);}
+        .cmp-body{padding:16px 18px;}
+        .cmp-body ul{list-style:none;font-size:12.5px;color:var(--slate-700);}
+        .cmp-body li{padding:4px 0;border-bottom:1px solid var(--slate-100);display:flex;align-items:flex-start;gap:6px;}
+        .cmp-body li::before{content:'';width:5px;height:5px;border-radius:50%;margin-top:7px;flex-shrink:0;}
+        .cmp-card:first-child .cmp-body li::before{background:var(--orange-600);}
+        .cmp-card:last-child .cmp-body li::before{background:var(--blue-600);}
+        .pipeline-flow{display:flex;align-items:center;gap:0;padding:16px 20px;background:var(--green-50);border:1px solid var(--green-100);border-radius:var(--radius-sm);margin-bottom:16px;overflow-x:auto;}
+        .pf-node{padding:8px 14px;border-radius:8px;font-size:11px;font-weight:600;white-space:nowrap;text-align:center;border:1px solid;}
+        .pf-node.input{background:#fff7ed;color:#c2410c;border-color:#fed7aa;}
+        .pf-node.process{background:#eff6ff;color:#1d4ed8;border-color:#bfdbfe;}
+        .pf-node.output{background:#f0fdf4;color:#15803d;border-color:#bbf7d0;}
+        .pf-node.tool{background:#faf5ff;color:#7e22ce;border-color:#e9d5ff;}
+        .pf-arrow{color:var(--slate-400);font-size:16px;padding:0 6px;flex-shrink:0;}
+        .footer{text-align:center;padding:40px;color:var(--slate-400);font-size:13px;border-top:1px solid var(--slate-200);}
+        .footer strong{color:var(--green-600);}
+        @media(max-width:768px){.hero h1{font-size:32px;}.cmp-grid{grid-template-columns:1fr;}.container{padding:24px 20px 60px;}}
+    </style>
+</head>
+<body>
+
+<a href="../" class="home-btn"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M3 12l9-9 9 9M5 10v10a1 1 0 001 1h3a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1h3a1 1 0 001-1V10"/></svg>Home</a>
+
+<div class="hero">
+    <div class="hero-content">
+        <div class="hero-badge">EBS AI ModelOps</div>
+        <h1>Classifier <span>Onboarding</span></h1>
+        <p>OCR Document Classifier 실전 사용 가이드. 데이터 준비부터 학습, 평가, 패키징, 서빙 검증까지.</p>
+        <div class="hero-meta">
+            <div class="hero-meta-item">&#128209; Multi-label Classification</div>
+            <div class="hero-meta-item">&#128230; Docker + Conda</div>
+            <div class="hero-meta-item">&#128260; 회전 감지 (rot90)</div>
+        </div>
+    </div>
+</div>
+
+<nav class="nav-bar"><div class="nav-inner">
+    <a href="#overview" class="nav-link">Overview</a>
+    <a href="#step1" class="nav-link">1. 환경</a>
+    <a href="#step2" class="nav-link">2. 데이터</a>
+    <a href="#step3" class="nav-link">3. 학습</a>
+    <a href="#step4" class="nav-link">4. 평가</a>
+    <a href="#step5" class="nav-link">5. 패키징</a>
+    <a href="#faq" class="nav-link">FAQ</a>
+    <a href="../classifier/" class="nav-link" style="margin-left:auto;color:var(--green-600);">← Tech Docs</a>
+</div></nav>
+
+<div class="container">
+
+<!-- OVERVIEW -->
+<div id="overview" class="section">
+    <div class="section-header"><div class="section-icon green">&#128209;</div><div><div class="section-title">Overview</div><div class="section-subtitle">두 가지 개발 환경과 전체 워크플로우</div></div></div>
+
+    <div class="pipeline-flow">
+        <div class="pf-node input">데이터 준비<br>category.yaml</div><div class="pf-arrow">→</div>
+        <div class="pf-node process">전처리<br>project-build.sh</div><div class="pf-arrow">→</div>
+        <div class="pf-node process">학습<br>train.sh</div><div class="pf-arrow">→</div>
+        <div class="pf-node output">평가<br>inference.sh</div><div class="pf-arrow">→</div>
+        <div class="pf-node tool">패키징<br>packaging.sh</div>
+    </div>
+
+    <div class="cmp-grid">
+        <div class="cmp-card"><div class="cmp-header onsite">&#128312; Case 1: 고객사 현장 개발</div><div class="cmp-body"><ul>
+            <li>훈련용 Docker 이미지 사전 반입 필요</li>
+            <li>Docker 컨테이너 내부에서 모든 작업 진행</li>
+            <li>코드: <code>ocr-document-classifier</code> 반입</li>
+            <li>GPU 노드 접속 후 컨테이너 실행</li>
+        </ul></div></div>
+        <div class="cmp-card"><div class="cmp-header server">&#128309; Case 2: 회사 서버 개발</div><div class="cmp-body"><ul>
+            <li>Conda 가상환경 사용 (Docker 불필요)</li>
+            <li>서버에서 직접 코드 실행</li>
+            <li>코드: GitHub clone 또는 공용 경로 사용</li>
+            <li>공용 환경: <code>/data/project/classifier/</code></li>
+        </ul></div></div>
+    </div>
+
+    <div class="callout info">
+        <div class="callout-icon">&#128204;</div>
+        <div><strong>두 케이스의 차이는 환경 설정(Docker vs Conda)뿐입니다.</strong> 데이터 준비, 학습, 평가, 패키징 과정은 동일합니다.<br>
+        코드: <code>https://github.com/UpstageAI/ocr-document-classifier</code></div>
+    </div>
+</div>
+
+<!-- STEP 1: 환경 -->
+<div id="step1" class="step-card">
+    <div class="step-header"><div class="step-num" style="background:linear-gradient(135deg,#64748b,#475569);">1</div><div class="step-title">환경 설정</div><div class="step-desc">Docker (고객사) / Conda (서버)</div></div>
+    <div class="step-body">
+
+        <h3 style="color:var(--orange-600);border-left-color:#f97316;">Case 1: 고객사 (Docker)</h3>
+        <p><strong>사전 반입 파일:</strong></p>
+        <table>
+            <thead><tr><th>항목</th><th>경로</th></tr></thead>
+            <tbody>
+                <tr><td>훈련용 Docker</td><td><code>/data/project/classifier/version1/docker/train/doccls_train_20250918.tar.gz</code></td></tr>
+                <tr><td>추론용 Docker</td><td><code>/data/project/classifier/version1/docker/inference/doccls_v1.3.4_general_20251016.tar.gz</code></td></tr>
+                <tr><td>학습 코드</td><td><code>/data/project/classifier/version1/ocr-document-classifier</code></td></tr>
+            </tbody>
+        </table>
+
+        <div class="cmd"><span class="cm"># 1. Docker 이미지 로드</span>
+<span class="fn">docker load</span> &lt; /data/project/classifier/version1/docker/train/doccls_train_20250918.tar.gz
+
+<span class="cm"># 2. 컨테이너 실행 (ocr-document-classifier 디렉토리에서)</span>
+<span class="kw">cd</span> /data/project/classifier/version1/ocr-document-classifier
+<span class="fn">bash</span> docker_run_for_train.sh
+
+<span class="cm"># 3. 컨테이너 진입 → /workspace 가 코드 실행 디렉토리</span>
+<span class="fn">docker exec</span> -it <span class="opt">{container_id}</span> /bin/bash</div>
+
+        <div class="callout warn">
+            <div class="callout-icon">&#9888;&#65039;</div>
+            <div><code>docker_run_for_train.sh</code> 내부에서 <code>WORKSPACE="./"</code>로 설정하고, <code>-p</code> 포트를 지정하세요.<br>이후 모든 작업은 <strong>컨테이너 내부 <code>/workspace</code></strong>에서 진행합니다.</div>
+        </div>
+
+        <h3 style="color:var(--blue-600);border-left-color:#3b82f6;">Case 2: 회사 서버 (Conda)</h3>
+        <div class="cmd"><span class="cm"># 공용 가상환경 사용</span>
+<span class="fn">source</span> /data/project/classifier/miniconda3/bin/activate document_classifier
+
+<span class="cm"># 또는 GitHub에서 clone 후 직접 설치</span>
+<span class="fn">git clone</span> git@github.com:UpstageAI/ocr-document-classifier.git
+<span class="kw">cd</span> ocr-document-classifier
+<span class="fn">pip install</span> -r requirements/train.txt</div>
+
+        <div class="callout tip">
+            <div class="callout-icon">&#128161;</div>
+            <div>처음이라면 <code>/data/project/classifier/version1/ocr-document-classifier</code>에서 바로 진행하는 것을 추천합니다.<br><strong>코드 실행 위치는 항상 <code>ocr-document-classifier/</code> 루트입니다.</strong></div>
+        </div>
+    </div>
+</div>
+
+<!-- STEP 2: 데이터 -->
+<div id="step2" class="step-card">
+    <div class="step-header"><div class="step-num" style="background:linear-gradient(135deg,#3b82f6,#2563eb);">2</div><div class="step-title">데이터 준비</div><div class="step-desc">원본 데이터 → train/val/test 분할 + label</div></div>
+    <div class="step-body">
+
+        <h3>2.1 원본 데이터 구성</h3>
+        <p>클래스별 폴더에 이미지를 넣고, <code>category.yaml</code>을 작성합니다.</p>
+        <pre class="dir-tree"><span class="f">dataset/origin_data/</span>          <span class="c">← IMAGE_PATH</span>
+├── <span class="fi">category.yaml</span>              <span class="c">← 클래스 목록</span>
+├── <span class="f">medical_bill_receipts/</span>     <span class="c">← 클래스명 = 폴더명</span>
+│   ├── <span class="fi">1.jpg</span>
+│   └── <span class="fi">2.jpg</span>
+├── <span class="f">diagnosis/</span>
+│   └── <span class="fi">...</span>
+└── <span class="f">multi/</span>                     <span class="c">← 멀티 라벨 (특수 폴더)</span>
+    └── <span class="f">1.tmp_2.tmp/</span>          <span class="c">← _ 로 분리 → .으로 재분리</span>
+        └── <span class="fi">1.jpg</span></pre>
+
+        <div class="cmd"><span class="cm"># category.yaml 예시</span>
+- medical_bill_receipts
+- diagnosis
+- medical_expenses_details
+- merged_medical_certificates</div>
+
+        <div class="callout info">
+            <div class="callout-icon">&#128204;</div>
+            <div><strong>category.yaml의 클래스명은 추론 결과에 직접 매핑됩니다.</strong><br>나중에 이름을 변경하면 추론 결과도 변경됩니다. (예: <code>medical_bill_receipts</code> → <code>mbr</code>)</div>
+        </div>
+
+        <h3>2.2 project-build.sh 실행</h3>
+        <div class="cmd"><span class="cm"># scripts/project-build.sh 내부 argument 설정</span>
+PROJECT_PATH='<span class="opt">dataset/project_data</span>'   <span class="cm"># 변환 결과 경로</span>
+IMAGE_PATH='<span class="opt">dataset/origin_data</span>'      <span class="cm"># 원본 데이터 경로</span>
+WORK_DIR='./'                           <span class="cm"># 고정</span>
+ROTATION_CLASS='[]'                     <span class="cm"># 비워둠 (pred_rot90 사용)</span>
+
+<span class="cm"># 실행 → train 80% / val 10% / test 10% 자동 분할</span>
+<span class="fn">bash</span> scripts/project-build.sh</div>
+
+        <h3>2.3 결과 구조</h3>
+        <pre class="dir-tree"><span class="f">dataset/project_data/</span>          <span class="c">← PROJECT_PATH</span>
+├── <span class="fi">category.yaml</span>
+├── <span class="f">images/</span>
+│   ├── <span class="f">train/</span>  <span class="f">val/</span>  <span class="f">test/</span>
+└── <span class="f">labels/</span>
+    ├── <span class="fi">train.txt</span>              <span class="c">← "이미지명,클래스명" 형식</span>
+    ├── <span class="fi">val.txt</span>
+    └── <span class="fi">test.txt</span></pre>
+
+        <div class="callout tip">
+            <div class="callout-icon">&#128161;</div>
+            <div>분할 비율 변경: <code>ocr_document_classifier/runner/preprocess_from_dir.py</code>의 <code>train_data_ratio</code>, <code>val_data_ratio</code>, <code>test_data_ratio</code></div>
+        </div>
+    </div>
+</div>
+
+<!-- STEP 3: 학습 -->
+<div id="step3" class="step-card">
+    <div class="step-header"><div class="step-num" style="background:linear-gradient(135deg,var(--purple-500),var(--purple-600));">3</div><div class="step-title">모델 학습</div><div class="step-desc">Config 설정 → 학습 실행 → 체크포인트</div></div>
+    <div class="step-body">
+
+        <h3>3.1 학습 Config 설정</h3>
+        <p><code>ocr_document_classifier/configs/train_image.yaml</code>에서 주요 항목:</p>
+        <table>
+            <thead><tr><th>항목</th><th>기본값</th><th>설명</th></tr></thead>
+            <tbody>
+                <tr><td><code>pred_rot90</code></td><td><code>true</code></td><td><strong>필수 확인!</strong> 회전 감지 활성화 (1장→4장 증강)</td></tr>
+                <tr><td><code>defaults.train/model</code></td><td><code>train_efficientnetv2-s</code></td><td>모델 선택: <code>-s</code>(small), <code>-m</code>(medium), <code>train_kvs</code></td></tr>
+                <tr><td><code>pl_trainer.max_epochs</code></td><td><code>50</code></td><td>학습 에포크 수</td></tr>
+                <tr><td><code>accumulate_grad_batches</code></td><td><code>4</code></td><td>배치 누적 (실질 batch = 16x4=64)</td></tr>
+                <tr><td><code>batch_size</code></td><td><code>16</code></td><td>배치 크기 (16x4 조합 권장)</td></tr>
+                <tr><td><code>optimizer.lr</code></td><td><code>5e-5</code></td><td>학습률 (rot90 사용 시 높게 권장)</td></tr>
+                <tr><td><code>gaussnoise.var_limit</code></td><td><code>1.0</code></td><td>노이즈 증강 강도 (노이즈 적으면 0.3~0.5)</td></tr>
+            </tbody>
+        </table>
+
+        <div class="callout info">
+            <div class="callout-icon">&#128204;</div>
+            <div><strong>모델 선택은 결과론적입니다.</strong> 항상 <code>-m</code>이 좋은 것은 아닙니다. 여러 모델을 학습 후 정확도가 높은 것을 선택하세요.</div>
+        </div>
+
+        <h3>3.2 학습 실행</h3>
+        <div class="cmd"><span class="cm"># scripts/train.sh 내부 argument</span>
+PROJECT_PATH='<span class="opt">dataset/project_data</span>'
+MODEL_VERSION='<span class="opt">cls</span>'               <span class="cm"># 원하는 모델 이름</span>
+ocr_document_classifier_path='./'
+
+<span class="cm"># 실행</span>
+<span class="fn">bash</span> scripts/train.sh
+
+<span class="cm"># 백그라운드 실행</span>
+<span class="fn">nohup</span> bash scripts/train.sh > train.log 2>&1 &
+<span class="fn">tail</span> -f train.log  <span class="cm"># 로그 확인</span></div>
+
+        <h3>3.3 학습 결과</h3>
+        <pre class="dir-tree"><span class="f">dataset/project_data/models/cls/</span>
+├── <span class="f">checkpoint/</span>
+│   ├── <span class="fi">epoch=50-val_acc=0.89.ckpt</span>  <span class="c">← 최고 val_acc 모델</span>
+│   └── <span class="fi">model_cfg.yaml</span>              <span class="c">← 모델 정보</span>
+└── <span class="fi">train_config.yaml</span>               <span class="c">← 학습 설정</span></pre>
+    </div>
+</div>
+
+<!-- STEP 4: 평가 -->
+<div id="step4" class="step-card">
+    <div class="step-header"><div class="step-num" style="background:linear-gradient(135deg,#10b981,#059669);">4</div><div class="step-title">평가</div><div class="step-desc">테스트 데이터로 정확도 확인</div></div>
+    <div class="step-body">
+        <div class="cmd"><span class="cm"># scripts/inference.sh 내부 argument</span>
+PROJECT_PATH="<span class="opt">dataset/project_data</span>"
+MODEL_VERSION="<span class="opt">cls</span>"
+CHECKPOINT_NAME="<span class="opt">epoch=50-val_acc=0.89</span>"  <span class="cm"># .ckpt 제외한 이름</span>
+
+<span class="cm"># 실행</span>
+<span class="fn">bash</span> scripts/inference.sh</div>
+
+        <h3>평가 결과</h3>
+        <pre class="dir-tree"><span class="f">dataset/project_data/models/cls/analysis/</span>
+├── <span class="fi">accuracy.csv</span>          <span class="c">← 전체 + 클래스별 정확도</span>
+├── <span class="fi">confusion_matrix.csv</span>  <span class="c">← Confusion Matrix</span>
+└── <span class="f">failure_images/</span>       <span class="c">← 오분류 이미지 모음</span></pre>
+    </div>
+</div>
+
+<!-- STEP 5: 패키징 -->
+<div id="step5" class="step-card">
+    <div class="step-header"><div class="step-num" style="background:linear-gradient(135deg,#f43f5e,#e11d48);">5</div><div class="step-title">패키징 &amp; 서빙 검증</div><div class="step-desc">모델 패키지 생성 → Docker 서빙 테스트</div></div>
+    <div class="step-body">
+
+        <h3>5.1 패키징</h3>
+        <div class="cmd"><span class="cm"># scripts/packaging.sh 내부 argument</span>
+PROJECT_PATH="<span class="opt">dataset/project_data</span>"
+MODEL_VERSION="<span class="opt">cls</span>"
+CHECKPOINT_NAME="<span class="opt">epoch=50-val_acc=0.89</span>"
+
+<span class="cm"># 실행</span>
+<span class="fn">bash</span> scripts/packaging.sh</div>
+
+        <pre class="dir-tree"><span class="f">dataset/project_data/models/cls/package/</span>
+├── <span class="fi">category.yaml</span>       <span class="c">← 클래스 정보</span>
+├── <span class="fi">model_cfg.yaml</span>      <span class="c">← 모델 구조 정보</span>
+├── <span class="fi">model.ckpt</span>          <span class="c">← 모델 가중치</span>
+├── <span class="fi">train_config.yaml</span>   <span class="c">← 학습 설정</span>
+├── <span class="fi">config.tar.gz</span>       <span class="c">← config 압축</span>
+└── <span class="fi">weight.tar.gz</span>       <span class="c">← 모델 압축 (전달용)</span></pre>
+
+        <h3>5.2 서빙 검증 (Docker)</h3>
+        <div class="cmd"><span class="cm"># 추론용 Docker로 서빙 테스트</span>
+<span class="fn">docker run</span> --gpus all \
+  -p 8080:8080 \
+  -v $(realpath <span class="opt">dataset/project_data/models/cls/package</span>):/app/model_dir \
+  -e OP_MODEL_DIR=/app/model_dir \
+  ocr_document_classifier:<span class="opt">1.3.0</span>
+
+<span class="cm"># 추론 요청 테스트</span>
+<span class="fn">python</span> tools/kserve/send.py --image_path <span class="opt">test.jpg</span></div>
+
+        <div class="callout info">
+            <div class="callout-icon">&#9989;</div>
+            <div>추론이 정상 동작하면 <code>weight.tar.gz</code>와 <code>config.tar.gz</code>를 고객사에 전달합니다.</div>
+        </div>
+    </div>
+</div>
+
+<!-- FAQ -->
+<div id="faq" class="section">
+    <div class="section-header"><div class="section-icon amber">&#128161;</div><div><div class="section-title">FAQ &amp; Troubleshooting</div><div class="section-subtitle">자주 발생하는 오류와 해결 방법</div></div></div>
+
+    <table>
+        <thead><tr><th>증상</th><th>원인</th><th>해결</th></tr></thead>
+        <tbody>
+            <tr><td><code>PermissionError: Permission denied</code></td><td>torch 캐시 경로 권한 문제</td><td><code>/root/.cache/torch</code> → <code>~/.cache/torch</code>로 변경</td></tr>
+            <tr><td><code>RandomResizedCrop</code> ValidationError</td><td>Albumentations 버전 변경</td><td><code>A.RandomResizedCrop(height=H, width=W)</code> →<br><code>A.RandomResizedCrop(size=(H, W))</code></td></tr>
+            <tr><td>학습이 느림</td><td>데이터 로딩 병목</td><td><code>num_workers: 8</code>, <code>persistent_workers: true</code> 확인</td></tr>
+            <tr><td>val_acc가 안 오름</td><td>lr이 너무 낮거나 데이터 부족</td><td><code>lr: 5e-5</code> → <code>1e-4</code> 시도, 데이터 증강 확인</td></tr>
+            <tr><td>멀티 라벨 인식 안 됨</td><td>multi 폴더 구조 오류</td><td>멀티 클래스: <code>multi/1.tmp_2.tmp/</code> 형식 (<code>_</code>로 분리 후 <code>.</code>으로 재분리)</td></tr>
+        </tbody>
+    </table>
+
+    <h3>Quick Reference</h3>
+    <div style="background:linear-gradient(135deg,#064e3b,#065f46);border-radius:var(--radius);padding:24px;color:#fff;">
+        <table style="width:100%;border:none;margin:0;">
+            <thead><tr><th style="background:rgba(255,255,255,0.1);color:#6ee7b7;border-bottom:1px solid rgba(255,255,255,0.15);">단계</th><th style="background:rgba(255,255,255,0.1);color:#6ee7b7;border-bottom:1px solid rgba(255,255,255,0.15);">스크립트</th><th style="background:rgba(255,255,255,0.1);color:#6ee7b7;border-bottom:1px solid rgba(255,255,255,0.15);">결과물</th></tr></thead>
+            <tbody>
+                <tr><td style="color:#e2e8f0;border-bottom:1px solid rgba(255,255,255,0.08);">데이터 전처리</td><td style="color:#86efac;font-family:'JetBrains Mono',monospace;font-size:12px;border-bottom:1px solid rgba(255,255,255,0.08);">bash scripts/project-build.sh</td><td style="color:#a5b4fc;font-size:12px;border-bottom:1px solid rgba(255,255,255,0.08);">train/val/test + labels</td></tr>
+                <tr><td style="color:#e2e8f0;border-bottom:1px solid rgba(255,255,255,0.08);">학습</td><td style="color:#86efac;font-family:'JetBrains Mono',monospace;font-size:12px;border-bottom:1px solid rgba(255,255,255,0.08);">bash scripts/train.sh</td><td style="color:#a5b4fc;font-size:12px;border-bottom:1px solid rgba(255,255,255,0.08);">checkpoint/*.ckpt</td></tr>
+                <tr><td style="color:#e2e8f0;border-bottom:1px solid rgba(255,255,255,0.08);">평가</td><td style="color:#86efac;font-family:'JetBrains Mono',monospace;font-size:12px;border-bottom:1px solid rgba(255,255,255,0.08);">bash scripts/inference.sh</td><td style="color:#a5b4fc;font-size:12px;border-bottom:1px solid rgba(255,255,255,0.08);">analysis/ (accuracy, confusion)</td></tr>
+                <tr><td style="color:#e2e8f0;border-bottom:none;">패키징</td><td style="color:#86efac;font-family:'JetBrains Mono',monospace;font-size:12px;border-bottom:none;">bash scripts/packaging.sh</td><td style="color:#a5b4fc;font-size:12px;border-bottom:none;">package/ (weight.tar.gz)</td></tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+</div>
+
+<div class="footer"><strong>OCR Document Classifier Onboarding</strong> &middot; EBS AI ModelOps<br>Generated on 2026-03-31</div>
+
+<script>
+document.querySelectorAll('.nav-link').forEach(link=>{link.addEventListener('click',function(e){const h=this.getAttribute('href');if(h.startsWith('#')){e.preventDefault();document.querySelector(h)?.scrollIntoView({behavior:'smooth',block:'start'});}});});
+</script>
+</body>
+</html>
