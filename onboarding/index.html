@@ -226,7 +226,6 @@
 <nav class="nav-bar">
     <div class="nav-inner">
         <a href="#onboarding" class="nav-link">&#128640; Onboarding</a>
-        <a href="#cli-ref" class="nav-link">&#128221; CLI Reference</a>
         <a href="../docai-automl/" class="nav-link" style="margin-left:auto; color:var(--purple-500);">← Technical Docs</a>
     </div>
 </nav>
@@ -335,10 +334,17 @@
 <span class="cmd">docai4 data analyze</span></div>
             <p>입력/출력 토큰 길이 분포를 분석하여 <code>setup.yaml</code>의 <code>max_length</code> 설정에 활용합니다.</p>
 
-            <div class="callout tip" style="margin-top:16px;">
-                <div class="callout-icon">&#128194;</div>
-                <div>결과 경로: <code>/data/project/enterprise/docai/dev/${docai3 or docai4}/{document_type}/data/</code><br>상세 디렉토리 구조는 <a href="#cli-ref" style="color:#059669; font-weight:600;">CLI Reference → data add</a>를 참고하세요.</div>
-            </div>
+            <h3 style="border-left-color:#3b82f6; color:#2563eb;">1.5 결과 디렉토리</h3>
+            <pre class="dir-tree"><span class="f">/data/project/enterprise/docai/dev/${docai3 or docai4}/{document_type}/data/</span>
+├── <span class="f">ontologies/</span>
+│   └── <span class="fi">ontology_X.yaml</span>
+└── <span class="f">sources/{dataset_name}/</span>
+    ├── <span class="f">images/</span>  <span class="c">(train/ val/ test/)</span>
+    ├── <span class="f">ufos/</span>    <span class="c">← DRSP (ocr/, parsing/)</span>
+    ├── <span class="f">ufks/</span>    <span class="c">← KVS (train/val/test.json)</span>
+    ├── <span class="f">ufps/</span> <span class="f">mufps/</span> <span class="f">csvs/</span>  <span class="c">← OCR 후 생성</span>
+    ├── <span class="f">analysis_result/</span>  <span class="c">← KVS analyze 결과</span>
+    └── <span class="fi">meta_info.json</span></pre>
         </div>
     </div>
 
@@ -357,10 +363,22 @@
 <span class="q">? Select Document Type</span> → 문서 타입 선택<br>
 <span class="q">? Enter Experiment Name</span> → <span class="sel">{날짜}_{고객사}_{범위}</span> 입력
             </div>
-            <p><code>{document_type}/models/{exp_name}/setup.yaml</code> 이 생성됩니다. 주요 설정: <code>data.dataset</code>, <code>data.ontology</code>, <code>train.model</code>, <code>train.lr</code>, <code>train.batch_size</code>, <code>max_length</code></p>
-            <div class="callout tip">
-                <div class="callout-icon">&#128209;</div>
-                <div>setup.yaml 전체 항목은 <a href="#cli-ref" style="color:#059669; font-weight:600;">CLI Reference → model setup</a>에서 DRSP/KVS별 상세 비교를 확인하세요.</div>
+            <p><code>{document_type}/models/{exp_name}/setup.yaml</code> 이 생성됩니다:</p>
+            <div class="cmp-grid" style="margin-top:12px;">
+                <div class="cmp-card"><div class="cmp-header gen3">DRSP setup.yaml</div><div class="cmp-body"><ul>
+                    <li><code>data.dataset</code> / <code>ontology</code> / <code>ontology_short</code></li>
+                    <li><code>train.model</code>: <code>parsing/bio_with_grouping</code></li>
+                    <li><code>backbone_pretrained_model_name_or_path</code></li>
+                    <li><code>max_length</code>: 2048~2400 / <code>batch_size</code>: 1~4</li>
+                    <li><code>lr</code>: 2e-5~3e-5 / <code>max_steps</code>: 1000~30000</li>
+                </ul></div></div>
+                <div class="cmp-card"><div class="cmp-header gen4">KVS setup.yaml</div><div class="cmp-body"><ul>
+                    <li><code>data.dataset</code> / <code>data.ontology</code></li>
+                    <li><code>train.model</code>: <code>lxdonut_parallel</code></li>
+                    <li><code>prompt_manager</code>: parallel_with_group / nl_group</li>
+                    <li><code>max_ocr_tokens</code> / <code>max_length</code>: 2048</li>
+                    <li><code>num_epochs</code>: 100~200 / <code>precision</code>: fp16</li>
+                </ul></div></div>
             </div>
 
             <h3 style="border-left-color:var(--purple-500); color:var(--purple-600);">2.2 학습 실행</h3>
@@ -373,9 +391,21 @@
 <span class="desc"># 모든 하이퍼파라미터 조합 일괄 학습</span>
 <span class="cmd">${docai3 or docai4} model train</span> <span class="opt">--all</span></div>
 
-            <div class="callout tip" style="margin-top:16px;">
-                <div class="callout-icon">&#128194;</div>
-                <div>학습 결과 디렉토리 구조 (DRSP/KVS 비교)는 <a href="#cli-ref" style="color:#059669; font-weight:600;">CLI Reference → model train</a>를 참고하세요.</div>
+            <h3 style="border-left-color:var(--purple-500); color:var(--purple-600);">2.3 학습 결과</h3>
+            <div class="cmp-grid">
+                <div class="cmp-card"><div class="cmp-header gen3">DRSP</div><div class="cmp-body">
+                    <pre class="dir-tree" style="margin:0;padding:12px 16px;font-size:11px;">models/{exp_name}/{exp_name}__{idx}/
+├── <span class="f">backbone_config/</span>
+├── <span class="f">checkpoints/</span> <span class="c">(best.ckpt, last.ckpt)</span>
+├── <span class="f">tokenizer/</span>
+├── <span class="fi">hparams.yaml</span>  <span class="fi">ontology.yaml</span></pre>
+                </div></div>
+                <div class="cmp-card"><div class="cmp-header gen4">KVS</div><div class="cmp-body">
+                    <pre class="dir-tree" style="margin:0;padding:12px 16px;font-size:11px;">models/{exp_name}/{exp_name}__0/
+├── <span class="f">code/</span>  <span class="f">logs/</span>
+├── <span class="f">model/</span> <span class="c">(best/, last/)</span>
+├── <span class="fi">config.yaml</span>  <span class="fi">accelerator_config.json</span></pre>
+                </div></div>
             </div>
         </div>
     </div>
@@ -410,10 +440,14 @@
 <span class="q">? Select ontology</span> → 온톨로지
             </div>
 
-            <div class="callout tip" style="margin-top:16px;">
-                <div class="callout-icon">&#128194;</div>
-                <div>결과 디렉토리 구조 (kieval, ufp, mufp, csv)는 <a href="#cli-ref" style="color:#059669; font-weight:600;">CLI Reference → model test</a>를 참고하세요.</div>
-            </div>
+            <h3 style="border-left-color:#10b981; color:#059669;">3.2 결과 디렉토리</h3>
+            <pre class="dir-tree"><span class="f">outputs/{dataset_name}/</span>
+├── <span class="f">general_infer_ufp/</span>    <span class="c">(ufp.json, mufp.json)</span>
+└── <span class="f">{use_case}__{ontology}/</span>
+    ├── <span class="f">kieval/</span>  <span class="c">(total_kieval.json, entity_level_kieval.json, kieval_result.md)</span>
+    ├── <span class="f">ufp/</span>     <span class="c">(gold.json, pred.json)</span>
+    ├── <span class="f">mufp/</span>    <span class="c">(gold.json, pred.json)</span>
+    └── <span class="f">csv/</span>     <span class="c">(gold.csv, pred.csv)</span></pre>
         </div>
     </div>
 
@@ -488,10 +522,13 @@
                 예: <code>kr-transfer-confirmation-extractor-meritzsec-0.3b-4.1.0</code>
             </div>
 
-            <div class="callout tip" style="margin-top:16px;">
-                <div class="callout-icon">&#128194;</div>
-                <div>패키지 결과 디렉토리 구조 (config/, weight/, EQMS config)는 <a href="#cli-ref" style="color:#059669; font-weight:600;">CLI Reference → pack</a>를 참고하세요.</div>
-            </div>
+            <h3 style="border-left-color:#f43f5e; color:#e11d48;">5.3 패키지 결과</h3>
+            <pre class="dir-tree"><span class="f">packages/{use_case}/{document_type}/{package_name}/</span>
+├── <span class="f">config/</span>               <span class="c">← OP_CONFIG_DIR (온톨로지, README)</span>
+├── <span class="f">weight/</span>               <span class="c">← OP_MODEL_DIR (모델, 코드, 토크나이저)</span>
+├── <span class="fi">config.yaml</span>          <span class="c">← EQMS용 서빙 설정</span>
+├── <span class="fi">config.tar.gz</span>
+└── <span class="fi">weight.tar.gz</span></pre>
         </div>
     </div>
 
@@ -546,418 +583,6 @@
             </tbody>
         </table>
     </div>
-
-</div>
-
-<!-- ══════════════════════════════════════════════════════ -->
-<!-- CLI COMMAND REFERENCE -->
-<!-- ══════════════════════════════════════════════════════ -->
-<hr class="ob-divider" style="background:linear-gradient(90deg,#4f46e5,#7c3aed,#4f46e5);">
-
-<div id="cli-ref" class="section" style="margin-top:48px;">
-    <div class="section-header">
-        <div class="section-icon purple" style="background:linear-gradient(135deg,#4f46e5,#7c3aed);">&#128221;</div>
-        <div><div class="section-title">CLI Command Reference</div><div class="section-subtitle">모든 명령어의 옵션, 프롬프트, 결과 구조 상세 가이드</div></div>
-    </div>
-
-    <div class="callout info">
-        <div class="callout-icon">&#128293;</div>
-        <div>
-            모든 명령어는 <code>docai3</code> (DRSP) 또는 <code>docai4</code> (KVS)를 진입점으로 사용합니다.<br>
-            각 명령어는 <strong>Command 방식</strong> (한 줄 실행)과 <strong>Prompt 방식</strong> (대화형 선택) 모두 지원합니다.
-        </div>
-    </div>
-
-    <!-- ════════ DATA ════════ -->
-    <h3 style="font-size:20px; border-left-width:4px; border-left-color:#3b82f6; color:#1d4ed8; margin-top:32px;">Data Commands</h3>
-    <p style="font-size:13px; color:var(--slate-600); margin-bottom:20px;">모델 학습을 위한 데이터셋 준비 과정입니다. 데이터셋을 복사하고 OCR을 실행하여 gold 파일을 생성합니다.</p>
-
-    <!-- data add -->
-    <div class="ref-card">
-        <div class="ref-card-header">
-            <div class="ref-badge" style="background:linear-gradient(135deg,#3b82f6,#2563eb);">+</div>
-            <h4>data add</h4>
-            <div class="ref-desc">데이터셋 &amp; 온톨로지 복사</div>
-        </div>
-        <div class="ref-card-body">
-            <p style="font-size:13px; color:var(--slate-600); margin-bottom:12px;">
-                <code>/data/project/datasets/data_assets/</code>에서 데이터셋을, <code>/data/project/enterprise/docai/repos/ocr-parser-ontology/_composed/</code>에서 온톨로지를 복사합니다.
-            </p>
-
-            <div class="result-label">Command 방식</div>
-            <div class="ref-cmd-block"><span class="cmd">${docai3 or docai4} data add</span> \
-  <span class="opt">-d</span> ${document_type} \
-  <span class="opt">-n</span> ${dataset_name} \
-  <span class="opt">-src</span> ${source_path} \
-  <span class="opt">-ver</span> ${source_version} \
-  <span class="opt">-ont</span> ${ontology_name_or_path}</div>
-
-            <table class="opt-table">
-                <thead><tr><th>옵션</th><th>설명</th><th>예시</th></tr></thead>
-                <tbody>
-                    <tr><td><code>-d, --document_type</code></td><td>문서 종류</td><td><code>-d payment_confirmation</code></td></tr>
-                    <tr><td><code>-n, --name</code></td><td>데이터셋 이름</td><td><code>-n 250213_meritzsec_main</code></td></tr>
-                    <tr><td><code>-src, --source</code></td><td>복사할 데이터셋 경로</td><td><code>-src /data/project/datasets/data_assets/payment_confirmation/drp.en_ko...</code></td></tr>
-                    <tr><td><code>-ver, --version</code></td><td>데이터셋 릴리즈 날짜</td><td><code>-ver 230525</code></td></tr>
-                    <tr><td><code>-ont, --ontology</code></td><td>온톨로지 이름/경로</td><td><code>-ont ont.payment_confirmation.upstage/4.0.yaml</code></td></tr>
-                </tbody>
-            </table>
-
-            <div class="result-label">Prompt 방식</div>
-            <div class="cli-select">
-<span class="q">? Select Document Type</span> → 문서 타입 선택 (또는 Create New Directory)<br>
-<span class="q">? Select Add Type</span> → <span class="sel">ontology</span> | <span class="sel">source</span><br>
-&nbsp;&nbsp;ontology → <span class="q">? Enter ontology path</span> <code>ont.payment_confirmation.upstage/4.0.yaml</code><br>
-&nbsp;&nbsp;source → <span class="q">? Enter data source path</span> → <span class="q">? Select Version</span> → <span class="q">? Enter dataset name</span>
-            </div>
-
-            <div class="conv-box">
-                <strong>Dataset Name Convention:</strong> <code>{날짜}_{고객사코드}_{범위}_{특징}</code><br>
-                <strong>날짜:</strong> 250213 &nbsp;|&nbsp; <strong>고객사:</strong> meritzsec, general &nbsp;|&nbsp; <strong>범위:</strong> main, maintenance, poc &nbsp;|&nbsp; <strong>특징:</strong> syn, _old, _new
-            </div>
-
-            <div class="result-label">Result</div>
-            <pre class="dir-tree"><span class="f">/data/project/enterprise/docai/dev/${docai3 or docai4}/{document_type}/data/</span>
-├── <span class="f">ontologies/</span>
-│   ├── <span class="fi">ontology_1.0.yaml</span>
-│   └── <span class="fi">ontology_2.0.yaml</span>
-└── <span class="f">sources/{dataset_name}/</span>
-    ├── <span class="f">images/</span>  <span class="c">(train/ val/ test/)</span>
-    ├── <span class="f">ufos/</span>    <span class="c">← DRSP (ocr/, parsing/)</span>
-    ├── <span class="f">ufks/</span>    <span class="c">← KVS (train/val/test.json)</span>
-    └── <span class="fi">meta_info.json</span></pre>
-        </div>
-    </div>
-
-    <!-- data ocr -->
-    <div class="ref-card">
-        <div class="ref-card-header">
-            <div class="ref-badge" style="background:linear-gradient(135deg,#3b82f6,#2563eb);">&#128065;</div>
-            <h4>data ocr</h4>
-            <div class="ref-desc">OCR 실행 &amp; gold 파일 생성</div>
-        </div>
-        <div class="ref-card-body">
-            <div class="result-label">Command 방식</div>
-            <div class="ref-cmd-block"><span class="cmd">${docai3 or docai4} data ocr</span> \
-  <span class="opt">-d</span> ${document_type} \
-  <span class="opt">-n</span> ${dataset_name} \
-  <span class="opt">-ont</span> ${ontology_name} \
-  <span class="opt">-ver</span> ${ocr_version} \
-  <span class="opt">--dos</span> <span class="opt">--is_multipage</span> <span class="opt">--language_tag</span> "ko"</div>
-
-            <table class="opt-table">
-                <thead><tr><th>옵션</th><th>설명</th><th>기본값</th></tr></thead>
-                <tbody>
-                    <tr><td><code>-d, --document_type</code></td><td>문서 종류</td><td>—</td></tr>
-                    <tr><td><code>-n, --name</code></td><td>데이터셋 이름</td><td>—</td></tr>
-                    <tr><td><code>-ont, --ontology</code></td><td>온톨로지 파일명</td><td>—</td></tr>
-                    <tr><td><code>-ver, --version</code></td><td>OCR 버전</td><td><code>2.2.1</code></td></tr>
-                    <tr><td><code>--dos</code></td><td>DOS flag</td><td><code>True</code></td></tr>
-                    <tr><td><code>--is_multipage</code></td><td>멀티페이지 flag</td><td><code>False</code></td></tr>
-                    <tr><td><code>--language_tag</code></td><td>언어 태그</td><td><code>"ko"</code></td></tr>
-                </tbody>
-            </table>
-
-            <div class="result-label">추가 생성 파일</div>
-            <pre class="dir-tree"><span class="f">sources/{dataset_name}/</span>
-├── <span class="f">ufos/ocr__{ver}__{lang}__{dos}_dos__edge/</span>  <span class="c">← OCR 결과</span>
-├── <span class="f">ufps/</span>   <span class="c">(train/val/test_ufp.json)</span>
-├── <span class="f">mufps/</span>  <span class="c">(train/val/test_mufp.json)</span>
-└── <span class="f">csvs/</span>   <span class="c">(train_csv/ val_csv/ test_csv/)</span></pre>
-        </div>
-    </div>
-
-    <!-- data analyze (KVS only) -->
-    <div class="ref-card">
-        <div class="ref-card-header">
-            <div class="ref-badge" style="background:linear-gradient(135deg,#3b82f6,#2563eb);">&#128200;</div>
-            <h4>data analyze</h4>
-            <div class="ref-desc">입출력 토큰 분포 분석 (KVS 전용)</div>
-        </div>
-        <div class="ref-card-body">
-            <div class="ref-cmd-block"><span class="cmd">docai4 data analyze</span></div>
-            <div class="cli-select">
-<span class="q">? Select Document Type</span> → <span class="q">? Select Dataset Name</span> → <span class="q">? Select ontology</span><br>
-<span class="q">? Select OCR Version</span> → <span class="q">? Select Tokenizer</span> (lxdonut_parsing_qa_tx05_231001 등)
-            </div>
-            <p style="font-size:13px; color:var(--slate-600);">결과: <code>sources/{dataset_name}/analysis_result/analysis_results.json</code> — setup.yaml의 <code>max_length</code> 설정에 활용합니다.</p>
-        </div>
-    </div>
-
-    <!-- ════════ MODEL ════════ -->
-    <h3 style="font-size:20px; border-left-width:4px; border-left-color:var(--purple-500); color:var(--purple-600); margin-top:40px;">Model Commands</h3>
-    <p style="font-size:13px; color:var(--slate-600); margin-bottom:20px;">모델 학습, 추론, 평가를 진행하는 명령어입니다.</p>
-
-    <!-- model setup -->
-    <div class="ref-card">
-        <div class="ref-card-header">
-            <div class="ref-badge" style="background:linear-gradient(135deg,var(--purple-500),var(--purple-600));">&#9881;</div>
-            <h4>model setup</h4>
-            <div class="ref-desc">setup.yaml 생성</div>
-        </div>
-        <div class="ref-card-body">
-            <div class="ref-cmd-block"><span class="cmd">${docai3 or docai4} model setup</span> \
-  <span class="opt">-d</span> ${document_type} \
-  <span class="opt">-n</span> ${exp_name}</div>
-
-            <p style="font-size:13px; color:var(--slate-600); margin-bottom:12px;">
-                결과: <code>dev/${docai3 or docai4}/{document_type}/models/{exp_name}/setup.yaml</code>
-            </p>
-
-            <div class="cmp-grid">
-                <div class="cmp-card">
-                    <div class="cmp-header gen3">DRSP setup.yaml 주요 항목</div>
-                    <div class="cmp-body"><ul>
-                        <li><code>data.dataset</code> / <code>data.ontology</code> / <code>data.ontology_short</code></li>
-                        <li><code>train.model</code>: <code>parsing/bio_with_grouping</code> 등</li>
-                        <li><code>backbone_pretrained_model_name_or_path</code></li>
-                        <li><code>tokenizer_pretrained_model_name_or_path</code></li>
-                        <li><code>max_length</code>: 2048 / 2400</li>
-                        <li><code>batch_size</code>: 1~4</li>
-                        <li><code>lr</code>: 2e-5~3e-5 / <code>max_steps</code>: 1000~30000</li>
-                        <li><code>aug_methods_to_use</code>: bbox_shake 등</li>
-                    </ul></div>
-                </div>
-                <div class="cmp-card">
-                    <div class="cmp-header gen4">KVS setup.yaml 주요 항목</div>
-                    <div class="cmp-body"><ul>
-                        <li><code>data.dataset</code> / <code>data.ontology</code></li>
-                        <li><code>train.model</code>: <code>lxdonut_parallel</code></li>
-                        <li><code>prompt_manager</code>: parallel_with_group / parallel_with_nl_group</li>
-                        <li><code>pretrained_model_name_or_path</code></li>
-                        <li><code>textual_encoder_max_ocr_tokens</code>: 2048</li>
-                        <li><code>textual_decoder_max_length</code>: 2048</li>
-                        <li><code>num_epochs</code>: 100~200</li>
-                        <li><code>gradient_accumulation_steps</code>: 16</li>
-                        <li><code>precision</code>: fp16</li>
-                    </ul></div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- model train -->
-    <div class="ref-card">
-        <div class="ref-card-header">
-            <div class="ref-badge" style="background:linear-gradient(135deg,var(--purple-500),var(--purple-600));">&#128640;</div>
-            <h4>model train</h4>
-            <div class="ref-desc">모델 학습 실행</div>
-        </div>
-        <div class="ref-card-body">
-            <div class="ref-cmd-block"><span class="cmd">${docai3 or docai4} model train</span> \
-  <span class="opt">-d</span> ${document_type} \
-  <span class="opt">-n</span> ${exp_name} \
-  <span class="opt">-id</span> ${device_id}
-
-<span class="desc"># 모든 실험 조합 일괄 학습:</span>
-<span class="cmd">${docai3 or docai4} model train</span> <span class="opt">--all</span></div>
-
-            <table class="opt-table">
-                <thead><tr><th>옵션</th><th>설명</th><th>예시</th></tr></thead>
-                <tbody>
-                    <tr><td><code>-d, --document_type</code></td><td>문서 종류</td><td><code>-d payment_confirmation</code></td></tr>
-                    <tr><td><code>-n, --name</code></td><td>실험 이름</td><td><code>-n exp_241203</code></td></tr>
-                    <tr><td><code>-id, --device_id</code></td><td>GPU 디바이스 ID</td><td><code>-id 0</code></td></tr>
-                    <tr><td><code>--all</code></td><td>모든 실험 일괄 실행</td><td>—</td></tr>
-                </tbody>
-            </table>
-
-            <div class="result-label">Result 구조</div>
-            <div class="cmp-grid">
-                <div class="cmp-card"><div class="cmp-header gen3">DRSP</div><div class="cmp-body">
-                    <pre class="dir-tree" style="margin:0;padding:12px 16px;font-size:11px;">models/{exp_name}/{exp_name}__{idx}/
-├── <span class="f">backbone_config/</span>
-├── <span class="f">checkpoints/</span>
-│   ├── <span class="fi">best.ckpt</span>
-│   └── <span class="fi">last.ckpt</span>
-├── <span class="f">tokenizer/</span>
-├── <span class="fi">hparams.yaml</span>
-├── <span class="fi">ontology.yaml</span>
-└── <span class="fi">setup.yaml</span></pre>
-                </div></div>
-                <div class="cmp-card"><div class="cmp-header gen4">KVS</div><div class="cmp-body">
-                    <pre class="dir-tree" style="margin:0;padding:12px 16px;font-size:11px;">models/{exp_name}/{exp_name}__0/
-├── <span class="f">code/</span>
-├── <span class="f">logs/</span>
-├── <span class="f">model/</span>
-│   ├── <span class="f">best/</span>
-│   └── <span class="f">last/</span>
-├── <span class="fi">config.yaml</span>
-├── <span class="fi">accelerator_config.json</span>
-├── <span class="fi">kieval_config.json</span>
-├── <span class="fi">progress_bar.log</span>
-└── <span class="fi">setup.yaml</span></pre>
-                </div></div>
-            </div>
-        </div>
-    </div>
-
-    <!-- model test -->
-    <div class="ref-card">
-        <div class="ref-card-header">
-            <div class="ref-badge" style="background:linear-gradient(135deg,#10b981,#059669);">&#9989;</div>
-            <h4>model test</h4>
-            <div class="ref-desc">추론 &amp; 평가 실행</div>
-        </div>
-        <div class="ref-card-body">
-            <div class="ref-cmd-block"><span class="cmd">${docai3 or docai4} model test</span> \
-  <span class="opt">-d</span> ${document_type} \
-  <span class="opt">-u</span> ${use_case} \
-  <span class="opt">-n</span> ${exp_name} \
-  <span class="opt">-e</span> ${model_name} \
-  <span class="opt">--dataset_name</span> ${dataset_name} \
-  <span class="opt">-ont</span> ${ontology_name}
-
-<span class="desc"># 모든 실험 일괄 평가:</span>
-<span class="cmd">${docai3 or docai4} model test</span> <span class="opt">--all</span></div>
-
-            <table class="opt-table">
-                <thead><tr><th>옵션</th><th>설명</th><th>예시</th></tr></thead>
-                <tbody>
-                    <tr><td><code>-d, --document_type</code></td><td>문서 종류</td><td><code>-d payment_confirmation</code></td></tr>
-                    <tr><td><code>-u, --use_case</code></td><td>use case (default: general)</td><td><code>-u meritzsec</code></td></tr>
-                    <tr><td><code>-n, --name</code></td><td>실험 이름</td><td><code>-n exp_241203</code></td></tr>
-                    <tr><td><code>-e, --exp</code></td><td>모델 이름 (실험__index)</td><td><code>-e exp_241203__0</code></td></tr>
-                    <tr><td><code>--dataset_name</code></td><td>데이터셋 이름</td><td><code>--dataset_name 250213_meritzsec_main</code></td></tr>
-                    <tr><td><code>-ont, --ontology</code></td><td>온톨로지 이름</td><td><code>-ont ont.payment_confirmation.upstage__4.0.yaml</code></td></tr>
-                    <tr><td><code>--all</code></td><td>모든 실험 일괄 평가</td><td>—</td></tr>
-                </tbody>
-            </table>
-
-            <div class="result-label">Result 구조</div>
-            <pre class="dir-tree">models/{exp_name}/{exp_name}__{idx}/<span class="f">outputs/{dataset_name}/</span>
-├── <span class="f">general_infer_ufp/</span>           <span class="c">← 기본 추론</span>
-│   ├── <span class="fi">ufp.json</span>
-│   └── <span class="fi">mufp.json</span>
-└── <span class="f">{use_case}__{ontology_ver}/</span>  <span class="c">← use_case별 평가</span>
-    ├── <span class="f">kieval/</span>
-    │   ├── <span class="fi">total_kieval.json</span>
-    │   ├── <span class="fi">entity_level_kieval.json</span>
-    │   └── <span class="fi">kieval_result.md</span>
-    ├── <span class="f">ufp/</span>   <span class="c">(gold.json, pred.json)</span>
-    ├── <span class="f">mufp/</span>  <span class="c">(gold.json, pred.json)</span>
-    └── <span class="f">csv/</span>   <span class="c">(gold.csv, pred.csv)</span></pre>
-        </div>
-    </div>
-
-    <!-- ════════ PACKAGE ════════ -->
-    <h3 style="font-size:20px; border-left-width:4px; border-left-color:#f43f5e; color:#e11d48; margin-top:40px;">Package Commands</h3>
-    <p style="font-size:13px; color:var(--slate-600); margin-bottom:20px;">모델 서빙을 위한 체크포인트 저장 및 패키징 과정입니다.</p>
-
-    <!-- save -->
-    <div class="ref-card">
-        <div class="ref-card-header">
-            <div class="ref-badge" style="background:linear-gradient(135deg,#f43f5e,#e11d48);">&#128190;</div>
-            <h4>save</h4>
-            <div class="ref-desc">체크포인트 저장</div>
-        </div>
-        <div class="ref-card-body">
-            <div class="ref-cmd-block"><span class="cmd">${docai3 or docai4} save</span> \
-  <span class="opt">--document_type</span> ${document_type} \
-  <span class="opt">--exp_name</span> ${exp_name} \
-  <span class="opt">--model_name</span> ${model_name}</div>
-
-            <div class="cli-select">
-<span class="q">? Select Document Type</span> → <span class="q">? Select Experiment</span> → <span class="q">? Select Model</span><br>
-<span class="q">? Is this model universal?</span> → <span class="sel">YES</span> / NO
-            </div>
-            <p style="font-size:13px; color:var(--slate-600);">
-                결과: <code>/data/project/enterprise/docai/checkpoints/${docai3 or docai4}/{document_type}/{model_name}_{universal|not_universal}</code>
-            </p>
-        </div>
-    </div>
-
-    <!-- pack -->
-    <div class="ref-card">
-        <div class="ref-card-header">
-            <div class="ref-badge" style="background:linear-gradient(135deg,#f43f5e,#e11d48);">&#128230;</div>
-            <h4>pack</h4>
-            <div class="ref-desc">서빙용 패키지 생성</div>
-        </div>
-        <div class="ref-card-body">
-            <div class="ref-cmd-block"><span class="cmd">${docai3 or docai4} pack</span> \
-  <span class="opt">--document_type</span> ${document_type} \
-  <span class="opt">--model_name</span> ${model_name} \
-  <span class="opt">--ontology</span> ${ontology} \
-  <span class="opt">--use_case</span> ${use_case} \
-  <span class="opt">--package_name</span> kr-{type}-extractor-{use_case}-0.3b-{version} \
-  <span class="opt">--package_document_type</span> ${package_document_type}</div>
-
-            <table class="opt-table">
-                <thead><tr><th>옵션</th><th>설명</th><th>예시</th></tr></thead>
-                <tbody>
-                    <tr><td><code>--document_type</code></td><td>문서 종류</td><td><code>--document_type payment_confirmation</code></td></tr>
-                    <tr><td><code>--model_name</code></td><td>모델 이름</td><td><code>--model_name exp_241203__0</code></td></tr>
-                    <tr><td><code>--ontology</code></td><td>온톨로지</td><td><code>--ontology ont.payment_confirmation.upstage__4.0.yaml</code></td></tr>
-                    <tr><td><code>--use_case</code></td><td>use case</td><td><code>--use_case meritzsec</code></td></tr>
-                    <tr><td><code>--package_name</code></td><td>패키지 이름</td><td><code>kr-transfer-confirmation-extractor-meritzsec-0.3b-4.1.0</code></td></tr>
-                    <tr><td><code>--package_document_type</code></td><td>패키지 문서 종류 (기본=document_type)</td><td>—</td></tr>
-                </tbody>
-            </table>
-
-            <div class="result-label">Result 구조</div>
-            <pre class="dir-tree"><span class="f">packages/{use_case}/{document_type}/{package_name}/</span>
-├── <span class="f">config/</span>                         <span class="c">← OP_CONFIG_DIR</span>
-│   ├── <span class="fi">ont.{type}.yaml</span>            <span class="c">← 온톨로지</span>
-│   ├── <span class="fi">ont.{type}_short.yaml</span>
-│   └── <span class="fi">README.md</span>                  <span class="c">← 모델 정보, 데이터셋, 평가 결과</span>
-├── <span class="f">weight/</span>                         <span class="c">← OP_MODEL_DIR</span>
-│   ├── <span class="f">codes/</span>  <span class="f">compiled/</span>  <span class="f">tokenizer/</span>
-│   ├── <span class="fi">config.json</span>  <span class="fi">config.yaml</span>
-│   ├── <span class="fi">ontology.yaml</span>  <span class="fi">ontology_short.yaml</span>
-│   └── <span class="fi">pytorch_model.bin</span>
-├── <span class="fi">config.yaml</span>                    <span class="c">← EQMS용 서빙 설정</span>
-├── <span class="fi">config.tar.gz</span>
-└── <span class="fi">weight.tar.gz</span></pre>
-        </div>
-    </div>
-
-    <!-- ════════ ANALYZE ════════ -->
-    <h3 style="font-size:20px; border-left-width:4px; border-left-color:#8b5cf6; color:#7c3aed; margin-top:40px;">Analyze Commands</h3>
-    <p style="font-size:13px; color:var(--slate-600); margin-bottom:20px;">모델 결과를 시각적으로 분석하는 도구입니다.</p>
-
-    <!-- analyzer -->
-    <div class="ref-card">
-        <div class="ref-card-header">
-            <div class="ref-badge" style="background:linear-gradient(135deg,#8b5cf6,#7c3aed);">&#128202;</div>
-            <h4>analyze</h4>
-            <div class="ref-desc">모델 결과 시각적 분석 (Analyzer)</div>
-        </div>
-        <div class="ref-card-body">
-            <div class="ref-cmd-block"><span class="cmd">${docai3 or docai4} analyze</span></div>
-            <div class="cli-select">
-<span class="q">? Select Document Type</span> → 문서 타입<br>
-<span class="q">? Select Model Name</span> → 모델<br>
-<span class="q">? Select Dataset Name</span> → 데이터셋<br>
-<span class="q">? Select Output Name</span> → 출력 디렉토리
-            </div>
-            <p style="font-size:13px; color:var(--slate-600); margin-bottom:12px;">
-                <code>localhost:{포트번호}</code>로 브라우저에서 접속하면 분석 페이지가 열립니다.
-            </p>
-
-            <div class="callout tip">
-                <div class="callout-icon">&#128248;</div>
-                <div>Analyzer 화면 스크린샷과 색상 범례는 위 <a href="#onboarding" style="color:#059669; font-weight:600;">Onboarding → 분석 (Analyzer)</a> 섹션을 참고하세요.</div>
-            </div>
-        </div>
-    </div>
-
-    <!-- validator -->
-    <div class="ref-card">
-        <div class="ref-card-header">
-            <div class="ref-badge" style="background:linear-gradient(135deg,#8b5cf6,#7c3aed);">&#9989;</div>
-            <h4>validator</h4>
-            <div class="ref-desc">검증 도구 (enterprise-docai-validator)</div>
-        </div>
-        <div class="ref-card-body">
-            <p style="font-size:13px; color:var(--slate-600);">
-                패키징된 모델의 서빙 검증에 사용합니다.<br>
-                참조: <code>https://github.com/UpstageAI/enterprise-docai-validator</code>
-            </p>
-        </div>
-    </div>
-
-</div>
 
 </div>
 
