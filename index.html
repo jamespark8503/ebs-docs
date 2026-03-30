@@ -173,6 +173,51 @@
             color: var(--purple-500);
         }
 
+        .card-footer-group {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .card-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 6px 14px;
+            border-radius: 100px;
+            font-size: 12px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+
+        .card-link.primary {
+            background: var(--purple-500);
+            color: #fff;
+        }
+
+        .card-link.primary:hover {
+            background: var(--purple-600);
+            box-shadow: 0 2px 8px rgba(124, 58, 237, 0.3);
+        }
+
+        .card-link.secondary {
+            background: var(--slate-100);
+            color: var(--slate-600);
+            border: 1px solid var(--slate-200);
+        }
+
+        .card-link.secondary:hover {
+            background: var(--purple-50);
+            color: var(--purple-600);
+            border-color: var(--purple-200);
+        }
+
+        .card-link svg {
+            width: 13px;
+            height: 13px;
+        }
+
         .card-footer svg {
             width: 16px;
             height: 16px;
@@ -199,6 +244,9 @@
         .card.c-green .card-badge { background: #d1fae5; color: #059669; }
         .card.c-rose::before { background: linear-gradient(90deg, #f43f5e, #fda4af); }
         .card.c-rose .card-icon { background: #fff1f2; }
+
+        /* div cards need pointer cursor on hover */
+        .card { cursor: default; }
 
         .empty-badge {
             display: inline-block;
@@ -232,49 +280,44 @@
 <div class="container">
     <div class="card-grid">
 
-        <a href="./docai-automl/" class="card c-blue">
+        <div class="card c-blue">
             <div class="card-icon">&#129302;</div>
             <div class="card-badge">AutoML Platform</div>
-            <div class="card-title">DocAI AutoML <span class="empty-badge">Coming Soon</span></div>
-            <div class="card-desc">문서 AI AutoML 플랫폼. 자동화된 모델 학습, 평가, 배포 파이프라인 기술 문서.</div>
-            <div class="card-footer">
-                문서 보기
-                <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            <div class="card-title">DocAI AutoML</div>
+            <div class="card-desc">3세대 DSP + 4세대 KVS 공용 AutoML. LXDonut 기반 멀티모달 문서 파싱 엔진.</div>
+            <div class="card-footer-group">
+                <a href="./docai-automl/" class="card-link primary">
+                    문서 보기 <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </a>
+                <a href="./onboarding/" class="card-link secondary">
+                    &#128640; Onboarding
+                </a>
             </div>
-        </a>
+        </div>
 
-        <a href="./docai-kit/" class="card c-purple">
+        <div class="card c-purple">
             <div class="card-icon">&#128218;</div>
             <div class="card-badge">Pipeline Toolkit</div>
             <div class="card-title">DocAI Kit</div>
             <div class="card-desc">Enterprise DocAI Kit. BMT/POC, QA, 온사이트 검증을 위한 문서 AI 파이프라인 툴킷. 12개 모듈, 7개 E2E 파이프라인.</div>
-            <div class="card-footer">
-                문서 보기
-                <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            <div class="card-footer-group">
+                <a href="./docai-kit/" class="card-link primary">
+                    문서 보기 <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </a>
             </div>
-        </a>
+        </div>
 
-        <a href="./classifier/" class="card c-green">
+        <div class="card c-green">
             <div class="card-icon">&#128209;</div>
             <div class="card-badge">Classification</div>
             <div class="card-title">Classifier</div>
             <div class="card-desc">문서 분류 엔진. V1(CNN) + V2(LXDonut) 아키텍처, CloudEvent 서빙, 학습/추론 파이프라인.</div>
-            <div class="card-footer">
-                문서 보기
-                <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            <div class="card-footer-group">
+                <a href="./classifier/" class="card-link primary">
+                    문서 보기 <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </a>
             </div>
-        </a>
-
-        <a href="./onboarding/" class="card c-rose" style="border:2px solid #fecdd3;">
-            <div class="card-icon" style="background:#fff1f2;">&#128640;</div>
-            <div class="card-badge" style="background:#fce7f3; color:#be185d;">Onboarding</div>
-            <div class="card-title">AutoML Onboarding</div>
-            <div class="card-desc">DocAI AutoML 실전 사용 가이드. 환경 세팅, 데이터 준비, 학습, 평가, 패키징까지 Step-by-Step + 전체 CLI Reference.</div>
-            <div class="card-footer" style="color:#e11d48;">
-                가이드 보기
-                <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-            </div>
-        </a>
+        </div>
 
     </div>
 </div>
