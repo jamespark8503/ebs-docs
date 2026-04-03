@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EBS DocAI Quiz</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap');
+:root{
+  --purple-900:#0F0525;--purple-700:#2D1065;--purple-600:#5020C6;--purple-500:#6528F7;--purple-400:#8B5CF6;--purple-300:#B794F6;--purple-200:#D4BBFC;--purple-100:#EDE5FF;--purple-50:#F3EEFE;
+  --blue-600:#2563eb;--green-600:#059669;--orange-600:#ea580c;--rose-600:#e11d48;
+  --slate-900:#0f172a;--slate-800:#1e293b;--slate-700:#334155;--slate-600:#475569;--slate-500:#64748b;--slate-400:#94a3b8;--slate-300:#cbd5e1;--slate-200:#e2e8f0;--slate-100:#f1f5f9;--slate-50:#f8fafc;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Noto Sans KR',sans-serif;background:var(--slate-50);color:var(--slate-800);min-height:100vh;}
+.hero{background:linear-gradient(135deg,var(--purple-900),var(--purple-700) 40%,var(--purple-500));padding:48px 0 40px;text-align:center;position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;top:-50%;right:-20%;width:500px;height:500px;background:radial-gradient(circle,rgba(101,40,247,.2),transparent 70%);border-radius:50%;}
+.hero h1{font-size:36px;font-weight:800;color:#fff;letter-spacing:-1px;position:relative;}
+.hero h1 span{color:var(--purple-300);}
+.hero p{color:var(--purple-300);font-size:15px;margin-top:8px;position:relative;}
+.home-btn{position:fixed;top:16px;left:16px;z-index:999;padding:6px 16px;background:rgba(255,255,255,.12);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.2);border-radius:100px;color:#D4BBFC;text-decoration:none;font-size:13px;font-weight:600;}
+.home-btn:hover{background:rgba(255,255,255,.25);color:#fff;}
+
+.container{max-width:760px;margin:0 auto;padding:32px 20px 80px;}
+
+/* Start Screen */
+#start-screen{text-align:center;padding:40px 0;}
+.category-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:32px 0;text-align:left;}
+.cat-card{background:#fff;border:2px solid var(--slate-200);border-radius:14px;padding:20px;cursor:pointer;transition:all .2s;position:relative;}
+.cat-card:hover{border-color:var(--purple-400);box-shadow:0 4px 20px rgba(101,40,247,.1);}
+.cat-card.selected{border-color:var(--purple-500);background:var(--purple-50);}
+.cat-card.selected::after{content:'';position:absolute;top:12px;right:12px;width:22px;height:22px;background:var(--purple-500);border-radius:50%;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z'/%3E%3C/svg%3E");background-size:14px;background-position:center;background-repeat:no-repeat;}
+.cat-icon{font-size:24px;margin-bottom:8px;}
+.cat-name{font-size:15px;font-weight:700;color:var(--slate-900);}
+.cat-desc{font-size:12px;color:var(--slate-500);margin-top:4px;}
+.cat-count{font-size:11px;color:var(--purple-500);font-weight:600;margin-top:6px;}
+.start-btn{display:inline-flex;align-items:center;gap:8px;padding:14px 40px;background:var(--purple-500);color:#fff;border:none;border-radius:100px;font-size:15px;font-weight:700;cursor:pointer;transition:all .2s;box-shadow:0 4px 16px rgba(101,40,247,.3);font-family:inherit;margin-top:16px;}
+.start-btn:hover{background:var(--purple-600);transform:translateY(-1px);}
+.start-btn:disabled{opacity:.4;cursor:not-allowed;transform:none;}
+.select-all{display:inline-flex;align-items:center;gap:6px;padding:8px 20px;background:var(--slate-100);border:1px solid var(--slate-200);border-radius:100px;font-size:13px;font-weight:600;color:var(--slate-600);cursor:pointer;margin-bottom:16px;font-family:inherit;}
+.select-all:hover{background:var(--purple-50);border-color:var(--purple-200);}
+
+/* Quiz Screen */
+#quiz-screen{display:none;}
+.progress-bar{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.9);backdrop-filter:blur(12px);border-bottom:1px solid var(--slate-200);padding:12px 0;}
+.progress-inner{max-width:760px;margin:0 auto;padding:0 20px;display:flex;align-items:center;gap:16px;}
+.progress-track{flex:1;height:6px;background:var(--slate-200);border-radius:100px;overflow:hidden;}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--purple-500),var(--purple-400));border-radius:100px;transition:width .4s ease;}
+.progress-text{font-size:13px;font-weight:700;color:var(--slate-600);white-space:nowrap;}
+.category-tag{font-size:11px;font-weight:700;padding:4px 12px;border-radius:100px;display:inline-block;margin-bottom:16px;}
+.tag-automl{background:#fff7ed;color:var(--orange-600);}
+.tag-automl-ob{background:#fef3c7;color:#92400e;}
+.tag-classifier{background:#f0fdf4;color:var(--green-600);}
+.tag-classifier-ob{background:#ecfdf5;color:#065f46;}
+.tag-kit{background:#eff6ff;color:var(--blue-600);}
+.tag-kit-ob{background:#dbeafe;color:#1e40af;}
+
+.question-card{background:#fff;border-radius:16px;border:1px solid var(--slate-200);padding:32px;margin-bottom:24px;box-shadow:0 2px 8px rgba(0,0,0,.03);}
+.q-number{font-size:12px;font-weight:700;color:var(--purple-500);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;}
+.q-text{font-size:17px;font-weight:700;color:var(--slate-900);line-height:1.6;margin-bottom:24px;}
+.q-text code{font-family:'JetBrains Mono',monospace;font-size:14px;background:var(--slate-100);padding:2px 8px;border-radius:5px;color:var(--purple-600);}
+.options{display:flex;flex-direction:column;gap:10px;}
+.option{display:flex;align-items:flex-start;gap:12px;padding:14px 18px;border:2px solid var(--slate-200);border-radius:12px;cursor:pointer;transition:all .15s;font-size:14px;line-height:1.6;color:var(--slate-700);}
+.option:hover{border-color:var(--purple-300);background:var(--purple-50);}
+.option.selected{border-color:var(--purple-500);background:var(--purple-50);}
+.option.correct{border-color:#10b981;background:#f0fdf4;color:#065f46;}
+.option.wrong{border-color:#ef4444;background:#fef2f2;color:#991b1b;}
+.option.disabled{pointer-events:none;}
+.option-marker{width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0;background:var(--slate-100);color:var(--slate-500);}
+.option.selected .option-marker{background:var(--purple-500);color:#fff;}
+.option.correct .option-marker{background:#10b981;color:#fff;}
+.option.wrong .option-marker{background:#ef4444;color:#fff;}
+.option-text{padding-top:3px;}
+
+.explanation{margin-top:20px;padding:16px 20px;border-radius:12px;font-size:13px;line-height:1.7;display:none;animation:fadeIn .3s ease;}
+.explanation.show{display:block;}
+.explanation.correct-exp{background:#f0fdf4;border:1px solid #bbf7d0;color:#065f46;}
+.explanation.wrong-exp{background:#fef2f2;border:1px solid #fecdd3;color:#991b1b;}
+.explanation strong{display:block;margin-bottom:4px;font-size:14px;}
+
+.nav-btns{display:flex;justify-content:space-between;margin-top:24px;gap:12px;}
+.nav-btn{padding:12px 28px;border-radius:100px;font-size:14px;font-weight:600;cursor:pointer;transition:all .2s;border:none;font-family:inherit;}
+.nav-btn.secondary{background:var(--slate-100);color:var(--slate-600);border:1px solid var(--slate-200);}
+.nav-btn.secondary:hover{background:var(--slate-200);}
+.nav-btn.primary{background:var(--purple-500);color:#fff;box-shadow:0 4px 12px rgba(101,40,247,.2);}
+.nav-btn.primary:hover{background:var(--purple-600);}
+.nav-btn:disabled{opacity:.3;cursor:not-allowed;}
+
+/* Result Screen */
+#result-screen{display:none;text-align:center;padding:40px 0;}
+.result-card{background:#fff;border-radius:20px;border:1px solid var(--slate-200);padding:48px 40px;max-width:560px;margin:0 auto;box-shadow:0 4px 24px rgba(0,0,0,.05);}
+.result-icon{font-size:64px;margin-bottom:16px;}
+.result-score{font-size:56px;font-weight:800;color:var(--purple-500);letter-spacing:-2px;}
+.result-label{font-size:15px;color:var(--slate-500);margin-top:4px;}
+.result-msg{font-size:18px;font-weight:700;color:var(--slate-900);margin:20px 0 8px;}
+.result-detail{font-size:14px;color:var(--slate-600);line-height:1.7;}
+.result-bar{display:flex;gap:4px;margin:24px auto;max-width:400px;height:10px;border-radius:100px;overflow:hidden;}
+.result-bar-seg{height:100%;transition:width .5s;}
+.result-bar-correct{background:#10b981;}
+.result-bar-wrong{background:#ef4444;}
+.cat-scores{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:24px 0;text-align:left;}
+.cat-score-item{padding:12px 16px;background:var(--slate-50);border-radius:10px;border:1px solid var(--slate-200);}
+.cat-score-name{font-size:12px;font-weight:700;color:var(--slate-500);}
+.cat-score-val{font-size:18px;font-weight:800;color:var(--slate-900);margin-top:2px;}
+.retry-btn{display:inline-flex;align-items:center;gap:8px;padding:14px 36px;background:var(--purple-500);color:#fff;border:none;border-radius:100px;font-size:15px;font-weight:700;cursor:pointer;transition:all .2s;font-family:inherit;margin-top:20px;box-shadow:0 4px 16px rgba(101,40,247,.3);}
+.retry-btn:hover{background:var(--purple-600);}
+
+/* Review */
+.review-btn{display:inline-flex;padding:12px 28px;background:var(--slate-100);border:1px solid var(--slate-200);border-radius:100px;font-size:14px;font-weight:600;color:var(--slate-600);cursor:pointer;font-family:inherit;margin-top:10px;}
+.review-btn:hover{background:var(--slate-200);}
+#review-section{display:none;margin-top:32px;text-align:left;}
+.review-item{background:#fff;border-radius:14px;border:1px solid var(--slate-200);padding:24px;margin-bottom:16px;}
+.review-item.was-correct{border-left:4px solid #10b981;}
+.review-item.was-wrong{border-left:4px solid #ef4444;}
+.review-q{font-size:15px;font-weight:700;color:var(--slate-900);margin-bottom:8px;}
+.review-answer{font-size:13px;line-height:1.7;color:var(--slate-600);}
+.review-answer .correct-ans{color:#059669;font-weight:600;}
+.review-answer .your-ans{color:#ef4444;font-weight:600;}
+
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+@media(max-width:600px){.category-grid{grid-template-columns:1fr;}.cat-scores{grid-template-columns:1fr;}.result-card{padding:32px 24px;}}
+</style>
+</head>
+<body>
+
+<a href="./" class="home-btn">Home</a>
+
+<div class="hero">
+  <h1>EBS DocAI <span>Quiz</span></h1>
+  <p>문서 AI 기술 문서 핵심 내용 학습 퀴즈</p>
+</div>
+
+<div class="container">
+
+<!-- START -->
+<div id="start-screen">
+  <p style="font-size:15px;color:var(--slate-600);margin-bottom:8px;">학습할 영역을 선택하세요</p>
+  <button class="select-all" onclick="toggleAll()">전체 선택 / 해제</button>
+  <div class="category-grid" id="cat-grid"></div>
+  <button class="start-btn" id="start-btn" onclick="startQuiz()" disabled>퀴즈 시작</button>
+</div>
+
+<!-- QUIZ -->
+<div id="quiz-screen">
+  <div class="progress-bar">
+    <div class="progress-inner">
+      <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+      <div class="progress-text" id="progress-text">1 / 25</div>
+    </div>
+  </div>
+  <div style="padding-top:20px;">
+    <div id="question-area"></div>
+    <div class="nav-btns">
+      <button class="nav-btn secondary" id="prev-btn" onclick="navigate(-1)" disabled>이전</button>
+      <button class="nav-btn primary" id="next-btn" onclick="navigate(1)" disabled>다음</button>
+    </div>
+  </div>
+</div>
+
+<!-- RESULT -->
+<div id="result-screen">
+  <div class="result-card">
+    <div class="result-icon" id="result-icon"></div>
+    <div class="result-score" id="result-score"></div>
+    <div class="result-label" id="result-label"></div>
+    <div class="result-bar" id="result-bar"></div>
+    <div class="result-msg" id="result-msg"></div>
+    <div class="result-detail" id="result-detail"></div>
+    <div class="cat-scores" id="cat-scores"></div>
+    <button class="retry-btn" onclick="resetQuiz()">다시 풀기</button>
+    <br>
+    <button class="review-btn" onclick="toggleReview()">오답 노트 보기</button>
+  </div>
+  <div id="review-section"></div>
+</div>
+
+</div>
+
+<script>
+const CATEGORIES = [
+  {id:'automl',name:'DocAI AutoML',desc:'LXDonut 아키텍처, 데이터 포맷, 학습 파이프라인',icon:'&#129302;',tagClass:'tag-automl'},
+  {id:'automl-ob',name:'AutoML Onboarding',desc:'데이터 준비, 학습, 추론, 패키징 실습',icon:'&#128640;',tagClass:'tag-automl-ob'},
+  {id:'classifier',name:'Classifier',desc:'V1/V2 비교, 모델, 서빙, 데이터',icon:'&#128209;',tagClass:'tag-classifier'},
+  {id:'classifier-ob',name:'Classifier Onboarding',desc:'환경 설정, 학습, 평가, 패키징 실습',icon:'&#128230;',tagClass:'tag-classifier-ob'},
+  {id:'kit',name:'DocAI Kit',desc:'12개 모듈, 파이프라인, 데이터 포맷',icon:'&#128295;',tagClass:'tag-kit'},
+  {id:'kit-ob',name:'Kit Onboarding',desc:'설정, Docker, 추론, 검증 실습',icon:'&#9889;',tagClass:'tag-kit-ob'}
+];
+
+const QUESTIONS = [
+  // ===== DocAI AutoML (8) =====
+  {cat:'automl',q:'LXDonut 아키텍처의 4가지 핵심 구성요소로 올바른 것은?',
+   opts:['Swin + BART + LXMERT + mBART','ResNet + GPT + BERT + T5','EfficientNet + BART + Transformer + mBART','DINOv2 + KoGPT + LXMERT + BART'],
+   ans:0,exp:'LXDonut은 Visual Encoder(Swin Transformer), Textual Encoder(BART/KoBART), Cross-Modal Encoder(LXMERT), Textual Decoder(mBART)로 구성됩니다.'},
+
+  {cat:'automl',q:'DocAI AutoML의 데이터 포맷 변환 순서로 올바른 것은?',
+   opts:['UFK → UFO → UFP','UFP → UFO → UFK','UFO → UFP → UFK','UFO → UFK → UFP'],
+   ans:2,exp:'OCR 결과인 UFO를 UFP(groups+entities)로 변환하고, 이를 다시 UFK(flat key-value pairs)로 변환하여 학습에 사용합니다.'},
+
+  {cat:'automl',q:'3세대 DSP와 4세대 KVS의 가장 큰 입력 차이점은?',
+   opts:['3세대는 Image만, 4세대는 Text만 사용','3세대는 UFO(텍스트만), 4세대는 Image+UFO(멀티모달)','둘 다 Image+Text를 사용하지만 인코더가 다름','3세대는 PDF만, 4세대는 모든 포맷 지원'],
+   ans:1,exp:'3세대 DSP는 UFO 텍스트만으로 파싱이 가능하지만, 4세대 KVS는 이미지가 필수인 멀티모달 파싱을 수행합니다.'},
+
+  {cat:'automl',q:'LXDonut의 Visual Encoder(Swin Transformer)의 출력 차원(dim)은?',
+   opts:['512-dim','768-dim','1024-dim','2048-dim'],
+   ans:2,exp:'SwinEncoder는 입력 이미지 (B, 3, 1280, 960)를 받아 1024차원의 특징 벡터를 출력합니다.'},
+
+  {cat:'automl',q:'AutoML의 PostProcessing 파이프라인에 포함되지 않는 모듈은?',
+   opts:['Refiner','Grounder','MultiPageMerger','Tokenizer'],
+   ans:3,exp:'PostProcessing은 Refiner(값 정규화), Grounder(DB 매칭), MultiPageMerger(멀티페이지 병합)로 구성됩니다. Tokenizer는 포함되지 않습니다.'},
+
+  {cat:'automl',q:'AutoML 학습에 사용되는 주요 평가 메트릭 중 Key-Instance 기반 F1 Score를 측정하는 것은?',
+   opts:['NED','ParserMetric','KiEval','BLEU'],
+   ans:2,exp:'KiEval(Key-Instance Evaluation)은 엔티티별 F1과 그룹 정확도를 측정하는 주요 메트릭입니다.'},
+
+  {cat:'automl',q:'4세대 KVS에만 있고 3세대 DSP에는 없는 기능은?',
+   opts:['Hydra 설정 관리','LXMERT Cross-Modal Encoder','Temperature Scaling 캘리브레이션','Accelerate + DeepSpeed 학습'],
+   ans:2,exp:'Temperature Scaling 기반 신뢰도 캘리브레이션은 4세대 KVS에서 새로 추가된 기능입니다. Hydra, LXMERT, Accelerate+DeepSpeed는 두 세대 모두 사용합니다.'},
+
+  {cat:'automl',q:'LXDonut의 3가지 모델 변형(Variant) 중 자기지도 학습(Self-supervised) 기반 Visual Encoder를 사용하는 것은?',
+   opts:['LXDonut','LXDonutParallel','LXDonutDINOv2','LXDonutBERT'],
+   ans:2,exp:'LXDonutDINOv2는 Self-supervised ViT인 DINOv2를 Visual Encoder로 사용하며, Zero-shot 전이 학습이 강화되었습니다.'},
+
+  // ===== AutoML Onboarding (5) =====
+  {cat:'automl-ob',q:'AutoML Onboarding에서 3세대(DRSP)와 4세대(KVS)의 CLI 명령어 프리픽스는?',
+   opts:['drsp / kvs','docai3 / docai4','parser3 / parser4','automl3 / automl4'],
+   ans:1,exp:'3세대는 docai3, 4세대는 docai4 프리픽스로 CLI 명령어를 실행합니다.'},
+
+  {cat:'automl-ob',q:'데이터셋 경로의 올바른 형식은?',
+   opts:['/data/models/{model_name}/datasets/','/data/project/datasets/data_assets/{dataset_type}/{dataset_name}','/home/user/datasets/{project}/{type}/','/opt/docai/data/{dataset_name}/'],
+   ans:1,exp:'데이터셋은 /data/project/datasets/data_assets/{dataset_type}/{dataset_name} 경로에 위치합니다.'},
+
+  {cat:'automl-ob',q:'AutoML 학습의 setup.sh에서 설정하는 항목에 포함되지 않는 것은?',
+   opts:['데이터 경로 (data)','모델 설정 (model)','학습 설정 (train)','Docker 컨테이너 설정 (container)'],
+   ans:3,exp:'setup.sh는 data, model, train 세 가지 설정을 구성합니다. Docker 컨테이너 설정은 별도로 관리됩니다.'},
+
+  {cat:'automl-ob',q:'모델 평가 시 사용되는 NED 메트릭은 무엇의 약자인가?',
+   opts:['Neural Entity Detection','Normalized Edit Distance','Non-linear Encoding Dimension','Named Entity Disambiguation'],
+   ans:1,exp:'NED(Normalized Edit Distance)는 예측값과 정답 간의 편집 거리를 정규화한 메트릭입니다.'},
+
+  {cat:'automl-ob',q:'AutoML 파이프라인에서 문서타입별 규칙 기반 후처리를 담당하는 커스텀 모듈은?',
+   opts:['Grounder','Tokenizer','Refiner','Analyzer'],
+   ans:2,exp:'Refiner는 날짜/숫자/주소 등을 문서타입별 규칙에 따라 정규화하는 커스텀 후처리 모듈입니다.'},
+
+  // ===== Classifier (8) =====
+  {cat:'classifier',q:'Classifier V1과 V2의 Loss 함수 차이로 올바른 것은?',
+   opts:['V1: CrossEntropyLoss, V2: BCEWithLogitsLoss','V1: BCEWithLogitsLoss, V2: CrossEntropyLoss','둘 다 CrossEntropyLoss','둘 다 BCEWithLogitsLoss'],
+   ans:1,exp:'V1은 Multi-label 분류이므로 BCEWithLogitsLoss를, V2는 Auto-regressive 생성이므로 CrossEntropyLoss를 사용합니다.'},
+
+  {cat:'classifier',q:'V1 Classifier에서 클래스 간 충돌 예측을 해결하는 설정 파일은?',
+   opts:['threshold.yaml','mapping.yaml','priority.yaml','conflict.yaml'],
+   ans:2,exp:'priority.yaml에서 충돌하는 예측 간 우선순위 규칙을 정의하여 해결합니다.'},
+
+  {cat:'classifier',q:'V1 Classifier의 학습 프레임워크와 V2의 학습 프레임워크는?',
+   opts:['V1: Accelerate, V2: PyTorch Lightning','V1: PyTorch Lightning, V2: Accelerate + Hydra','둘 다 PyTorch Lightning','둘 다 Accelerate + Hydra'],
+   ans:1,exp:'V1은 PyTorch Lightning(ImageLightningModule), V2는 Accelerate + Hydra를 사용합니다.'},
+
+  {cat:'classifier',q:'V2 Classifier의 Prompt Format에서 사용되는 태그는?',
+   opts:['<classify>...</classify>','<s_question><document_classification></s_question>','<doc_type>...</doc_type>','<label>...</label>'],
+   ans:1,exp:'V2는 <s_question><document_classification></s_question><s_answer>... 형태의 XML 스타일 프롬프트를 사용합니다.'},
+
+  {cat:'classifier',q:'V1 Classifier의 KServe 서빙에서 사용하는 프로토콜은?',
+   opts:['gRPC Binary','REST JSON','CloudEvent Binary','WebSocket Stream'],
+   ans:2,exp:'V1은 CloudEvent Binary 프로토콜로 이미지 바이너리를 직접 전송합니다.'},
+
+  {cat:'classifier',q:'V1 Classifier에서 Hard example mining을 위해 top-k 어려운 샘플만 loss를 계산하는 기법은?',
+   opts:['FocalLoss','TopKMultiTagLoss','HardNegativeLoss','ContrastiveLoss'],
+   ans:1,exp:'TopKMultiTagLoss는 가장 어려운 top-k 샘플에 대해서만 loss를 계산하는 Hard example mining 기법입니다.'},
+
+  {cat:'classifier',q:'Classifier V1에서 지원하는 모델 아키텍처에 포함되지 않는 것은?',
+   opts:['ResNet50','EfficientNetV2','DINOv2','SigLIP (DocVisionModel)'],
+   ans:2,exp:'V1은 ResNet50/152, EfficientNetV2, Swin(KVSVision), SigLIP(DocVisionModel)을 지원합니다. DINOv2는 AutoML의 LXDonutDINOv2에서 사용됩니다.'},
+
+  {cat:'classifier',q:'다음 중 V2 Classifier에만 해당하는 특징은?',
+   opts:['DataMatrix 바코드 인식','Multi-label 분류','Temperature Scaling 캘리브레이션','Weighted Sampling'],
+   ans:2,exp:'Temperature Scaling 캘리브레이션은 V2에서 지원됩니다. DataMatrix, Multi-label, Weighted Sampling은 V1의 특징입니다.'},
+
+  // ===== Classifier Onboarding (4) =====
+  {cat:'classifier-ob',q:'Classifier Onboarding에서 데이터 준비 시 project-build.sh의 train/val/test 분할 비율은?',
+   opts:['70/15/15','80/10/10','90/5/5','60/20/20'],
+   ans:1,exp:'project-build.sh는 데이터를 80% train, 10% validation, 10% test로 분할합니다.'},
+
+  {cat:'classifier-ob',q:'Classifier 패키징 결과물에 포함되지 않는 파일은?',
+   opts:['category.yaml','model_cfg.yaml','optimizer_state.pt','model.ckpt'],
+   ans:2,exp:'패키지에는 category.yaml, model_cfg.yaml, model.ckpt, config/weight 아카이브가 포함됩니다. optimizer_state는 배포 패키지에 포함되지 않습니다.'},
+
+  {cat:'classifier-ob',q:'Classifier 학습 설정에서 pred_rot90 옵션의 역할은?',
+   opts:['이미지를 90도 단위로 회전하여 학습 데이터 증강','0/90/180/270도 회전 예측 기능 활성화','학습 중 90% 이상 정확도 도달 시 조기 종료','배치 크기를 90으로 설정'],
+   ans:1,exp:'pred_rot90 옵션은 문서의 회전 각도(0/90/180/270도)를 예측하는 기능을 활성화합니다.'},
+
+  {cat:'classifier-ob',q:'Classifier Onboarding에서 환경 구성 방법 2가지는?',
+   opts:['pip install / npm install','Docker(on-site) / Conda(server)','venv / poetry','apt-get / snap'],
+   ans:1,exp:'Case 1은 Docker 기반 on-site 환경, Case 2는 Conda 기반 서버 환경을 제공합니다.'},
+
+  // ===== DocAI Kit (8) =====
+  {cat:'kit',q:'DocAI Kit의 모든 모듈이 따르는 3-레이어 아키텍처 패턴은?',
+   opts:['input → process → output','request_XXX → run_XXX → main','load → transform → save','init → execute → cleanup'],
+   ans:1,exp:'모든 모듈은 request_XXX(단일 HTTP 요청) → run_XXX(디렉토리 순회) → main(CLI 처리) 3-레이어 구조를 따릅니다.'},
+
+  {cat:'kit',q:'DocAI Kit에서 민감정보 마스킹에 사용되는 라이브러리는?',
+   opts:['OpenCV rectangle','PIL ImageDraw','matplotlib patches','scikit-image'],
+   ans:1,exp:'masker.py는 PIL ImageDraw로 bounding box 좌표에 검은색 사각형을 덮어 민감정보를 마스킹합니다.'},
+
+  {cat:'kit',q:'DocAI Kit의 parser.py에서 DRSP와 KVS 엔진의 입력 차이는?',
+   opts:['DRSP는 Image만, KVS는 UFO만 사용','DRSP는 UFO만, KVS는 UFO+Image 사용','둘 다 동일한 입력 사용','DRSP는 PDF, KVS는 PNG만 지원'],
+   ans:1,exp:'DRSP는 UFO(텍스트)만으로 파싱하고, KVS는 UFO+Image를 함께 사용하여 멀티모달 파싱을 수행합니다.'},
+
+  {cat:'kit',q:'DocAI Kit에서 다른 모듈과 달리 multipart form-data 프로토콜을 사용하는 모듈은?',
+   opts:['ocr.py','parser.py','serving.py','classifier.py'],
+   ans:2,exp:'serving.py는 Serving Pack 통합 추론을 위해 multipart form-data로 이미지와 모델명을 전송합니다. classifier.py는 CloudEvent Binary를 사용합니다.'},
+
+  {cat:'kit',q:'DocAI Kit E2E 파이프라인에서 CSV/XLSX 최종 출력까지 수행하는 스크립트는?',
+   opts:['ocr2parser.sh','ocr2all.sh','ocr2res.sh','conversion2all.sh'],
+   ans:2,exp:'ocr2res.sh는 Conversion → OA → OCR → Parser → UFP2CSV까지 수행하여 최종 CSV/XLSX를 출력합니다.'},
+
+  {cat:'kit',q:'DocAI Kit의 oa.py(Orientation Alignment)에서 기울기 보정을 스킵하는 기준은?',
+   opts:['1도 미만','3도 미만','5도 미만','10도 미만'],
+   ans:2,exp:'oa.py는 Word box 각도 분석으로 기울기를 감지하되, 5도 미만의 기울기는 스킵합니다.'},
+
+  {cat:'kit',q:'DocAI Kit의 데이터 포맷 중 LLM으로 보정된 결과를 저장하는 파일명은?',
+   opts:['ufos.json','mufps.json','llm_mufps.json','refined_ufps.json'],
+   ans:2,exp:'LLM이 보정한 MUFP 결과는 llm_mufps.json 파일에 저장됩니다.'},
+
+  {cat:'kit',q:'DocAI Kit의 conversion.py에서 병렬 처리에 사용하는 모듈은?',
+   opts:['multiprocessing.Pool','threading.ThreadPoolExecutor','concurrent.futures.ProcessPoolExecutor','asyncio.gather'],
+   ans:2,exp:'conversion.py는 ProcessPoolExecutor로 PDF/TIFF를 PNG로 병렬 변환합니다.'},
+
+  // ===== Kit Onboarding (5) =====
+  {cat:'kit-ob',q:'DocAI Kit Onboarding에서 setup.sh의 PARSER_ENGINES 변수에 설정 가능한 엔진 값은?',
+   opts:['v3 / v4','cnn / transformer','drsp / kvs','base / parallel'],
+   ans:2,exp:'PARSER_ENGINES는 문서타입별로 drsp 또는 kvs 엔진을 JSON 형태로 매핑합니다.'},
+
+  {cat:'kit-ob',q:'DocAI Kit의 Online/Offline 모드 중 고객사 Serving Pack을 사용하는 것은?',
+   opts:['Online 모드','Offline 모드','둘 다','해당 없음'],
+   ans:1,exp:'Online은 업스테이지 GPU 서버, Offline은 고객사 Serving Pack을 사용합니다.'},
+
+  {cat:'kit-ob',q:'DocAI Kit Onboarding에서 Offline 추론에 사용하는 E2E 스크립트는?',
+   opts:['ocr2parser.sh','ocr2res.sh','serving2all.sh','conversion2all.sh'],
+   ans:2,exp:'Offline(고객사 Serving Pack) 환경에서는 serving2all.sh로 통합 추론을 수행합니다.'},
+
+  {cat:'kit-ob',q:'DocAI Kit Onboarding에서 Validator Web 점수 추출 시 사용하는 도구는?',
+   opts:['wget','curl','httpie','postman'],
+   ans:1,exp:'Validator Web의 score JSON을 추출할 때 curl 명령어를 사용합니다.'},
+
+  {cat:'kit-ob',q:'DocAI Kit Onboarding에서 XLSX 출력을 위해 추가 설치가 필요한 파이썬 패키지는?',
+   opts:['xlsxwriter','pandas','openpyxl','xlrd'],
+   ans:2,exp:'XLSX 출력을 위해 openpyxl 패키지를 추가로 설치해야 합니다.'}
+];
+
+let selectedCats = new Set();
+let quizQuestions = [];
+let currentIdx = 0;
+let userAnswers = {};
+
+// Init categories
+function initCategories(){
+  const grid = document.getElementById('cat-grid');
+  CATEGORIES.forEach(c=>{
+    const count = QUESTIONS.filter(q=>q.cat===c.id).length;
+    const div = document.createElement('div');
+    div.className = 'cat-card';
+    div.dataset.id = c.id;
+    div.innerHTML = `<div class="cat-icon">${c.icon}</div><div class="cat-name">${c.name}</div><div class="cat-desc">${c.desc}</div><div class="cat-count">${count}문제</div>`;
+    div.onclick = ()=> toggleCat(c.id, div);
+    grid.appendChild(div);
+  });
+}
+
+function toggleCat(id, el){
+  if(selectedCats.has(id)){selectedCats.delete(id);el.classList.remove('selected');}
+  else{selectedCats.add(id);el.classList.add('selected');}
+  document.getElementById('start-btn').disabled = selectedCats.size===0;
+}
+
+function toggleAll(){
+  const cards = document.querySelectorAll('.cat-card');
+  if(selectedCats.size === CATEGORIES.length){
+    selectedCats.clear();
+    cards.forEach(c=>c.classList.remove('selected'));
+  } else {
+    CATEGORIES.forEach(c=>selectedCats.add(c.id));
+    cards.forEach(c=>c.classList.add('selected'));
+  }
+  document.getElementById('start-btn').disabled = selectedCats.size===0;
+}
+
+function startQuiz(){
+  quizQuestions = QUESTIONS.filter(q=>selectedCats.has(q.cat));
+  // Shuffle
+  for(let i=quizQuestions.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[quizQuestions[i],quizQuestions[j]]=[quizQuestions[j],quizQuestions[i]];}
+  currentIdx = 0;
+  userAnswers = {};
+  document.getElementById('start-screen').style.display='none';
+  document.getElementById('quiz-screen').style.display='block';
+  renderQuestion();
+}
+
+function renderQuestion(){
+  const q = quizQuestions[currentIdx];
+  const cat = CATEGORIES.find(c=>c.id===q.cat);
+  const answered = userAnswers[currentIdx] !== undefined;
+  const total = quizQuestions.length;
+
+  document.getElementById('progress-fill').style.width = ((currentIdx+1)/total*100)+'%';
+  document.getElementById('progress-text').textContent = `${currentIdx+1} / ${total}`;
+
+  const isLast = currentIdx === total - 1;
+  const allAnswered = Object.keys(userAnswers).length === total;
+
+  let html = `<span class="category-tag ${cat.tagClass}">${cat.name}</span>`;
+  html += `<div class="question-card">`;
+  html += `<div class="q-number">Question ${currentIdx+1}</div>`;
+  html += `<div class="q-text">${q.q}</div>`;
+  html += `<div class="options">`;
+  const labels = ['A','B','C','D'];
+  q.opts.forEach((opt, i)=>{
+    let cls = 'option';
+    if(answered){
+      cls += ' disabled';
+      if(i === q.ans) cls += ' correct';
+      else if(i === userAnswers[currentIdx] && i !== q.ans) cls += ' wrong';
+    }
+    html += `<div class="${cls}" onclick="selectAnswer(${i})"><div class="option-marker">${labels[i]}</div><div class="option-text">${opt}</div></div>`;
+  });
+  html += `</div>`;
+
+  if(answered){
+    const isCorrect = userAnswers[currentIdx] === q.ans;
+    html += `<div class="explanation show ${isCorrect?'correct-exp':'wrong-exp'}">`;
+    html += `<strong>${isCorrect?'정답입니다!':'오답입니다.'}</strong>${q.exp}</div>`;
+  }
+  html += `</div>`;
+
+  document.getElementById('question-area').innerHTML = html;
+  document.getElementById('prev-btn').disabled = currentIdx === 0;
+
+  const nextBtn = document.getElementById('next-btn');
+  if(isLast && allAnswered){
+    nextBtn.textContent = '결과 보기';
+    nextBtn.disabled = false;
+  } else if(isLast){
+    nextBtn.textContent = '결과 보기';
+    nextBtn.disabled = !allAnswered;
+  } else {
+    nextBtn.textContent = '다음';
+    nextBtn.disabled = !answered;
+  }
+}
+
+function selectAnswer(idx){
+  if(userAnswers[currentIdx] !== undefined) return;
+  userAnswers[currentIdx] = idx;
+  renderQuestion();
+}
+
+function navigate(dir){
+  const total = quizQuestions.length;
+  if(dir === 1 && currentIdx === total - 1 && Object.keys(userAnswers).length === total){
+    showResult();
+    return;
+  }
+  currentIdx = Math.max(0, Math.min(total-1, currentIdx + dir));
+  renderQuestion();
+}
+
+function showResult(){
+  document.getElementById('quiz-screen').style.display='none';
+  document.getElementById('result-screen').style.display='block';
+
+  let correct = 0;
+  const catCorrect = {};
+  const catTotal = {};
+  quizQuestions.forEach((q,i)=>{
+    if(!catTotal[q.cat]) catTotal[q.cat]=0;
+    if(!catCorrect[q.cat]) catCorrect[q.cat]=0;
+    catTotal[q.cat]++;
+    if(userAnswers[i]===q.ans){correct++;catCorrect[q.cat]++;}
+  });
+
+  const total = quizQuestions.length;
+  const pct = Math.round(correct/total*100);
+
+  let icon, msg;
+  if(pct>=90){icon='&#127942;';msg='완벽에 가까운 실력!';}
+  else if(pct>=70){icon='&#128170;';msg='잘 이해하고 있어요!';}
+  else if(pct>=50){icon='&#128064;';msg='조금 더 복습이 필요해요';}
+  else{icon='&#128218;';msg='문서를 다시 한번 읽어보세요';}
+
+  document.getElementById('result-icon').innerHTML = icon;
+  document.getElementById('result-score').textContent = pct + '%';
+  document.getElementById('result-label').textContent = `${total}문제 중 ${correct}문제 정답`;
+  document.getElementById('result-msg').textContent = msg;
+  document.getElementById('result-detail').textContent = `총 ${total}문제 | 정답 ${correct} | 오답 ${total-correct}`;
+
+  const bar = document.getElementById('result-bar');
+  bar.innerHTML = `<div class="result-bar-seg result-bar-correct" style="width:${correct/total*100}%"></div><div class="result-bar-seg result-bar-wrong" style="width:${(total-correct)/total*100}%"></div>`;
+
+  const scoresDiv = document.getElementById('cat-scores');
+  scoresDiv.innerHTML = '';
+  CATEGORIES.filter(c=>catTotal[c.id]).forEach(c=>{
+    scoresDiv.innerHTML += `<div class="cat-score-item"><div class="cat-score-name">${c.name}</div><div class="cat-score-val">${catCorrect[c.id]||0} / ${catTotal[c.id]}</div></div>`;
+  });
+
+  // Build review
+  const reviewDiv = document.getElementById('review-section');
+  let rhtml = '';
+  quizQuestions.forEach((q,i)=>{
+    const isCorrect = userAnswers[i]===q.ans;
+    const cat = CATEGORIES.find(c=>c.id===q.cat);
+    const labels = ['A','B','C','D'];
+    rhtml += `<div class="review-item ${isCorrect?'was-correct':'was-wrong'}">`;
+    rhtml += `<div class="review-q"><span class="category-tag ${cat.tagClass}" style="margin-right:8px;font-size:10px;">${cat.name}</span>Q${i+1}. ${q.q}</div>`;
+    rhtml += `<div class="review-answer">`;
+    if(!isCorrect) rhtml += `<span class="your-ans">내 답: ${labels[userAnswers[i]]}. ${q.opts[userAnswers[i]]}</span><br>`;
+    rhtml += `<span class="correct-ans">정답: ${labels[q.ans]}. ${q.opts[q.ans]}</span><br>`;
+    rhtml += `${q.exp}</div></div>`;
+  });
+  reviewDiv.innerHTML = rhtml;
+}
+
+function toggleReview(){
+  const sec = document.getElementById('review-section');
+  sec.style.display = sec.style.display==='none'?'block':'none';
+}
+
+function resetQuiz(){
+  document.getElementById('result-screen').style.display='none';
+  document.getElementById('review-section').style.display='none';
+  document.getElementById('start-screen').style.display='block';
+  selectedCats.clear();
+  document.querySelectorAll('.cat-card').forEach(c=>c.classList.remove('selected'));
+  document.getElementById('start-btn').disabled=true;
+}
+
+initCategories();
+</script>
+</body>
+</html>
