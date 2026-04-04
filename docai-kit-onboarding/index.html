@@ -305,7 +305,24 @@
   -e OP_MODEL_DIR=/model \
   ocr:2.5.0-kserve</div>
 
-        <h3 style="color:#059669;border-left-color:#10b981;">KVS Parser 컨테이너</h3>
+        <h3 style="color:#059669;border-left-color:#10b981;">DRSP Parser 컨테이너 (3세대)</h3>
+        <div class="cmd"><span class="cm"># 이미지 로드</span>
+<span class="fn">sudo docker load</span> -i /data/project/enterprise/docai/docker/images/docai3/<span class="opt">{nlp_engine_image}</span>.tar.gz
+
+<span class="cm"># 실행</span>
+<span class="fn">sudo docker run</span> --rm -d \
+  --gpus all --ipc=host \
+  -v <span class="opt">{package_path}</span>/<span class="opt">{document_type}</span>:/pack \
+  -e OP_MODEL_DIR=/pack/<span class="opt">{model_dir}</span> \
+  -e OP_CONFIG_DIR=/pack/<span class="opt">{config_dir}</span> \
+  -p <span class="opt">30000</span>:8080 \
+  nlp-engine:<span class="opt">{tag}</span></div>
+        <div class="callout info" style="margin-top:8px;">
+            <div class="callout-icon">&#128204;</div>
+            <div><strong>DRSP vs KVS 차이:</strong> DRSP는 <code>OP_CONFIG_DIR</code> 설정이 필요하며, UFO(텍스트)만으로 파싱합니다. 이미지 경로: <code>/data/project/enterprise/docai/docker/images/docai3/</code></div>
+        </div>
+
+        <h3 style="color:#059669;border-left-color:#10b981;">KVS Parser 컨테이너 (4세대)</h3>
         <div class="cmd"><span class="cm"># 이미지 로드</span>
 <span class="fn">sudo docker load</span> -i /data/project/enterprise/docai/docker/images/docai4/{kvs_image}.tar.gz
 
