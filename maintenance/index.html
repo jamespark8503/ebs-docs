@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Model Maintenance — Standard Process</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&family=Noto+Sans+KR:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+        :root{--purple-900:#0F0525;--purple-700:#2D1065;--purple-600:#5020C6;--purple-500:#6528F7;--purple-400:#8B5CF6;--purple-300:#B794F6;--purple-200:#D4BBFC;--purple-100:#EDE5FF;--purple-50:#F3EEFE;--blue-600:#2563eb;--blue-100:#dbeafe;--blue-50:#eff6ff;--green-600:#059669;--green-100:#d1fae5;--green-50:#f0fdf4;--orange-600:#ea580c;--orange-100:#fed7aa;--orange-50:#fff7ed;--rose-600:#e11d48;--rose-100:#fecdd3;--rose-50:#fff1f2;--amber-600:#d97706;--amber-50:#fefce8;--slate-900:#0f172a;--slate-800:#1e293b;--slate-700:#334155;--slate-600:#475569;--slate-500:#64748b;--slate-400:#94a3b8;--slate-300:#cbd5e1;--slate-200:#e2e8f0;--slate-100:#f1f5f9;--slate-50:#f8fafc;--radius:16px;--radius-sm:10px;}
+        *{margin:0;padding:0;box-sizing:border-box;}
+        body{font-family:'Noto Sans KR','Montserrat',-apple-system,sans-serif;background:var(--slate-50);color:var(--slate-800);line-height:1.7;-webkit-font-smoothing:antialiased;}
+        .home-btn{position:fixed;top:20px;left:20px;z-index:999;display:inline-flex;align-items:center;gap:6px;padding:8px 18px;background:rgba(255,255,255,0.12);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.2);border-radius:100px;color:#D4BBFC;text-decoration:none;font-size:13px;font-weight:600;transition:all .2s;}
+        .home-btn:hover{background:rgba(255,255,255,0.25);color:#fff;}
+        .hero{position:relative;background:linear-gradient(135deg,var(--purple-900) 0%,#1A0A3E 40%,var(--purple-500) 100%);padding:80px 0 60px;overflow:hidden;}
+        .hero::before{content:'';position:absolute;top:-50%;right:-20%;width:600px;height:600px;background:radial-gradient(circle,rgba(101,40,247,0.2) 0%,transparent 70%);border-radius:50%;}
+        .hero-content{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:0 40px;}
+        .hero h1{font-size:44px;font-weight:800;color:#fff;letter-spacing:-1.5px;line-height:1.15;margin-bottom:16px;}
+        .hero h1 span{color:var(--purple-300);}
+        .hero p{font-size:17px;color:var(--purple-300);max-width:640px;line-height:1.7;}
+        .nav-bar{position:sticky;top:0;z-index:100;background:rgba(255,255,255,0.85);backdrop-filter:blur(20px) saturate(180%);border-bottom:1px solid var(--slate-200);}
+        .nav-inner{max-width:1100px;margin:0 auto;padding:0 40px;display:flex;gap:4px;overflow-x:auto;}
+        .nav-inner::-webkit-scrollbar{display:none;}
+        .nav-link{display:flex;align-items:center;gap:6px;padding:14px 16px;font-size:13px;font-weight:600;color:var(--slate-500);text-decoration:none;white-space:nowrap;border-bottom:2px solid transparent;transition:all .2s;}
+        .nav-link:hover{color:var(--purple-600);border-bottom-color:var(--purple-300);}
+        .container{max-width:1100px;margin:0 auto;padding:48px 40px 100px;}
+        .section{margin-bottom:48px;}
+        .section-header{display:flex;align-items:center;gap:14px;margin-bottom:24px;}
+        .section-icon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#fff;font-size:18px;}
+        .section-icon.purple{background:linear-gradient(135deg,var(--purple-500),var(--purple-600));box-shadow:0 4px 12px rgba(101,40,247,.25);}
+        .section-icon.blue{background:linear-gradient(135deg,#3b82f6,var(--blue-600));box-shadow:0 4px 12px rgba(59,130,246,.25);}
+        .section-icon.green{background:linear-gradient(135deg,#10b981,var(--green-600));box-shadow:0 4px 12px rgba(16,185,129,.25);}
+        .section-icon.orange{background:linear-gradient(135deg,#f97316,var(--orange-600));box-shadow:0 4px 12px rgba(249,115,22,.25);}
+        .section-icon.rose{background:linear-gradient(135deg,#f43f5e,var(--rose-600));box-shadow:0 4px 12px rgba(244,63,94,.25);}
+        .section-icon.amber{background:linear-gradient(135deg,#f59e0b,var(--amber-600));box-shadow:0 4px 12px rgba(245,158,11,.25);}
+        .section-title{font-size:24px;font-weight:800;color:var(--slate-900);letter-spacing:-.5px;}
+        .section-subtitle{font-size:13px;color:var(--slate-500);margin-top:2px;}
+        h3{font-size:15px;font-weight:700;color:var(--purple-700);margin:20px 0 10px;padding-left:12px;border-left:3px solid var(--purple-400);}
+        table{width:100%;border-collapse:separate;border-spacing:0;font-size:12.5px;margin-bottom:16px;border-radius:var(--radius-sm);overflow:hidden;border:1px solid var(--slate-200);}
+        thead th{background:var(--purple-50);color:var(--purple-800);font-weight:700;font-size:10.5px;text-transform:uppercase;letter-spacing:.7px;padding:10px 14px;text-align:left;border-bottom:2px solid var(--purple-100);}
+        tbody td{padding:9px 14px;border-bottom:1px solid var(--slate-100);color:var(--slate-700);vertical-align:top;}
+        tbody tr:last-child td{border-bottom:none;}
+        tbody tr:hover{background:var(--purple-50);}
+        code{font-family:'JetBrains Mono',monospace;font-size:11px;background:var(--slate-100);padding:2px 6px;border-radius:4px;color:var(--purple-700);border:1px solid var(--slate-200);}
+        .callout{display:flex;gap:12px;padding:14px 18px;border-radius:var(--radius-sm);margin-bottom:14px;font-size:12.5px;line-height:1.6;}
+        .callout-icon{font-size:16px;flex-shrink:0;margin-top:1px;}
+        .callout.info{background:var(--purple-50);border:1px solid var(--purple-100);color:var(--purple-700);}
+        .callout.warn{background:#fef3c7;border:1px solid #fde68a;color:#92400e;}
+        .callout.tip{background:var(--green-50);border:1px solid var(--green-100);color:#065f46;}
+        .callout.danger{background:var(--rose-50);border:1px solid var(--rose-100);color:#9f1239;}
+        .step-card{background:#fff;border-radius:var(--radius);border:1px solid var(--slate-200);margin-bottom:20px;overflow:hidden;}
+        .step-header{display:flex;align-items:center;gap:12px;padding:16px 24px;background:var(--slate-50);border-bottom:1px solid var(--slate-200);}
+        .step-num{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;color:#fff;flex-shrink:0;}
+        .step-title{font-size:17px;font-weight:800;color:var(--slate-900);}
+        .step-desc{font-size:12px;color:var(--slate-500);margin-left:auto;}
+        .step-body{padding:20px 24px;}
+        .checklist{list-style:none;padding:0;margin:8px 0;}
+        .checklist li{display:flex;align-items:flex-start;gap:10px;padding:8px 0;font-size:13px;color:var(--slate-700);border-bottom:1px solid var(--slate-100);}
+        .checklist li:last-child{border-bottom:none;}
+        .checklist li::before{content:'';width:18px;height:18px;border:2px solid var(--slate-300);border-radius:4px;flex-shrink:0;margin-top:2px;}
+        .retro{background:var(--amber-50);border:1px solid #fde68a;border-radius:var(--radius-sm);padding:16px 20px;margin:12px 0;font-size:12.5px;line-height:1.7;color:#92400e;}
+        .retro-title{font-weight:700;font-size:13px;margin-bottom:6px;}
+        .footer{text-align:center;padding:32px 0;font-size:12px;color:var(--slate-400);border-top:1px solid var(--slate-200);margin-top:60px;}
+    </style>
+</head>
+<body>
+
+<a href="../" class="home-btn">&#8592; Portal</a>
+
+<div class="hero">
+    <div class="hero-content">
+        <h1>Model <span>Maintenance</span></h1>
+        <p>모델 정기점검(유지보수) 표준 프로세스. 티켓 생성부터 출장, 채점, 리포트까지 전 과정을 체크리스트로 관리합니다.</p>
+    </div>
+</div>
+
+<div class="nav-bar">
+    <div class="nav-inner">
+        <a href="#ticket" class="nav-link">1. 티켓</a>
+        <a href="#assign" class="nav-link">2. 담당자</a>
+        <a href="#customer" class="nav-link">3. 고객사</a>
+        <a href="#testset" class="nav-link">4. 테스트셋</a>
+        <a href="#prep-aimp" class="nav-link">5. 준비(AIMP)</a>
+        <a href="#prep-devops" class="nav-link">6. 준비(DevOps)</a>
+        <a href="#onsite" class="nav-link">7. 출장 당일</a>
+        <a href="#followup" class="nav-link">8. 후속 조치</a>
+        <a href="#retro" class="nav-link">회고</a>
+    </div>
+</div>
+
+<div class="container">
+
+    <!-- STEP 1 -->
+    <div id="ticket" class="step-card">
+        <div class="step-header">
+            <div class="step-num" style="background:linear-gradient(135deg,var(--purple-500),var(--purple-600));">1</div>
+            <div class="step-title">AISP / DevOps &mdash; 티켓 및 일정 관리</div>
+        </div>
+        <div class="step-body">
+            <ul class="checklist">
+                <li>정기점검 Jira 티켓 생성 &rarr; 현호(@hyunho) 멘션</li>
+                <li>출장 기간 &middot; 범위 &middot; 필요 리소스(DevOps 동행 여부 포함) 기재</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- STEP 2 -->
+    <div id="assign" class="step-card">
+        <div class="step-header">
+            <div class="step-num" style="background:linear-gradient(135deg,#3b82f6,var(--blue-600));">2</div>
+            <div class="step-title">AIMP &mdash; 담당자 할당</div>
+        </div>
+        <div class="step-body">
+            <ul class="checklist">
+                <li>기존 프로젝트 담당자 우선 Assignee 설정</li>
+                <li>기존 담당 불가 시 새 담당자 지정 &amp; 연락처 공유</li>
+                <li>미팅 arrange &mdash; PM &amp; Dev &amp; Model 미팅 및 준비 요청사항 전달</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- STEP 3 -->
+    <div id="customer" class="step-card">
+        <div class="step-header">
+            <div class="step-num" style="background:linear-gradient(135deg,#10b981,var(--green-600));">3</div>
+            <div class="step-title">AIEM &mdash; 고객사 커뮤니케이션</div>
+        </div>
+        <div class="step-body">
+            <h3 style="color:#059669;border-left-color:#10b981;">일정</h3>
+            <ul class="checklist">
+                <li>DevOps 팀 동반 출장 여부 조율 &rarr; 방문 일정 확정</li>
+            </ul>
+
+            <h3 style="color:#059669;border-left-color:#10b981;">개발 환경</h3>
+            <ul class="checklist">
+                <li><strong>모델 배포 현황</strong> 확인 &rarr; 미배포 모델은 DevOps에 업로드 요청</li>
+                <li>접근 가능한 PC (현업 자리를 눈치보지 않도록 별도 자리 마련 요청)</li>
+                <li>개발계 접속 권한 &middot; 방법(담당자 PC vs 원격) 확정</li>
+                <li>테스트 &middot; 후처리용 <strong>필수 포트</strong> 목록 전달 &rarr; 방화벽 오픈 요청</li>
+            </ul>
+
+            <div class="callout warn">
+                <div class="callout-icon">&#9888;&#65039;</div>
+                <div>프로젝트 종료 후 정기점검 시 <strong>인프라 변경 신청</strong>(고객사 내부 결재)이 필요할 수 있습니다. PM을 통해 사전 확인을 진행하세요.</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- STEP 4 -->
+    <div id="testset" class="step-card">
+        <div class="step-header">
+            <div class="step-num" style="background:linear-gradient(135deg,#f97316,var(--orange-600));">4</div>
+            <div class="step-title">테스트셋 설계 &amp; 채점 정책</div>
+        </div>
+        <div class="step-body">
+            <table>
+                <thead>
+                    <tr><th>단계</th><th>고객사 요청</th><th>AIMP 작업</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>1. 초기 요청</td><td>모델당 <strong>30장</strong> 이미지 (일반 분포)</td><td>&mdash;</td></tr>
+                    <tr><td>2. 사전 스크리닝</td><td>&mdash;</td><td>Edge-case 검토 후 문제 이미지 <strong>반려</strong></td></tr>
+                    <tr><td>3. 1차 테스트</td><td>고객사에서 채점</td><td>KPI 채점</td></tr>
+                    <tr><td>4. KPI 미달 시</td><td>&mdash;</td><td>추가 채점 (최대 50장까지)</td></tr>
+                    <tr><td>5. 채점 주체</td><td>기본: <strong>고객사 직접</strong> / 예외: 모델러</td><td>사전 합의 필요</td></tr>
+                </tbody>
+            </table>
+            <div class="callout tip">
+                <div class="callout-icon">&#128161;</div>
+                <div><strong>채점 방식:</strong> 공정성을 위해 고객사 직접 채점을 기본으로 제안합니다. 고객사가 거절할 경우에만 모델러가 직접 진행합니다.</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- STEP 5 -->
+    <div id="prep-aimp" class="step-card">
+        <div class="step-header">
+            <div class="step-num" style="background:linear-gradient(135deg,var(--purple-500),var(--purple-600));">5</div>
+            <div class="step-title">출장 전 준비 &mdash; AIMP</div>
+        </div>
+        <div class="step-body">
+            <h3 style="color:var(--purple-700);">기술 패키지</h3>
+            <ul class="checklist">
+                <li><strong>DocAI Kit</strong> 반입 패키지 빌드 &middot; 사내 테스트</li>
+                <li>모델별 <strong>후처리 로직</strong> 문서화 (내부 &middot; 게이트웨이)</li>
+            </ul>
+
+            <h3 style="color:var(--purple-700);">(반출 가능 시) 데이터 마스킹</h3>
+            <ul class="checklist">
+                <li>이미지 마스커 모델 반입 신청</li>
+                <li>JSON 마스커 코드 반입 신청</li>
+            </ul>
+
+            <h3 style="color:var(--purple-700);">문서 &middot; 교육</h3>
+            <ul class="checklist">
+                <li><strong>KPI 정의 &amp; 산식</strong> 기록 (프로젝트 당시 Context 포함)</li>
+                <li>고객사용 <strong>Validator 사용법 영상</strong> 제작 &rarr; PM 통해 배포</li>
+            </ul>
+
+            <h3 style="color:var(--purple-700);">현장 운영</h3>
+            <ul class="checklist">
+                <li>작업 PC 위치 vs 현업 자리 확인 &rarr; 이동 지원(Dev/PM) 요청</li>
+                <li>점검 대상 모델 및 도커 이미지가 떠 있는 서버에 접근 가능한 계정 사용 여부 체크</li>
+                <li>해당 계정 docker 및 podman 사용 가능 여부 체크</li>
+                <li>(Validator 사용을 위한) 로컬 브라우저에서 연결 가능한 포트 신청</li>
+            </ul>
+
+            <div class="callout danger">
+                <div class="callout-icon">&#128680;</div>
+                <div><strong>KPI Context 파악 필수!</strong> EBS와 협상한 것은 고객사 PM, 채점하는 것은 현업 &rarr; 둘 간의 이해도 간극이 있습니다. 프로젝트 수행 당시 Context를 반드시 사전에 기록해두세요.</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- STEP 6 -->
+    <div id="prep-devops" class="step-card">
+        <div class="step-header">
+            <div class="step-num" style="background:linear-gradient(135deg,#3b82f6,var(--blue-600));">6</div>
+            <div class="step-title">출장 전 준비 &mdash; DevOps</div>
+        </div>
+        <div class="step-body">
+            <ul class="checklist">
+                <li>서빙팩 <strong>내부 포트</strong>(예 8081) 확인</li>
+                <li>호출용 IP/도메인(<code>host.docker.internal</code> 등) 점검</li>
+                <li>엔드포인트 규칙(예 <code>/mbr</code>) 확정 &amp; 문서화</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- STEP 7 -->
+    <div id="onsite" class="step-card">
+        <div class="step-header">
+            <div class="step-num" style="background:linear-gradient(135deg,#10b981,var(--green-600));">7</div>
+            <div class="step-title">출장 당일 프로세스 &mdash; AIMP + DevOps</div>
+        </div>
+        <div class="step-body">
+            <div class="callout danger">
+                <div class="callout-icon">&#128680;</div>
+                <div><strong>무조건 PM 대동!</strong> 현업의 기분에 따라 채점 결과가 달라질 수 있습니다.</div>
+            </div>
+
+            <table>
+                <thead><tr><th>순서</th><th>작업</th><th>상세</th></tr></thead>
+                <tbody>
+                    <tr><td>1</td><td>환경 세팅 &middot; 패키지 설치</td><td>DocAI Kit, Validator 등</td></tr>
+                    <tr><td>2</td><td><strong>Validator</strong>로 1차 10장 추론 &middot; 채점</td><td>고객사 대상 현장/영상 교육 &amp; 주의사항(후처리 범위 &middot; KPI) 재확인</td></tr>
+                    <tr><td>3</td><td>KPI 달성 여부 판단</td><td>필요 시 10장씩 추가 테스트 (최대 50장)</td></tr>
+                    <tr><td>4</td><td>데이터 Export</td><td>가능: 결과 파일 반출 후 사외 리포트 / 불가: 전부 수기 기록</td></tr>
+                </tbody>
+            </table>
+
+            <h3 style="color:#059669;border-left-color:#10b981;">KPI 미달 시 시나리오</h3>
+            <table>
+                <thead><tr><th>시나리오</th><th>대응</th></tr></thead>
+                <tbody>
+                    <tr><td>전수 조사</td><td>모델러가 채점 결과 전수 검사 &rarr; 오채점 설명 &amp; 수정 &rarr; KPI 재측정</td></tr>
+                    <tr><td>추가 테스트</td><td>10장씩 추가 채점 (50장까지). 확률 모수로 프로세스 설득</td></tr>
+                    <tr><td>추가 테스트 실패 (2차 사업 O)</td><td>2차 사업 모델에 포함하여 협상</td></tr>
+                    <tr><td>추가 테스트 실패 (2차 사업 X)</td><td>모델 재개발</td></tr>
+                    <tr><td>아슬아슬한 차이 (0.1~1점)</td><td>인터페이스 변경 없이 베스트 이미지 추가로 점수 보완 제안</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- STEP 8 -->
+    <div id="followup" class="step-card">
+        <div class="step-header">
+            <div class="step-num" style="background:linear-gradient(135deg,#f97316,var(--orange-600));">8</div>
+            <div class="step-title">테스트 후 후속 조치</div>
+        </div>
+        <div class="step-body">
+            <h3 style="color:var(--orange-600);border-left-color:#f97316;">로그 반출</h3>
+            <table>
+                <thead><tr><th>구분</th><th>처리</th></tr></thead>
+                <tbody>
+                    <tr><td>개인정보 無</td><td>Dev/PM 통해 직접 반출</td></tr>
+                    <tr><td>개인정보 有</td><td>이미지 마스킹(마스커 모델) + JSON 마스킹(코드) 후 반출</td></tr>
+                </tbody>
+            </table>
+
+            <h3 style="color:var(--orange-600);border-left-color:#f97316;">결과 리포트</h3>
+            <ul class="checklist">
+                <li>기존 모델 리포트 템플릿 활용</li>
+                <li>DevOps 쪽 리포트와 톤앤매너 통일</li>
+            </ul>
+
+            <h3 style="color:var(--orange-600);border-left-color:#f97316;">Jira &amp; 캘린더</h3>
+            <ul class="checklist">
+                <li>결과 &middot; 리포트 첨부 &rarr; 티켓 <strong>Done</strong></li>
+                <li>사후 회고 사항을 Jira에 등록 or AIMP Document에 업데이트</li>
+                <li>다음 분기/반기 정기점검 일정 등록</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- 회고 -->
+    <div id="retro" class="section">
+        <div class="section-header">
+            <div class="section-icon amber">
+                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"/></svg>
+            </div>
+            <div>
+                <div class="section-title">Lessons Learned</div>
+                <div class="section-subtitle">실전 회고에서 뽑아낸 핵심 교훈</div>
+            </div>
+        </div>
+
+        <div class="retro">
+            <div class="retro-title">KB손해보험 회고</div>
+            <ul style="margin:8px 0 0 16px;">
+                <li>방문 전 정기점검 가능 여부 확인이 최우선 (PM 통해 진행)</li>
+                <li>vufp가 재부팅 시 삭제되어 매번 재설치 필요</li>
+                <li>현업 부서가 여러 개일 경우 부서별 대응 방안 사전 협의</li>
+                <li>채점에 일주일 이상 소요될 수 있음 (11종 문서)</li>
+            </ul>
+        </div>
+
+        <div class="retro">
+            <div class="retro-title">삼성증권 회고</div>
+            <ul style="margin:8px 0 0 16px;">
+                <li>전체 프로세스 2~3주 소요 (validator 설치 1~2일 &rarr; 고객사 채점 2~3일 &rarr; 결과 확인/리포트 1~2일)</li>
+                <li>Validator 띄운 PC 방화벽 포트 미오픈 &rarr; 현업 화면에서 확인 불가 &rarr; 물리적 이동 필요</li>
+                <li>50장 채점은 고객사 담당자에게도 부담 &rarr; KPI 대상 항목만 채점하도록 <code>ontology-short</code> 확인 필수</li>
+                <li>개인정보 포함 이미지 반출 불가 &rarr; 현장에서 직접 확인해야 하는 번거로움</li>
+                <li>진행 중인 프로젝트와 일정 겹칠 시 PM-Dev-Model 사전 협의 필요</li>
+            </ul>
+        </div>
+
+        <div class="retro">
+            <div class="retro-title">전체 회고 &mdash; 핵심 교훈</div>
+            <ul style="margin:8px 0 0 16px;">
+                <li><strong>유지보수도 프로젝트 첫 세팅이 중요</strong> &mdash; 당시 Context 기록이 없으면 KPI 기준부터 혼란</li>
+                <li>개인기로 풀어낸 사이트(KB, HMM, AIA, 현대해상 등) &rarr; 당시 담당 Model/PM/Dev 없으면 유지보수 매우 어려움</li>
+                <li>고객사 프로젝트 담당자 퇴사/이직 시 &rarr; 새로운 기준으로 채점 진행 가능 (히스토리 정리 필수)</li>
+                <li>Validator export 기능 부재 &rarr; 채점 결과 JSON 내려받기 기능 추가 개발 필요</li>
+                <li>채점 기록 유실 사례 (새로고침, 새 파일 추가 등) &rarr; Validator에 자동 저장 기능 필요</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- 고객사 소통 체크리스트 -->
+    <div class="section">
+        <div class="section-header">
+            <div class="section-icon blue">
+                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"/></svg>
+            </div>
+            <div>
+                <div class="section-title">PM 요청 템플릿</div>
+                <div class="section-subtitle">정기점검 관련 고객사 소통 시 사용</div>
+            </div>
+        </div>
+
+        <div style="background:var(--slate-900);border-radius:var(--radius-sm);padding:20px 24px;font-family:'JetBrains Mono',monospace;font-size:12px;line-height:1.8;color:var(--slate-300);white-space:pre-wrap;margin-bottom:16px;">정기점검을 위해 방문 가능한 일정과 점검 시 모델을 테스트할 테스트셋 준비를 요청드리고자 합니다.
+
+- 테스트셋 채점은 vufp로 진행하고자 하여, 사전 반입이 필요합니다.
+  일정 확인해주시면 감사하겠습니다.
+- 채점은 공정성을 위해 고객사 담당자분들께서 직접 하시는 방향으로
+  소통해주시면 감사하겠습니다.
+- 채점 후 vufp 결과 반출 가능 여부도 확인 부탁드립니다.
+
+<span style="color:#86efac;">[테스트셋 가이드]</span>
+- 프로젝트 종료 시 협의된 데이터 분포와 유사한 일반적인 데이터로 준비
+  (틀린 케이스만 모은 것 X)
+- 수기 채점을 고려하여 모델당 최대 50장 준비 요청
+  (edge case 검토 후 30~50장으로 픽스 예정)</div>
+
+        <table>
+            <thead><tr><th>확인 항목</th><th>내용</th><th>비고</th></tr></thead>
+            <tbody>
+                <tr><td>방문 일정</td><td></td><td>DevOps 동행 여부 포함</td></tr>
+                <tr><td>테스트셋 준비 요청</td><td></td><td>모델당 30~50장</td></tr>
+                <tr><td>테스트셋 확인 여부</td><td></td><td>Edge case 반려 포함</td></tr>
+                <tr><td>채점 방식</td><td></td><td>고객사 직접 vs 모델러</td></tr>
+                <tr><td>개발/운영망 접근</td><td></td><td>계정, 포트, PC</td></tr>
+                <tr><td>결과 반출 가능 여부</td><td></td><td>개인정보 포함 시 마스킹</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+<div class="footer">
+    <strong>Upstage</strong> &middot; EBS AI ModelOps &middot; Model Maintenance Process
+</div>
+
+</body>
+</html>
