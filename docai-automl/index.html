@@ -500,12 +500,379 @@ flowchart LR
     <table>
         <thead><tr><th>Format</th><th>Full Name</th><th>설명</th><th>핵심 구조</th></tr></thead>
         <tbody>
-            <tr><td><code>UFO</code></td><td>Unified Format OCR</td><td>OCR 결과. word boxes + transcription + relations</td><td><code>images.{name}.words, relations</code></td></tr>
-            <tr><td><code>UFP</code></td><td>Unified Format Parse</td><td>파싱 결과. groups + entities + boundingBoxes</td><td><code>documents.{name}.groups[].entities[]</code></td></tr>
-            <tr><td><code>UFK</code></td><td>Unified Format KVs</td><td>학습용 flat key-value. group_id 포함</td><td><code>documents.{name}[].{key, value, group_id}</code></td></tr>
+            <tr><td><code>UFO</code></td><td>Upstage Format for OCR</td><td>OCR 결과. word boxes + transcription + relations</td><td><code>images.{name}.words, relations</code></td></tr>
+            <tr><td><code>UFP</code></td><td>Upstage Format for Parser</td><td>파싱 결과. groups + entities + boundingBoxes</td><td><code>documents.{name}.groups[].entities[]</code></td></tr>
+            <tr><td><code>UFK</code></td><td>Upstage Format for KVS</td><td>학습용 flat key-value. group_id 포함</td><td><code>documents.{name}[].{key, value, group_id}</code></td></tr>
             <tr><td><code>MUFP</code></td><td>Market UFP</td><td>시장용 UFP 변환 포맷</td><td><code>documents.{name}.groups[].entities[]</code></td></tr>
         </tbody>
     </table>
+
+    <h4 style="margin-top:24px;">UFO (Upstage Format for OCR)</h4>
+    <ul>
+        <li>Upstage의 OCR 결과를 통합하는 데이터 형식. Detector, Recognizer, Parser 등 서로 다른 모듈에서 모두 사용 가능</li>
+        <li>Json 파일 안에서 Graph Structure 기반으로 element 탐색이 용이</li>
+        <li>핵심 구조: <code>images.{name}.paragraphs</code> (문단), <code>words</code> (단어), <code>chars</code> (글자), <code>relations</code> (관계 정보)</li>
+        <li>공통 속성: <code>transcription</code> (전사), <code>points</code> (좌표, 좌상단부터 시계방향), <code>orientation</code> (horizontal/vertical/irregular), <code>language</code>, <code>confidence</code></li>
+        <li>한 폴더 내 여러 이미지에 대해 하나의 gt 파일 생성 (train/dev/test 각각 하나의 UFO 파일)</li>
+    </ul>
+
+    <h4 style="margin-top:24px;">UFP (Upstage Format for Parser)</h4>
+    <ul>
+        <li>Parser 결과를 표현하는 데이터 형식. groups + entities + boundingBoxes 구조</li>
+        <li>핵심 구조: <code>documents.{name}.groups[].entities[]</code></li>
+        <li>모델 성능 평가의 기준 포맷 (일관된 모델 평가는 UFP 기반으로 수행)</li>
+    </ul>
+
+    <!-- UFP Groups 구조도 -->
+    <div style="margin:20px 0;padding:24px;background:#f8fafc;border-radius:12px;border:1px solid #e2e8f0;overflow-x:auto;">
+        <div style="font-size:15px;font-weight:600;color:#334155;margin-bottom:16px;">Groups 구조</div>
+        <div style="display:flex;align-items:center;gap:8px;flex-wrap:nowrap;min-width:max-content;">
+            <span style="font-size:22px;font-weight:300;color:#64748b;">Groups : [</span>
+            <!-- Group 1: 1 entity -->
+            <div style="border:2px dashed #94a3b8;border-radius:10px;padding:12px;min-width:120px;">
+                <div style="font-size:12px;font-weight:600;color:#475569;margin-bottom:8px;">Group</div>
+                <div style="background:white;border:1px solid #e2e8f0;border-radius:6px;padding:6px 10px;display:flex;align-items:center;gap:6px;">
+                    <span style="font-size:11px;font-weight:500;color:#475569;">Entity</span>
+                    <div style="display:flex;align-items:center;gap:4px;margin-left:4px;">
+                        <span style="background:#d1fae5;color:#065f46;font-size:10px;padding:2px 6px;border-radius:3px;">Key</span>
+                        <span style="color:#94a3b8;font-size:10px;">:</span>
+                        <span style="background:#ede9fe;color:#5b21b6;font-size:10px;padding:2px 6px;border-radius:3px;">Value</span>
+                    </div>
+                </div>
+            </div>
+            <span style="font-size:18px;color:#94a3b8;">,</span>
+            <!-- Group 2: 3 entities -->
+            <div style="border:2px dashed #94a3b8;border-radius:10px;padding:12px;min-width:120px;">
+                <div style="font-size:12px;font-weight:600;color:#475569;margin-bottom:8px;">Group</div>
+                <div style="display:flex;flex-direction:column;gap:4px;">
+                    <div style="background:white;border:1px solid #e2e8f0;border-radius:6px;padding:6px 10px;display:flex;align-items:center;gap:6px;"><span style="font-size:11px;font-weight:500;color:#475569;">Entity</span><div style="display:flex;align-items:center;gap:4px;margin-left:4px;"><span style="background:#d1fae5;color:#065f46;font-size:10px;padding:2px 6px;border-radius:3px;">Key</span><span style="color:#94a3b8;font-size:10px;">:</span><span style="background:#ede9fe;color:#5b21b6;font-size:10px;padding:2px 6px;border-radius:3px;">Value</span></div></div>
+                    <div style="background:white;border:1px solid #e2e8f0;border-radius:6px;padding:6px 10px;display:flex;align-items:center;gap:6px;"><span style="font-size:11px;font-weight:500;color:#475569;">Entity</span><div style="display:flex;align-items:center;gap:4px;margin-left:4px;"><span style="background:#d1fae5;color:#065f46;font-size:10px;padding:2px 6px;border-radius:3px;">Key</span><span style="color:#94a3b8;font-size:10px;">:</span><span style="background:#ede9fe;color:#5b21b6;font-size:10px;padding:2px 6px;border-radius:3px;">Value</span></div></div>
+                    <div style="background:white;border:1px solid #e2e8f0;border-radius:6px;padding:6px 10px;display:flex;align-items:center;gap:6px;"><span style="font-size:11px;font-weight:500;color:#475569;">Entity</span><div style="display:flex;align-items:center;gap:4px;margin-left:4px;"><span style="background:#d1fae5;color:#065f46;font-size:10px;padding:2px 6px;border-radius:3px;">Key</span><span style="color:#94a3b8;font-size:10px;">:</span><span style="background:#ede9fe;color:#5b21b6;font-size:10px;padding:2px 6px;border-radius:3px;">Value</span></div></div>
+                </div>
+            </div>
+            <span style="font-size:18px;color:#94a3b8;">,</span>
+            <!-- Group 3: 1 entity -->
+            <div style="border:2px dashed #94a3b8;border-radius:10px;padding:12px;min-width:120px;">
+                <div style="font-size:12px;font-weight:600;color:#475569;margin-bottom:8px;">Group</div>
+                <div style="background:white;border:1px solid #e2e8f0;border-radius:6px;padding:6px 10px;display:flex;align-items:center;gap:6px;"><span style="font-size:11px;font-weight:500;color:#475569;">Entity</span><div style="display:flex;align-items:center;gap:4px;margin-left:4px;"><span style="background:#d1fae5;color:#065f46;font-size:10px;padding:2px 6px;border-radius:3px;">Key</span><span style="color:#94a3b8;font-size:10px;">:</span><span style="background:#ede9fe;color:#5b21b6;font-size:10px;padding:2px 6px;border-radius:3px;">Value</span></div></div>
+            </div>
+            <span style="font-size:18px;color:#94a3b8;">,</span>
+            <!-- Group 4: 2 entities -->
+            <div style="border:2px dashed #94a3b8;border-radius:10px;padding:12px;min-width:120px;">
+                <div style="font-size:12px;font-weight:600;color:#475569;margin-bottom:8px;">Group</div>
+                <div style="display:flex;flex-direction:column;gap:4px;">
+                    <div style="background:white;border:1px solid #e2e8f0;border-radius:6px;padding:6px 10px;display:flex;align-items:center;gap:6px;"><span style="font-size:11px;font-weight:500;color:#475569;">Entity</span><div style="display:flex;align-items:center;gap:4px;margin-left:4px;"><span style="background:#d1fae5;color:#065f46;font-size:10px;padding:2px 6px;border-radius:3px;">Key</span><span style="color:#94a3b8;font-size:10px;">:</span><span style="background:#ede9fe;color:#5b21b6;font-size:10px;padding:2px 6px;border-radius:3px;">Value</span></div></div>
+                    <div style="background:white;border:1px solid #e2e8f0;border-radius:6px;padding:6px 10px;display:flex;align-items:center;gap:6px;"><span style="font-size:11px;font-weight:500;color:#475569;">Entity</span><div style="display:flex;align-items:center;gap:4px;margin-left:4px;"><span style="background:#d1fae5;color:#065f46;font-size:10px;padding:2px 6px;border-radius:3px;">Key</span><span style="color:#94a3b8;font-size:10px;">:</span><span style="background:#ede9fe;color:#5b21b6;font-size:10px;padding:2px 6px;border-radius:3px;">Value</span></div></div>
+                </div>
+            </div>
+            <span style="font-size:18px;color:#94a3b8;">,</span>
+            <!-- Group 5: 1 entity -->
+            <div style="border:2px dashed #94a3b8;border-radius:10px;padding:12px;min-width:120px;">
+                <div style="font-size:12px;font-weight:600;color:#475569;margin-bottom:8px;">Group</div>
+                <div style="background:white;border:1px solid #e2e8f0;border-radius:6px;padding:6px 10px;display:flex;align-items:center;gap:6px;"><span style="font-size:11px;font-weight:500;color:#475569;">Entity</span><div style="display:flex;align-items:center;gap:4px;margin-left:4px;"><span style="background:#d1fae5;color:#065f46;font-size:10px;padding:2px 6px;border-radius:3px;">Key</span><span style="color:#94a3b8;font-size:10px;">:</span><span style="background:#ede9fe;color:#5b21b6;font-size:10px;padding:2px 6px;border-radius:3px;">Value</span></div></div>
+            </div>
+            <span style="font-size:22px;font-weight:300;color:#64748b;">]</span>
+        </div>
+    </div>
+
+    <!-- UFP Entity 상세 구조 -->
+    <div style="margin:20px 0;padding:24px;background:#f8fafc;border-radius:12px;border:1px solid #e2e8f0;">
+        <div style="font-size:18px;font-weight:700;color:#1e293b;margin-bottom:16px;">UFP Entity</div>
+        <div style="background:white;border:1px solid #e2e8f0;border-radius:12px;padding:24px;position:relative;">
+            <div style="font-size:15px;font-weight:600;color:#334155;margin-bottom:16px;">Entity</div>
+            <div style="display:flex;gap:40px;flex-wrap:wrap;">
+                <div style="display:flex;flex-direction:column;gap:12px;">
+                    <div style="display:flex;align-items:center;gap:8px;">
+                        <span style="background:#d1fae5;color:#065f46;font-size:13px;font-weight:600;padding:6px 16px;border-radius:6px;">Key</span>
+                        <span style="color:#64748b;font-size:14px;font-weight:500;">:</span>
+                        <span style="background:#ede9fe;color:#5b21b6;font-size:13px;font-weight:600;padding:6px 16px;border-radius:6px;">Value</span>
+                    </div>
+                    <div style="display:flex;align-items:center;gap:8px;margin-left:40px;">
+                        <svg width="16" height="20" style="flex-shrink:0;"><path d="M8 0 L8 14 L4 10 M8 14 L12 10" stroke="#94a3b8" stroke-width="1.5" fill="none"/></svg>
+                        <span style="background:linear-gradient(135deg,#c084fc,#a855f7);color:white;font-size:13px;font-weight:600;padding:6px 16px;border-radius:6px;">refinedValue</span>
+                    </div>
+                </div>
+                <div style="display:flex;flex-direction:column;gap:12px;">
+                    <div style="display:flex;align-items:center;gap:8px;">
+                        <span style="font-size:12px;color:#475569;font-weight:500;">chips :</span>
+                        <span style="color:#94a3b8;">[</span>
+                        <div style="display:flex;gap:2px;"><span style="background:#ddd6fe;color:#5b21b6;font-size:10px;padding:3px 8px;border-radius:3px;">chip</span><span style="color:#cbd5e1;">-</span><span style="background:#ddd6fe;color:#5b21b6;font-size:10px;padding:3px 8px;border-radius:3px;">chip</span><span style="color:#cbd5e1;">-</span><span style="background:#ddd6fe;color:#5b21b6;font-size:10px;padding:3px 8px;border-radius:3px;">chip</span></div>
+                        <span style="color:#94a3b8;">]</span>
+                    </div>
+                    <div style="display:flex;align-items:center;gap:4px;margin-left:20px;">
+                        <svg width="12" height="16" style="flex-shrink:0;"><path d="M6 0 L6 10 L3 7 M6 10 L9 7" stroke="#94a3b8" stroke-width="1.2" fill="none"/></svg><span style="font-size:11px;color:#64748b;">bbox</span>
+                        <svg width="12" height="16" style="flex-shrink:0;"><path d="M6 0 L6 10 L3 7 M6 10 L9 7" stroke="#94a3b8" stroke-width="1.2" fill="none"/></svg><span style="font-size:11px;color:#64748b;">bbox</span>
+                        <svg width="12" height="16" style="flex-shrink:0;"><path d="M6 0 L6 10 L3 7 M6 10 L9 7" stroke="#94a3b8" stroke-width="1.2" fill="none"/></svg><span style="font-size:11px;color:#64748b;">bbox</span>
+                    </div>
+                    <div style="display:flex;align-items:center;gap:8px;">
+                        <span style="font-size:12px;color:#475569;font-weight:500;">boundingBoxes :</span>
+                        <span style="color:#94a3b8;">[</span>
+                        <div style="display:flex;gap:4px;"><div style="width:22px;height:18px;border:1.5px solid #a78bfa;border-radius:2px;background:#f5f3ff;"></div><span style="color:#94a3b8;">,</span><div style="width:22px;height:18px;border:1.5px solid #a78bfa;border-radius:2px;background:#f5f3ff;"></div><span style="color:#94a3b8;">,</span><div style="width:22px;height:18px;border:1.5px solid #a78bfa;border-radius:2px;background:#f5f3ff;"></div></div>
+                        <span style="color:#94a3b8;">]</span>
+                    </div>
+                </div>
+            </div>
+            <div style="position:absolute;bottom:12px;right:16px;background:#fff1f2;color:#be123c;font-size:11px;font-weight:500;padding:4px 12px;border-radius:4px;border:1px solid #fecdd3;">entityConfidence</div>
+        </div>
+    </div>
+
+    <!-- UFP Example -->
+    <div style="margin:20px 0;padding:24px;background:#f8fafc;border-radius:12px;border:1px solid #e2e8f0;">
+        <div style="font-size:15px;font-weight:600;color:#334155;margin-bottom:16px;">Example</div>
+        <div style="display:flex;flex-direction:column;gap:14px;">
+            <div style="display:flex;align-items:center;gap:12px;">
+                <span style="background:#d1fae5;color:#065f46;font-size:13px;font-weight:600;padding:6px 16px;border-radius:6px;min-width:40px;text-align:center;">Key</span>
+                <svg width="24" height="12"><path d="M0 6 L18 6 L14 2 M18 6 L14 10" stroke="#64748b" stroke-width="1.5" fill="none"/></svg>
+                <span style="font-size:13px;color:#334155;font-family:monospace;">처방상세정보.일투.header</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:12px;">
+                <span style="background:#ede9fe;color:#5b21b6;font-size:13px;font-weight:600;padding:6px 16px;border-radius:6px;min-width:40px;text-align:center;">Value</span>
+                <svg width="24" height="12"><path d="M0 6 L18 6 L14 2 M18 6 L14 10" stroke="#64748b" stroke-width="1.5" fill="none"/></svg>
+                <span style="font-size:13px;color:#334155;font-family:monospace;">"1 회 투약량"</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:12px;">
+                <span style="background:linear-gradient(135deg,#c084fc,#a855f7);color:white;font-size:13px;font-weight:600;padding:6px 10px;border-radius:6px;min-width:40px;text-align:center;">refinedValue</span>
+                <svg width="24" height="12"><path d="M0 6 L18 6 L14 2 M18 6 L14 10" stroke="#64748b" stroke-width="1.5" fill="none"/></svg>
+                <span style="font-size:13px;color:#334155;font-family:monospace;">"1 회 투약량"</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:12px;">
+                <span style="font-size:12px;color:#475569;font-weight:500;">chips :</span>
+                <span style="color:#94a3b8;">[</span>
+                <span style="background:#ddd6fe;color:#5b21b6;font-size:11px;padding:3px 8px;border-radius:3px;">chip</span><span style="color:#cbd5e1;">-</span><span style="background:#ddd6fe;color:#5b21b6;font-size:11px;padding:3px 8px;border-radius:3px;">chip</span><span style="color:#cbd5e1;">-</span><span style="background:#ddd6fe;color:#5b21b6;font-size:11px;padding:3px 8px;border-radius:3px;">chip</span>
+                <span style="color:#94a3b8;">]</span>
+                <svg width="24" height="12"><path d="M0 6 L18 6 L14 2 M18 6 L14 10" stroke="#64748b" stroke-width="1.5" fill="none"/></svg>
+                <span style="font-size:13px;color:#334155;font-family:monospace;">[ "1", "회", "투약량" ]</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:12px;">
+                <span style="font-size:12px;color:#475569;font-weight:500;">bbox :</span>
+                <div style="width:22px;height:18px;border:1.5px solid #a78bfa;border-radius:2px;background:#f5f3ff;"></div>
+                <svg width="24" height="12"><path d="M0 6 L18 6 L14 2 M18 6 L14 10" stroke="#64748b" stroke-width="1.5" fill="none"/></svg>
+                <div style="font-size:11px;color:#475569;font-family:monospace;line-height:1.6;">[1494.675, 1330.875], [1515.150, 1330.875], [1515.150, 1362.375], [1494.675, 1362.375]</div>
+            </div>
+        </div>
+    </div>
+
+    <h4 style="margin-top:24px;">mUFP (Modified UFP)</h4>
+    <ul>
+        <li>UFP를 고객사 시스템에 맞게 변환한 포맷. 개발팀과 소통하면서 CSV와도 1:1 변환 가능</li>
+        <li>UFP와의 차이점:
+            <ul>
+                <li>unique한 key에는 confidence score가 가장 높은 value 하나만 선택</li>
+                <li>merge가 필요한 entity는 하나로 합침 (delimiter: <code>||</code>)</li>
+                <li>하나의 group은 같은 groupType에 속하는 Entity로만 구성</li>
+                <li>문서에 필수인 entity가 UFP에 없으면 mUFP에서 생성</li>
+            </ul>
+        </li>
+        <li>역할: UFP는 모델의 뷰, mUFP는 시스템의 뷰. 고객사마다 multiple entity 처리 방식이 다르므로 mUFP 변환 로직이 달라질 수 있음</li>
+        <li>변환 흐름: UFP → (Refiner &amp; Grounder) → mUFP → CSV</li>
+    </ul>
+
+    <!-- fill_missing_attributes 다이어그램 -->
+    <div style="margin:20px 0;padding:24px;background:#f8fafc;border-radius:12px;border:1px solid #e2e8f0;overflow-x:auto;">
+        <div style="font-size:15px;font-weight:600;color:#334155;margin-bottom:20px;">mUFP 변환 과정: fill_missing_attributes</div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:0;min-width:max-content;">
+
+            <!-- 상단: Groups 원본 -->
+            <div style="display:flex;align-items:center;gap:8px;flex-wrap:nowrap;">
+                <span style="font-size:18px;font-weight:300;color:#64748b;">Groups : [</span>
+                <div style="border:2px dashed #94a3b8;border-radius:10px;padding:10px;min-width:100px;">
+                    <div style="font-size:11px;font-weight:600;color:#475569;margin-bottom:6px;">Group</div>
+                    <div style="background:white;border:1px solid #e2e8f0;border-radius:5px;padding:5px 8px;display:flex;align-items:center;gap:4px;"><span style="font-size:10px;color:#475569;">Entity</span><span style="background:#d1fae5;color:#065f46;font-size:9px;padding:1px 5px;border-radius:2px;">Key</span><span style="color:#94a3b8;font-size:9px;">:</span><span style="background:#ede9fe;color:#5b21b6;font-size:9px;padding:1px 5px;border-radius:2px;">Value</span></div>
+                </div>
+                <span style="color:#94a3b8;">,</span>
+                <div style="border:2px dashed #94a3b8;border-radius:10px;padding:10px;min-width:100px;">
+                    <div style="font-size:11px;font-weight:600;color:#475569;margin-bottom:6px;">Group</div>
+                    <div style="display:flex;flex-direction:column;gap:3px;">
+                        <div style="background:white;border:1px solid #e2e8f0;border-radius:5px;padding:5px 8px;display:flex;align-items:center;gap:4px;"><span style="font-size:10px;color:#475569;">Entity</span><span style="background:#d1fae5;color:#065f46;font-size:9px;padding:1px 5px;border-radius:2px;">Key</span><span style="color:#94a3b8;font-size:9px;">:</span><span style="background:#ede9fe;color:#5b21b6;font-size:9px;padding:1px 5px;border-radius:2px;">Value</span></div>
+                        <div style="background:white;border:1px solid #e2e8f0;border-radius:5px;padding:5px 8px;display:flex;align-items:center;gap:4px;"><span style="font-size:10px;color:#475569;">Entity</span><span style="background:#d1fae5;color:#065f46;font-size:9px;padding:1px 5px;border-radius:2px;">Key</span><span style="color:#94a3b8;font-size:9px;">:</span><span style="background:#ede9fe;color:#5b21b6;font-size:9px;padding:1px 5px;border-radius:2px;">Value</span></div>
+                        <div style="background:white;border:1px solid #e2e8f0;border-radius:5px;padding:5px 8px;display:flex;align-items:center;gap:4px;"><span style="font-size:10px;color:#475569;">Entity</span><span style="background:#d1fae5;color:#065f46;font-size:9px;padding:1px 5px;border-radius:2px;">Key</span><span style="color:#94a3b8;font-size:9px;">:</span><span style="background:#ede9fe;color:#5b21b6;font-size:9px;padding:1px 5px;border-radius:2px;">Value</span></div>
+                    </div>
+                </div>
+                <span style="color:#94a3b8;">,</span>
+                <div style="border:2px dashed #94a3b8;border-radius:10px;padding:10px;min-width:100px;">
+                    <div style="font-size:11px;font-weight:600;color:#475569;margin-bottom:6px;">Group</div>
+                    <div style="background:white;border:1px solid #e2e8f0;border-radius:5px;padding:5px 8px;display:flex;align-items:center;gap:4px;"><span style="font-size:10px;color:#475569;">Entity</span><span style="background:#d1fae5;color:#065f46;font-size:9px;padding:1px 5px;border-radius:2px;">Key</span><span style="color:#94a3b8;font-size:9px;">:</span><span style="background:#ede9fe;color:#5b21b6;font-size:9px;padding:1px 5px;border-radius:2px;">Value</span></div>
+                </div>
+                <span style="color:#94a3b8;">,</span>
+                <div style="border:2px dashed #94a3b8;border-radius:10px;padding:10px;min-width:100px;">
+                    <div style="font-size:11px;font-weight:600;color:#475569;margin-bottom:6px;">Group</div>
+                    <div style="display:flex;flex-direction:column;gap:3px;">
+                        <div style="background:white;border:1px solid #e2e8f0;border-radius:5px;padding:5px 8px;display:flex;align-items:center;gap:4px;"><span style="font-size:10px;color:#475569;">Entity</span><span style="background:#d1fae5;color:#065f46;font-size:9px;padding:1px 5px;border-radius:2px;">Key</span><span style="color:#94a3b8;font-size:9px;">:</span><span style="background:#ede9fe;color:#5b21b6;font-size:9px;padding:1px 5px;border-radius:2px;">Value</span></div>
+                        <div style="background:white;border:1px solid #e2e8f0;border-radius:5px;padding:5px 8px;display:flex;align-items:center;gap:4px;"><span style="font-size:10px;color:#475569;">Entity</span><span style="background:#d1fae5;color:#065f46;font-size:9px;padding:1px 5px;border-radius:2px;">Key</span><span style="color:#94a3b8;font-size:9px;">:</span><span style="background:#ede9fe;color:#5b21b6;font-size:9px;padding:1px 5px;border-radius:2px;">Value</span></div>
+                    </div>
+                </div>
+                <span style="color:#94a3b8;">,</span>
+                <div style="border:2px dashed #94a3b8;border-radius:10px;padding:10px;min-width:100px;">
+                    <div style="font-size:11px;font-weight:600;color:#475569;margin-bottom:6px;">Group</div>
+                    <div style="background:white;border:1px solid #e2e8f0;border-radius:5px;padding:5px 8px;display:flex;align-items:center;gap:4px;"><span style="font-size:10px;color:#475569;">Entity</span><span style="background:#d1fae5;color:#065f46;font-size:9px;padding:1px 5px;border-radius:2px;">Key</span><span style="color:#94a3b8;font-size:9px;">:</span><span style="background:#ede9fe;color:#5b21b6;font-size:9px;padding:1px 5px;border-radius:2px;">Value</span></div>
+                </div>
+                <span style="font-size:18px;font-weight:300;color:#64748b;">]</span>
+            </div>
+
+            <!-- 화살표들 -->
+            <div style="display:flex;justify-content:center;gap:80px;padding:8px 0;">
+                <svg width="2" height="30"><line x1="1" y1="0" x2="1" y2="24" stroke="#94a3b8" stroke-width="1.5"/><path d="M1 24 L-2 18 M1 24 L4 18" stroke="#94a3b8" stroke-width="1.2" fill="none"/></svg>
+                <svg width="2" height="30"><line x1="1" y1="0" x2="1" y2="24" stroke="#94a3b8" stroke-width="1.5"/><path d="M1 24 L-2 18 M1 24 L4 18" stroke="#94a3b8" stroke-width="1.2" fill="none"/></svg>
+                <svg width="2" height="30"><line x1="1" y1="0" x2="1" y2="24" stroke="#94a3b8" stroke-width="1.5"/><path d="M1 24 L-2 18 M1 24 L4 18" stroke="#94a3b8" stroke-width="1.2" fill="none"/></svg>
+                <svg width="2" height="30"><line x1="1" y1="0" x2="1" y2="24" stroke="#94a3b8" stroke-width="1.5"/><path d="M1 24 L-2 18 M1 24 L4 18" stroke="#94a3b8" stroke-width="1.2" fill="none"/></svg>
+                <svg width="2" height="30"><line x1="1" y1="0" x2="1" y2="24" stroke="#94a3b8" stroke-width="1.5"/><path d="M1 24 L-2 18 M1 24 L4 18" stroke="#94a3b8" stroke-width="1.2" fill="none"/></svg>
+            </div>
+
+            <!-- fill_missing_attributes 바 -->
+            <div style="background:#fef9c3;border:1px solid #fde68a;border-radius:8px;padding:10px 48px;font-size:14px;font-weight:500;color:#92400e;font-family:monospace;text-align:center;width:80%;max-width:700px;">
+                fill_missing_attributes
+            </div>
+
+            <!-- 화살표들 -->
+            <div style="display:flex;justify-content:center;gap:120px;padding:8px 0;">
+                <svg width="2" height="30"><line x1="1" y1="0" x2="1" y2="24" stroke="#94a3b8" stroke-width="1.5"/><path d="M1 24 L-2 18 M1 24 L4 18" stroke="#94a3b8" stroke-width="1.2" fill="none"/></svg>
+                <svg width="2" height="30"><line x1="1" y1="0" x2="1" y2="24" stroke="#94a3b8" stroke-width="1.5"/><path d="M1 24 L-2 18 M1 24 L4 18" stroke="#94a3b8" stroke-width="1.2" fill="none"/></svg>
+                <svg width="2" height="30"><line x1="1" y1="0" x2="1" y2="24" stroke="#94a3b8" stroke-width="1.5"/><path d="M1 24 L-2 18 M1 24 L4 18" stroke="#94a3b8" stroke-width="1.2" fill="none"/></svg>
+            </div>
+
+            <!-- 하단: 처리 후 Groups -->
+            <div style="display:flex;align-items:flex-start;gap:24px;">
+                <div style="border:2px dashed #94a3b8;border-radius:10px;padding:10px;min-width:100px;">
+                    <div style="font-size:11px;font-weight:600;color:#475569;margin-bottom:6px;">Group</div>
+                    <div style="background:white;border:1px solid #e2e8f0;border-radius:5px;padding:5px 8px;display:flex;align-items:center;gap:4px;"><span style="font-size:10px;color:#475569;">Entity</span><span style="background:#d1fae5;color:#065f46;font-size:9px;padding:1px 5px;border-radius:2px;">Key</span><span style="color:#94a3b8;font-size:9px;">:</span><span style="background:#ede9fe;color:#5b21b6;font-size:9px;padding:1px 5px;border-radius:2px;">Value</span></div>
+                </div>
+                <div style="border:2px dashed #94a3b8;border-radius:10px;padding:10px;min-width:100px;">
+                    <div style="font-size:11px;font-weight:600;color:#475569;margin-bottom:6px;">Group</div>
+                    <div style="background:white;border:1px solid #e2e8f0;border-radius:5px;padding:5px 8px;display:flex;align-items:center;gap:4px;"><span style="font-size:10px;color:#475569;">Entity</span><span style="background:#d1fae5;color:#065f46;font-size:9px;padding:1px 5px;border-radius:2px;">Key</span><span style="color:#94a3b8;font-size:9px;">:</span><span style="background:#ede9fe;color:#5b21b6;font-size:9px;padding:1px 5px;border-radius:2px;">Value</span></div>
+                </div>
+                <div style="border:2px dashed #94a3b8;border-radius:10px;padding:10px;min-width:100px;">
+                    <div style="font-size:11px;font-weight:600;color:#475569;margin-bottom:6px;">Group</div>
+                    <div style="background:white;border:1px solid #e2e8f0;border-radius:5px;padding:5px 8px;display:flex;align-items:center;gap:4px;"><span style="font-size:10px;color:#475569;">Entity</span><span style="background:#d1fae5;color:#065f46;font-size:9px;padding:1px 5px;border-radius:2px;">Key</span><span style="color:#94a3b8;font-size:9px;">:</span><span style="background:#ede9fe;color:#5b21b6;font-size:9px;padding:1px 5px;border-radius:2px;">Value</span></div>
+                </div>
+            </div>
+
+            <!-- Same 키 merge -->
+            <div style="display:flex;flex-direction:column;align-items:center;gap:0;margin-top:8px;">
+                <div style="display:flex;align-items:flex-end;gap:0;position:relative;width:260px;height:30px;">
+                    <svg width="260" height="30" style="position:absolute;left:0;top:0;">
+                        <line x1="40" y1="0" x2="130" y2="24" stroke="#94a3b8" stroke-width="1.2"/>
+                        <line x1="130" y1="0" x2="130" y2="24" stroke="#94a3b8" stroke-width="1.2"/>
+                        <line x1="220" y1="0" x2="130" y2="24" stroke="#94a3b8" stroke-width="1.2"/>
+                    </svg>
+                </div>
+                <div style="font-size:14px;font-weight:700;color:#334155;margin:4px 0;">Same</div>
+                <svg width="2" height="20"><line x1="1" y1="0" x2="1" y2="14" stroke="#94a3b8" stroke-width="1.5"/><path d="M1 14 L-2 8 M1 14 L4 8" stroke="#94a3b8" stroke-width="1.2" fill="none"/></svg>
+                <div style="border:2px dashed #94a3b8;border-radius:10px;padding:10px;min-width:140px;margin-top:4px;">
+                    <div style="font-size:11px;font-weight:600;color:#475569;margin-bottom:6px;">Group</div>
+                    <div style="background:white;border:1px solid #e2e8f0;border-radius:5px;padding:5px 8px;display:flex;align-items:center;gap:4px;">
+                        <span style="font-size:10px;color:#475569;">Entity</span>
+                        <span style="background:#d1fae5;color:#065f46;font-size:9px;padding:1px 5px;border-radius:2px;">Key</span><span style="color:#94a3b8;font-size:9px;">:</span><span style="background:#ede9fe;color:#5b21b6;font-size:9px;padding:1px 5px;border-radius:2px;">Value</span>
+                        <span style="color:#64748b;font-size:10px;font-weight:600;">+</span>
+                        <span style="background:#ede9fe;color:#5b21b6;font-size:9px;padding:1px 5px;border-radius:2px;">Value</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Must have Entity 다이어그램 -->
+    <div style="margin:20px 0;padding:24px;background:#f8fafc;border-radius:12px;border:1px solid #e2e8f0;overflow-x:auto;">
+        <div style="font-size:15px;font-weight:600;color:#334155;margin-bottom:20px;">mUFP: 필수 엔티티 보장 (Must have Entity)</div>
+        <div style="display:flex;flex-direction:column;gap:16px;min-width:max-content;">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+                <span style="font-size:15px;font-weight:600;color:#334155;">Must have Entity :</span>
+                <span style="background:#d1fae5;color:#065f46;font-size:11px;font-weight:600;padding:3px 10px;border-radius:4px;">Key</span>
+            </div>
+            <div style="display:flex;align-items:flex-start;gap:8px;">
+                <span style="font-size:20px;font-weight:300;color:#64748b;margin-top:20px;">[</span>
+                <div style="border:2px dashed #94a3b8;border-radius:10px;padding:10px;min-width:130px;">
+                    <div style="font-size:11px;font-weight:600;color:#475569;margin-bottom:6px;">Group</div>
+                    <div style="background:white;border:1px solid #e2e8f0;border-radius:5px;padding:5px 8px;display:flex;align-items:center;gap:4px;"><span style="font-size:10px;color:#475569;">Entity</span><span style="background:#d1fae5;color:#065f46;font-size:9px;padding:1px 5px;border-radius:2px;">Key</span><span style="color:#94a3b8;font-size:9px;">:</span><span style="background:#ede9fe;color:#5b21b6;font-size:9px;padding:1px 5px;border-radius:2px;">Value</span><span style="color:#64748b;font-size:9px;font-weight:600;">+</span><span style="background:#ede9fe;color:#5b21b6;font-size:9px;padding:1px 5px;border-radius:2px;">Value</span></div>
+                </div>
+                <span style="color:#94a3b8;margin-top:30px;">,</span>
+                <div style="border:2px dashed #94a3b8;border-radius:10px;padding:10px;min-width:110px;">
+                    <div style="font-size:11px;font-weight:600;color:#475569;margin-bottom:6px;">Group</div>
+                    <div style="display:flex;flex-direction:column;gap:3px;">
+                        <div style="background:white;border:1px solid #e2e8f0;border-radius:5px;padding:5px 8px;display:flex;align-items:center;gap:4px;"><span style="font-size:10px;color:#475569;">Entity</span><span style="background:#d1fae5;color:#065f46;font-size:9px;padding:1px 5px;border-radius:2px;">Key</span><span style="color:#94a3b8;font-size:9px;">:</span><span style="background:#ede9fe;color:#5b21b6;font-size:9px;padding:1px 5px;border-radius:2px;">Value</span></div>
+                        <div style="background:white;border:1px solid #e2e8f0;border-radius:5px;padding:5px 8px;display:flex;align-items:center;gap:4px;"><span style="font-size:10px;color:#475569;">Entity</span><span style="background:#d1fae5;color:#065f46;font-size:9px;padding:1px 5px;border-radius:2px;">Key</span><span style="color:#94a3b8;font-size:9px;">:</span><span style="background:#ede9fe;color:#5b21b6;font-size:9px;padding:1px 5px;border-radius:2px;">Value</span></div>
+                        <div style="background:white;border:1px solid #e2e8f0;border-radius:5px;padding:5px 8px;display:flex;align-items:center;gap:4px;"><span style="font-size:10px;color:#475569;">Entity</span><span style="background:#d1fae5;color:#065f46;font-size:9px;padding:1px 5px;border-radius:2px;">Key</span><span style="color:#94a3b8;font-size:9px;">:</span><span style="background:#ede9fe;color:#5b21b6;font-size:9px;padding:1px 5px;border-radius:2px;">Value</span></div>
+                    </div>
+                </div>
+                <span style="color:#94a3b8;margin-top:30px;">,</span>
+                <div style="display:flex;flex-direction:column;align-items:center;gap:4px;">
+                    <div style="border:2px dashed #94a3b8;border-radius:10px;padding:10px;min-width:110px;">
+                        <div style="font-size:11px;font-weight:600;color:#475569;margin-bottom:6px;">Group</div>
+                        <div style="display:flex;flex-direction:column;gap:3px;">
+                            <div style="background:white;border:1px solid #e2e8f0;border-radius:5px;padding:5px 8px;display:flex;align-items:center;gap:4px;"><span style="font-size:10px;color:#475569;">Entity</span><span style="background:#d1fae5;color:#065f46;font-size:9px;padding:1px 5px;border-radius:2px;">Key</span><span style="color:#94a3b8;font-size:9px;">:</span><span style="background:#ede9fe;color:#5b21b6;font-size:9px;padding:1px 5px;border-radius:2px;">Value</span></div>
+                            <div style="background:white;border:1px solid #e2e8f0;border-radius:5px;padding:5px 8px;display:flex;align-items:center;gap:4px;"><span style="font-size:10px;color:#475569;">Entity</span><span style="background:#d1fae5;color:#065f46;font-size:9px;padding:1px 5px;border-radius:2px;">Key</span><span style="color:#94a3b8;font-size:9px;">:</span><span style="background:#ede9fe;color:#5b21b6;font-size:9px;padding:1px 5px;border-radius:2px;">Value</span></div>
+                        </div>
+                    </div>
+                    <div style="color:#dc2626;font-size:13px;font-weight:700;margin-top:4px;">Missing must-have entity</div>
+                </div>
+                <span style="color:#94a3b8;margin-top:30px;">,</span>
+                <div style="border:2px dashed #94a3b8;border-radius:10px;padding:10px;min-width:110px;">
+                    <div style="font-size:11px;font-weight:600;color:#475569;margin-bottom:6px;">Group</div>
+                    <div style="background:white;border:1px solid #e2e8f0;border-radius:5px;padding:5px 8px;display:flex;align-items:center;gap:4px;"><span style="font-size:10px;color:#475569;">Entity</span><span style="background:#fecaca;color:#991b1b;font-size:9px;padding:1px 5px;border-radius:2px;font-weight:600;">Key</span><span style="color:#94a3b8;font-size:9px;">:</span><span style="background:#ede9fe;color:#5b21b6;font-size:9px;padding:1px 5px;border-radius:2px;">Value</span></div>
+                </div>
+                <span style="font-size:20px;font-weight:300;color:#64748b;margin-top:20px;">]</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:12px;margin-left:400px;">
+                <svg width="2" height="24"><line x1="1" y1="0" x2="1" y2="18" stroke="#94a3b8" stroke-width="1.5"/><path d="M1 18 L-2 12 M1 18 L4 12" stroke="#94a3b8" stroke-width="1.2" fill="none"/></svg>
+                <span style="font-size:12px;color:#475569;">Filling using default Entity</span>
+            </div>
+            <div style="margin-left:370px;border:2px dashed #94a3b8;border-radius:10px;padding:10px;min-width:110px;max-width:180px;">
+                <div style="font-size:11px;font-weight:600;color:#475569;margin-bottom:6px;">Group</div>
+                <div style="display:flex;flex-direction:column;gap:3px;">
+                    <div style="background:white;border:1px solid #e2e8f0;border-radius:5px;padding:5px 8px;display:flex;align-items:center;gap:4px;"><span style="font-size:10px;color:#475569;">Entity</span><span style="background:#d1fae5;color:#065f46;font-size:9px;padding:1px 5px;border-radius:2px;">Key</span><span style="color:#94a3b8;font-size:9px;">:</span><span style="background:#ede9fe;color:#5b21b6;font-size:9px;padding:1px 5px;border-radius:2px;">Value</span></div>
+                    <div style="background:white;border:1px solid #e2e8f0;border-radius:5px;padding:5px 8px;display:flex;align-items:center;gap:4px;"><span style="font-size:10px;color:#475569;">Entity</span><span style="background:#d1fae5;color:#065f46;font-size:9px;padding:1px 5px;border-radius:2px;">Key</span><span style="color:#94a3b8;font-size:9px;">:</span><span style="background:#ede9fe;color:#5b21b6;font-size:9px;padding:1px 5px;border-radius:2px;">Value</span></div>
+                    <div style="background:white;border:1px solid #d1fae5;border-radius:5px;padding:5px 8px;display:flex;align-items:center;gap:4px;"><span style="font-size:10px;color:#475569;">Entity</span><span style="background:#fecaca;color:#991b1b;font-size:9px;padding:1px 5px;border-radius:2px;font-weight:600;">Key</span><span style="color:#94a3b8;font-size:9px;">:</span><span style="background:#ede9fe;color:#5b21b6;font-size:9px;padding:1px 5px;border-radius:2px;">Value</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- UFP → mUFP 전체 변환 개요 -->
+    <div style="margin:20px 0;padding:24px;background:#f8fafc;border-radius:12px;border:1px solid #e2e8f0;overflow-x:auto;">
+        <div style="font-size:15px;font-weight:600;color:#334155;margin-bottom:20px;">UFP → mUFP 변환 개요</div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:0;min-width:max-content;">
+            <div style="display:flex;align-items:center;gap:8px;">
+                <span style="font-size:16px;font-weight:600;color:#334155;margin-right:4px;">UFP's Groups :</span>
+                <span style="font-size:20px;font-weight:300;color:#64748b;">[</span>
+                <div style="border:2px dashed #94a3b8;border-radius:10px;padding:8px;min-width:90px;"><div style="font-size:10px;font-weight:600;color:#475569;margin-bottom:4px;">Group</div><div style="background:white;border:1px solid #e2e8f0;border-radius:5px;padding:4px 6px;display:flex;align-items:center;gap:3px;"><span style="font-size:9px;color:#475569;">Entity</span><span style="background:#d1fae5;color:#065f46;font-size:8px;padding:1px 4px;border-radius:2px;">Key</span><span style="color:#94a3b8;font-size:8px;">:</span><span style="background:#ede9fe;color:#5b21b6;font-size:8px;padding:1px 4px;border-radius:2px;">Value</span></div></div>
+                <span style="color:#94a3b8;">,</span>
+                <div style="border:2px dashed #94a3b8;border-radius:10px;padding:8px;min-width:90px;"><div style="font-size:10px;font-weight:600;color:#475569;margin-bottom:4px;">Group</div><div style="display:flex;flex-direction:column;gap:2px;"><div style="background:white;border:1px solid #e2e8f0;border-radius:5px;padding:4px 6px;display:flex;align-items:center;gap:3px;"><span style="font-size:9px;color:#475569;">Entity</span><span style="background:#d1fae5;color:#065f46;font-size:8px;padding:1px 4px;border-radius:2px;">Key</span><span style="color:#94a3b8;font-size:8px;">:</span><span style="background:#ede9fe;color:#5b21b6;font-size:8px;padding:1px 4px;border-radius:2px;">Value</span></div><div style="background:white;border:1px solid #e2e8f0;border-radius:5px;padding:4px 6px;display:flex;align-items:center;gap:3px;"><span style="font-size:9px;color:#475569;">Entity</span><span style="background:#d1fae5;color:#065f46;font-size:8px;padding:1px 4px;border-radius:2px;">Key</span><span style="color:#94a3b8;font-size:8px;">:</span><span style="background:#ede9fe;color:#5b21b6;font-size:8px;padding:1px 4px;border-radius:2px;">Value</span></div><div style="background:white;border:1px solid #e2e8f0;border-radius:5px;padding:4px 6px;display:flex;align-items:center;gap:3px;"><span style="font-size:9px;color:#475569;">Entity</span><span style="background:#d1fae5;color:#065f46;font-size:8px;padding:1px 4px;border-radius:2px;">Key</span><span style="color:#94a3b8;font-size:8px;">:</span><span style="background:#ede9fe;color:#5b21b6;font-size:8px;padding:1px 4px;border-radius:2px;">Value</span></div></div></div>
+                <span style="color:#94a3b8;">,</span>
+                <div style="border:2px dashed #94a3b8;border-radius:10px;padding:8px;min-width:90px;"><div style="font-size:10px;font-weight:600;color:#475569;margin-bottom:4px;">Group</div><div style="background:white;border:1px solid #e2e8f0;border-radius:5px;padding:4px 6px;display:flex;align-items:center;gap:3px;"><span style="font-size:9px;color:#475569;">Entity</span><span style="background:#d1fae5;color:#065f46;font-size:8px;padding:1px 4px;border-radius:2px;">Key</span><span style="color:#94a3b8;font-size:8px;">:</span><span style="background:#ede9fe;color:#5b21b6;font-size:8px;padding:1px 4px;border-radius:2px;">Value</span></div></div>
+                <span style="color:#94a3b8;">,</span>
+                <div style="border:2px dashed #94a3b8;border-radius:10px;padding:8px;min-width:90px;"><div style="font-size:10px;font-weight:600;color:#475569;margin-bottom:4px;">Group</div><div style="display:flex;flex-direction:column;gap:2px;"><div style="background:white;border:1px solid #e2e8f0;border-radius:5px;padding:4px 6px;display:flex;align-items:center;gap:3px;"><span style="font-size:9px;color:#475569;">Entity</span><span style="background:#d1fae5;color:#065f46;font-size:8px;padding:1px 4px;border-radius:2px;">Key</span><span style="color:#94a3b8;font-size:8px;">:</span><span style="background:#ede9fe;color:#5b21b6;font-size:8px;padding:1px 4px;border-radius:2px;">Value</span></div><div style="background:white;border:1px solid #e2e8f0;border-radius:5px;padding:4px 6px;display:flex;align-items:center;gap:3px;"><span style="font-size:9px;color:#475569;">Entity</span><span style="background:#d1fae5;color:#065f46;font-size:8px;padding:1px 4px;border-radius:2px;">Key</span><span style="color:#94a3b8;font-size:8px;">:</span><span style="background:#ede9fe;color:#5b21b6;font-size:8px;padding:1px 4px;border-radius:2px;">Value</span></div></div></div>
+                <span style="color:#94a3b8;">,</span>
+                <div style="border:2px dashed #94a3b8;border-radius:10px;padding:8px;min-width:90px;"><div style="font-size:10px;font-weight:600;color:#475569;margin-bottom:4px;">Group</div><div style="background:white;border:1px solid #e2e8f0;border-radius:5px;padding:4px 6px;display:flex;align-items:center;gap:3px;"><span style="font-size:9px;color:#475569;">Entity</span><span style="background:#fecaca;color:#991b1b;font-size:8px;padding:1px 4px;border-radius:2px;font-weight:600;">Key</span><span style="color:#94a3b8;font-size:8px;">:</span><span style="background:#ede9fe;color:#5b21b6;font-size:8px;padding:1px 4px;border-radius:2px;">Value</span></div></div>
+                <span style="font-size:20px;font-weight:300;color:#64748b;">]</span>
+            </div>
+            <div style="display:flex;align-items:center;justify-content:center;gap:12px;padding:24px 0;">
+                <span style="font-size:18px;font-weight:600;color:#334155;">UFP → mUFP</span>
+                <svg width="28" height="28"><path d="M14 4 L14 20 L8 14 M14 20 L20 14" stroke="#1e293b" stroke-width="3" fill="none" stroke-linecap="round"/></svg>
+            </div>
+            <div style="display:flex;align-items:flex-start;gap:8px;">
+                <span style="font-size:16px;font-weight:600;color:#334155;margin-right:4px;margin-top:20px;">mUFP's Groups :</span>
+                <span style="font-size:20px;font-weight:300;color:#64748b;margin-top:20px;">[</span>
+                <div style="border:2px dashed #94a3b8;border-radius:10px;padding:8px;min-width:130px;"><div style="font-size:10px;font-weight:600;color:#475569;margin-bottom:4px;">Group</div><div style="background:white;border:1px solid #e2e8f0;border-radius:5px;padding:4px 6px;display:flex;align-items:center;gap:3px;"><span style="font-size:9px;color:#475569;">Entity</span><span style="background:#d1fae5;color:#065f46;font-size:8px;padding:1px 4px;border-radius:2px;">Key</span><span style="color:#94a3b8;font-size:8px;">:</span><span style="background:#ede9fe;color:#5b21b6;font-size:8px;padding:1px 4px;border-radius:2px;">Value</span><span style="color:#64748b;font-size:8px;font-weight:700;">+</span><span style="background:#ede9fe;color:#5b21b6;font-size:8px;padding:1px 4px;border-radius:2px;">Value</span></div></div>
+                <span style="color:#94a3b8;margin-top:30px;">,</span>
+                <div style="border:2px dashed #94a3b8;border-radius:10px;padding:8px;min-width:130px;"><div style="font-size:10px;font-weight:600;color:#475569;margin-bottom:4px;">Group</div><div style="display:flex;flex-direction:column;gap:2px;"><div style="background:white;border:1px solid #e2e8f0;border-radius:5px;padding:4px 6px;display:flex;align-items:center;gap:3px;"><span style="font-size:9px;color:#475569;">Entity</span><span style="background:#d1fae5;color:#065f46;font-size:8px;padding:1px 4px;border-radius:2px;">Key</span><span style="color:#94a3b8;font-size:8px;">:</span><span style="background:#ede9fe;color:#5b21b6;font-size:8px;padding:1px 4px;border-radius:2px;">Value</span></div><div style="background:white;border:1px solid #e2e8f0;border-radius:5px;padding:4px 6px;display:flex;align-items:center;gap:3px;"><span style="font-size:9px;color:#475569;">Entity</span><span style="background:#d1fae5;color:#065f46;font-size:8px;padding:1px 4px;border-radius:2px;">Key</span><span style="color:#94a3b8;font-size:8px;">:</span><span style="background:#ede9fe;color:#5b21b6;font-size:8px;padding:1px 4px;border-radius:2px;">Value</span><span style="color:#64748b;font-size:8px;font-weight:700;">+</span><span style="background:#ede9fe;color:#5b21b6;font-size:8px;padding:1px 4px;border-radius:2px;">Value</span></div></div></div>
+                <span style="color:#94a3b8;margin-top:30px;">,</span>
+                <div style="border:2px dashed #94a3b8;border-radius:10px;padding:8px;min-width:110px;"><div style="font-size:10px;font-weight:600;color:#475569;margin-bottom:4px;">Group</div><div style="display:flex;flex-direction:column;gap:2px;"><div style="background:white;border:1px solid #e2e8f0;border-radius:5px;padding:4px 6px;display:flex;align-items:center;gap:3px;"><span style="font-size:9px;color:#475569;">Entity</span><span style="background:#d1fae5;color:#065f46;font-size:8px;padding:1px 4px;border-radius:2px;">Key</span><span style="color:#94a3b8;font-size:8px;">:</span><span style="background:#ede9fe;color:#5b21b6;font-size:8px;padding:1px 4px;border-radius:2px;">Value</span></div><div style="background:white;border:1px solid #e2e8f0;border-radius:5px;padding:4px 6px;display:flex;align-items:center;gap:3px;"><span style="font-size:9px;color:#475569;">Entity</span><span style="background:#d1fae5;color:#065f46;font-size:8px;padding:1px 4px;border-radius:2px;">Key</span><span style="color:#94a3b8;font-size:8px;">:</span><span style="background:#ede9fe;color:#5b21b6;font-size:8px;padding:1px 4px;border-radius:2px;">Value</span></div><div style="background:white;border:1px solid #d1fae5;border-radius:5px;padding:4px 6px;display:flex;align-items:center;gap:3px;"><span style="font-size:9px;color:#475569;">Entity</span><span style="background:#fecaca;color:#991b1b;font-size:8px;padding:1px 4px;border-radius:2px;font-weight:600;">Key</span><span style="color:#94a3b8;font-size:8px;">:</span><span style="background:#ede9fe;color:#5b21b6;font-size:8px;padding:1px 4px;border-radius:2px;">Value</span></div></div></div>
+                <span style="color:#94a3b8;margin-top:30px;">,</span>
+                <div style="border:2px dashed #94a3b8;border-radius:10px;padding:8px;min-width:90px;"><div style="font-size:10px;font-weight:600;color:#475569;margin-bottom:4px;">Group</div><div style="background:white;border:1px solid #e2e8f0;border-radius:5px;padding:4px 6px;display:flex;align-items:center;gap:3px;"><span style="font-size:9px;color:#475569;">Entity</span><span style="background:#fecaca;color:#991b1b;font-size:8px;padding:1px 4px;border-radius:2px;font-weight:600;">Key</span><span style="color:#94a3b8;font-size:8px;">:</span><span style="background:#ede9fe;color:#5b21b6;font-size:8px;padding:1px 4px;border-radius:2px;">Value</span></div></div>
+                <span style="font-size:20px;font-weight:300;color:#64748b;margin-top:20px;">]</span>
+            </div>
+        </div>
+    </div>
+
+    <h4 style="margin-top:24px;">UFK (Upstage Format for KVS)</h4>
+    <ul>
+        <li>KVS 모델의 학습/평가용 데이터 형식. 이미지 내 key-value pair dictionary의 list</li>
+        <li>핵심 구조: <code>documents.{image_file}[].{group_id, key, value, value_type, refined_value, tags, page_id}</code></li>
+        <li><code>group_id</code>: header는 <code>[group_table_id]</code>, content는 <code>[group_table_id]-[group_order_id]</code> 형태</li>
+        <li><code>value_type</code>: date(<code>YYYY-MM-DD</code>), time(<code>HH:MM:SS</code>), datetime(<code>YYYY-MM-DDTHH:MM:SS</code>) 등 형식 변환용 타입</li>
+        <li><code>refined_value</code>: value_type에 따라 포맷 변환된 값 (해당 없으면 value와 동일)</li>
+        <li>데이터 변환 흐름: UFO → UFP → UFK</li>
+    </ul>
 
     <h3>Data Conversion Flow</h3>
     <div class="code-block"><pre><span class="cm"># 1. UFO → UFP 변환 (convert_ufo_to_ufp.py)</span>
