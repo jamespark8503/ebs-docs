@@ -310,13 +310,24 @@
 <span class="fn">sudo docker load</span> -i /data/project/enterprise/docai/docker/images/docai3/<span class="opt">{nlp_engine_image}</span>.tar.gz
 
 <span class="cm"># 실행</span>
-<span class="fn">sudo docker run</span> --rm -d \
-  --gpus all --ipc=host \
-  -v <span class="opt">{package_path}</span>/<span class="opt">{document_type}</span>:/pack \
-  -e OP_MODEL_DIR=/pack/<span class="opt">{model_dir}</span> \
-  -e OP_CONFIG_DIR=/pack/<span class="opt">{config_dir}</span> \
+<span class="fn">sudo docker run</span> -d --rm \
+  --name <span class="opt">{container_name}</span> \
+  --gpus <span class="val">'"device=0"'</span> --ipc=host \
+  -v <span class="opt">{package_path}</span>:/pack \
+  -e OP_MODEL_DIR=/pack/weight \
+  -e OP_CONFIG_DIR=/pack/config \
   -p <span class="opt">30000</span>:8080 \
   nlp-engine:<span class="opt">{tag}</span></div>
+
+        <div class="cmd" style="margin-top:8px;"><span class="cm"># 예시: 농협생명 진료비세부내역서</span>
+<span class="fn">sudo docker run</span> -d --rm --name drsp-med \
+  --gpus <span class="val">'"device=0"'</span> --ipc=host \
+  -v /data/project/enterprise/docai/packages/nhlife/medical_expenses_details/kr-medical-expenses-details-extractor-nhlife-0.3b-3.1.0:/pack \
+  -e OP_MODEL_DIR=/pack/weight \
+  -e OP_CONFIG_DIR=/pack/config \
+  -p 30001:8080 \
+  nlp-engine:1.11.3-pack3-s.gpu.1-rc33_rotate</div>
+
         <div class="callout info" style="margin-top:8px;">
             <div class="callout-icon">&#128204;</div>
             <div><strong>DRSP vs KVS 차이:</strong> DRSP는 <code>OP_CONFIG_DIR</code> 설정이 필요하며, UFO(텍스트)만으로 파싱합니다. 이미지 경로: <code>/data/project/enterprise/docai/docker/images/docai3/</code></div>
